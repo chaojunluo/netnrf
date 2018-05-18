@@ -27,7 +27,8 @@ PoweredBy [netnr.com](https://www.netnr.com)　　[`联系（打赏）`](https://www.net
 ----------
 ### 版本
 
-#### v2.0　　Demo：<https://rf2.netnr.com>　　（2018-05） 
+#### v2.0　2018-05
+> - Demo：<https://rf2.netnr.com>
 > - Gitee：<https://gitee.com/netnr/rf2>
 > - GitHub：<https://github.com/netnr/rf2>
 
@@ -40,11 +41,13 @@ PoweredBy [netnr.com](https://www.netnr.com)　　[`联系（打赏）`](https://www.net
 > - 加入公共查询，以JSON结构表达查询条件
 > - 若干调整...
 > - 数据库设计用PD15.2，SQLServer版本，数据库服务器是虚拟主机送的20M，请不要摧毁数据库来成就自己，谢谢！
+> - 由于数据库公开，出现问题先重置数据库再看，链接：<https://rf2.netnr.com/tool/sqlserverreset>
 > - Iframe地址用indexOf判断是否打开，那么，/rf/modal 与 /rf/modallg 这两个链接会出问题，要么改indexOf或改url
 
 ------
 
-#### v1.0　　Demo：<https://rf1.netnr.com>　　（2017-03）
+#### v1.0　2017-03
+> - Demo：<https://rf1.netnr.com>
 > - Gitee：<https://gitee.com/netnr/rf1>
 > - GitHub：<https://github.com/netnr/rf1>
 
@@ -52,5 +55,24 @@ PoweredBy [netnr.com](https://www.netnr.com)　　[`联系（打赏）`](https://www.net
 > - `jquery` `bootstrap` `easyui` `ace-admin` `font-awesome`
 
 ----------
+
+### 截图
+
+##### 列表 
+
+![列表](https://netnr.gitee.io/gs/2018/05/18/403ce7d002.png)
+
+##### 新增、编辑、查看
+
+![表单](https://netnr.gitee.io/gs/2018/05/18/8d25d345b2.png)
+
+##### 列表配置
+
+![列表配置](https://netnr.gitee.io/gs/2018/05/18/13da6572a3.png)
+
+##### 表单配置
+
+![表单配置](https://netnr.gitee.io/gs/2018/05/18/0c98ee578c.png)
+
 ### 第三方文档API
 [EasyUI文档](https://ad.netnr.com/#EasyUI-1.5.2)、[jQuery文档](https://ad.netnr.com/#jQuery-1.11.3)
