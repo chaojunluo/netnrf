@@ -41,7 +41,7 @@ PoweredBy [netnr.com](https://www.netnr.com)　　[`联系（打赏）`](https://www.net
 > - 调整API，与官方API高度保持一致（最大调整）
 > - 加入公共查询，以JSON结构表达查询条件
 > - 若干调整...
-> - 数据库设计用PD15.2，SQLServer版本，数据库服务器是虚拟主机送的20M，请不要摧毁数据库来成就自己，谢谢！
+> - 数据库设计用PD15.2，SQLServer版本，数据库服务器是虚拟主机附带，请不要摧毁数据库来成就自己，谢谢！
 > - 由于数据库公开，出现问题先重置数据库再看，链接：<https://rf2.netnr.com/tool/sqlserverreset>
 > - Iframe地址用indexOf判断是否打开，那么，/rf/modal 与 /rf/modallg 这两个链接会出问题，要么改indexOf或改url
 
