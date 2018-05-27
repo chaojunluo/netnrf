@@ -1,14 +1,14 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link href="/favicon.svg" rel="Shortcut Icon" type="image/svg" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link href="favicon.svg" rel="Shortcut Icon" type="image/svg" />
 
     <title>netnrf响应式框架</title>
 
@@ -16,6 +16,33 @@
     <meta name="description" content="netnrf响应式框架，基于Ace Admin框架菜单导航，Bootstrap布局，fontAwesome图标，内嵌Iframe用EasyUI做数据绑定，动态配置列表、动态配置表单。" />
 
     <link href="https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        /*footer*/
+        .footer {
+            width: 100%;
+            display: block;
+            margin-top: 70px;
+            padding: 30px 0 0;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+            .footer .logo {
+                user-select: none;
+                animation: myrotate 60s infinite;
+            }
+
+        @keyframes myrotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -26,7 +53,7 @@
                 <p>Gitee：<a href="https://gitee.com/netnr/netnrf">https://gitee.com/netnr/netnrf</a></p>
                 <p>GitHub：<a href="https://github.com/netnr/netnrf">https://github.com/netnr/netnrf</a></p>
                 <hr>
-                <p>PoweredBy <a href="https://www.netnr.com">netnr.com</a>　　<a href="https://www.netnr.com/mix/contact"><code>联系（打赏）</code></a>　　<a href="http://qm.qq.com/cgi-bin/qm/qr?k=oLmAflGAIODgeYw9tImSvBVX1SK_warh"><code>加入QQ群</code></a></p>
+                <p><a href="https://www.netnr.com/mix/contact"><code>联系（打赏）</code></a>　　<a href="http://qm.qq.com/cgi-bin/qm/qr?k=oLmAflGAIODgeYw9tImSvBVX1SK_warh"><code>加入QQ群</code></a></p>
                 <hr>
                 <h3>菜单、按钮、权控</h3>
                 <p>用户（User）、角色（Role）、菜单（Menu）、权限（Auth）</p>
@@ -101,5 +128,11 @@
             </div>
         </div>
     </div>
+
+    <!--页脚-->
+    <footer class="footer" id="footer">
+        <p><img src="favicon.svg" class="logo" /></p>
+        <p>© 2018 <a href="https://www.netnr.com">netnr</a></p>
+    </footer>
 </body>
 </html>
