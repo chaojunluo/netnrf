@@ -3,7 +3,7 @@
 /// <reference path="../lib/jquery-easyui-1.5.4/jquery.easyui.min.min.js" />
 
 /*                      *\
-    Author：Tomorrow
+    Author：netnr
     Date：2018-01-22
 
     z.Grid：datagrid、treegrid、propertygrid、datalist
