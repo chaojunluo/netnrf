@@ -1,0 +1,120 @@
+﻿@model Dictionary<int, List<RF.Model.sys_column>>
+
+<!--模态 表单-->
+<div class="modal fade modalautoheight" id="_af_modal_@ViewBag.index" role="dialog" data-backdrop="static">
+    <div class='modal-dialog @ViewBag.modalsize'>
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="_af_title_@ViewBag.index">
+                    <i class="fa fa-plus blue fa-2x" style="margin-right:10px;vertical-align:middle;"></i>表单标题
+                    <label style="margin-left:20px;font-size:13px;font-weight:200;color:red;">蓝色标题项为必填</label>
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal formui" id="_af_form_@ViewBag.index">
+                    <div class="row">
+
+                        @if (Model.Count == 1)
+                        {
+                            foreach (var mo in Model)
+                            {
+                                foreach (RF.Model.sys_column item in mo.Value)
+                                {
+                                    <div class='col-md-@Math.BigMul(6,Convert.ToInt32(item.f_col)) col-sm-6 @(item.f_hide==1?"hidden":"")'>
+                                        <div class="form-group">
+                                            <label class='control-label @(item.f_required==1?"requiredTag":"")'>@item.title</label>
+                                            @if (item.f_type == "checkbox")
+                                            {
+                                                <div class='checkbox'>
+                                                    <label>
+                                                        <input type="checkbox" value="@item.f_value" id="@item.field" name="@item.field" data-type="@item.f_type" data-url="@item.f_url" placeholder="@item.f_placeholder" />
+                                                        @item.f_text
+                                                    </label>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <input type='@(item.f_type=="password"?item.f_type:"text")' id="@item.field" name="@item.field" class="form-control" value="@item.f_value" data-type="@item.f_type" data-url="@item.f_url" placeholder="@item.f_placeholder" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <ul class="nav nav-tabs" role="tablist" id="_af_tablist_@ViewBag.index">
+                                @foreach (var mo in Model)
+                                {
+                                    <li class='@(mo.Key==1?"active":"")'>
+                                        <a href="#_afpp_@mo.Key" data-toggle="tab">面板 @mo.Key</a>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="tab-content" id="_aftc_@ViewBag.index">
+                                @foreach (var mo in Model)
+                                {
+                                    <div class='tab-pane @(mo.Key==1?"active":"")' id="_afpp_@mo.Key">
+                                        @foreach (RF.Model.sys_column item in mo.Value)
+                                        {
+                                            <div class='col-md-@Math.BigMul(6,Convert.ToInt32(item.f_col)) col-sm-6 @(item.f_hide==1?"hidden":"")'>
+                                                <div class="form-group">
+                                                    <label class='control-label @(item.f_required==1?"requiredTag":"")'>@item.title</label>
+                                                    @if (item.f_type == "checkbox")
+                                                    {
+                                                        <div class='checkbox'>
+                                                            <label>
+                                                                <input type="checkbox" value="@item.f_value" id="@item.field" name="@item.field" data-type="@item.f_type" data-url="@item.f_url" placeholder="@item.f_placeholder" />
+                                                                @item.f_text
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>
+                                                            <input type='@(item.f_type=="password"?item.f_type:"text")' id="@item.field" name="@item.field" class="form-control" value="@item.f_value" data-type="@item.f_type" data-url="@item.f_url" placeholder="@item.f_placeholder" />
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="_af_saveadd_@ViewBag.index" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;保存并新增</button>
+                <button id="_af_save_@ViewBag.index" type="button" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    setTimeout(function () {
+        if (window.z) {
+
+            //获取需要绑定的对象
+            z.FormAttrDataUrl();
+
+            //区域标题赋值
+            $(z.DC["FormN"]).each(function () {
+                var index = this.index, areas = this.areas;
+                if (areas && areas.length > 0) {
+                    $('#_af_tablist_' + index).find('a').each(function (i) {
+                        $(this).html(areas[i].text);
+                    });
+                }
+            });
+        }
+    }, 500)
+</script>

@@ -1,0 +1,14 @@
+﻿using Microsoft.EntityFrameworkCore;
+using @domainNamespace@;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace @mappingNamespace@
+{
+	class @className@ : IEntityTypeConfiguration<@domainName@>
+	{
+		public void Configure(EntityTypeBuilder<@domainName@> builder)
+		{
+			builder.HasKey(@primaryKey@);
+		}
+	}
+}

@@ -1,0 +1,15 @@
+﻿{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+
+  "ConnectionStrings": {
+    //SQLServer连接字符串
+    "SQLServerConn": "@sqlserverConn@",
+    //SQLite连接，Web项目新建Data文件夹放数据库
+    "SQLiteConn": "Filename=Data/RFCore.db"
+  }
+}

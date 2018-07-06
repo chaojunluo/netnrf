@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "TreeGrid";
+}
+
+<div id="Grid1"></div>
+
+<script src="/Scripts/z.js"></script>
+
+<script>
+
+    var gd1 = z.Grid();
+    gd1.url = "/Table/QueryTree";
+    gd1.model = "treegrid";
+    gd1.treeId = "id";
+    gd1.treeName = "m_name";
+    gd1.treeSrc = function (row) {
+        return "/table/QueryTreeSub/" + row.id;
+    }
+    gd1.load();
+</script>

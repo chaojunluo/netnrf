@@ -1,0 +1,58 @@
+﻿using System;
+using @domainNamespace@;
+
+namespace @dataNamespace@
+{
+    /// <summary>
+    /// 统一入口，保证上下文（context）的一致性
+    /// 如果不想手动释放资源，请用using
+    /// </summary>
+    public class RepositoryUse : IDisposable
+    {
+        #region Save & Dispose
+        public int Save()
+        {
+            return Context.SaveChanges();
+        }
+
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    Context.Dispose();
+                }
+            }
+            disposed = true;
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region 上下文
+        private ContextBase _context;
+
+        /// <summary>
+        /// 上下文
+        /// </summary>
+        public ContextBase Context
+        {
+            get
+            {
+                return _context ?? (_context = new ContextBase());
+            }
+        }
+        #endregion
+
+        #region 单表仓库
+@listRepository@
+
+        #endregion
+    }
+}
+

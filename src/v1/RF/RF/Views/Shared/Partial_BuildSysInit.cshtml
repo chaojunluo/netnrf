@@ -1,0 +1,23 @@
+﻿<div id="divSiteInit" style="position: absolute; color: black; border: 1px solid black; top: 5px; right: 15px; width: 4%; min-width: 100px; line-height: 35px; height: 35px; text-align: center; cursor: pointer; z-index: 9; -moz-user-select: none;" onselectstart="return false">
+    重置数据库
+</div>
+
+<script>
+    $('#divSiteInit').click(function () {
+        $.ajax({
+            url: '/Partial/SiteReset',
+            type: 'post',
+            success: function (data) {
+                if (data == "success") {
+                    alert("重置成功");
+                    location.href = "/account/logout";
+                } else {
+                    alert("重置失败，请联系我们");
+                }
+            },
+            error: function () {
+                alert("网络错误，重置失败");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Netnr.Core\Netnr.Core.csproj" />
+    <ProjectReference Include="..\Netnr.Data\Netnr.Data.csproj" />
+    <ProjectReference Include="..\Netnr.Domain\Netnr.Domain.csproj" />
+    <ProjectReference Include="..\Netnr.Mapping\Netnr.Mapping.csproj" />
+  </ItemGroup>
+
+</Project>

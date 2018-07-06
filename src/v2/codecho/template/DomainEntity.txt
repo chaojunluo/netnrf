@@ -1,0 +1,13 @@
+﻿using System;
+
+namespace @domainNamespace@
+{
+	public class @className@
+	{
+		public @className@() { }
+		#region Model
+
+@listDomain@
+		#endregion Model
+	}
+}

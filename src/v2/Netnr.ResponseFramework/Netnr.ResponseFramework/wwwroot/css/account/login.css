@@ -1,0 +1,42 @@
+﻿.title {
+    font-size: 32px;
+    margin: 25% 0 30px;
+}
+
+    .title span {
+        color: white;
+        padding: 10px;
+        font-size: 28px;
+        margin-left: 10px;
+        border-radius: 30px;
+        background-color: #5bc0de;
+    }
+
+#img_captcha {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 130px;
+    height: 42px;
+    z-index: 999;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.form-group-lg .form-control {
+    border-radius: 6px;
+}
+
+.form-group-lg .btn {
+    border-radius: 6px;
+    outline: none !important;
+}
+
+#loginmsg {
+    color: red;
+    height: 20px;
+    min-height: 20px;
+    line-height: 20px;
+    margin: -5px 0 5px;
+    text-align: center;
+}

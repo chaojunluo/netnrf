@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "DataGrid";
+}
+
+<div id="Grid1"></div>
+
+<script src="/Scripts/z.js"></script>
+
+<script>
+
+    var gd1 = z.Grid();
+    gd1.url = "/Common/QueryData?uri=ppcolumn";
+    gd1.load();
+
+    //刷新
+    z.button('reload', function () {
+        gd1.load();
+    });
+
+</script>
