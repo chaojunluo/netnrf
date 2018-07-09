@@ -29,6 +29,7 @@ z.DC["dataurl_formtype"] = {
     //绑定数据
     data: [
         { value: "text", text: "text 文本" },
+        { value: "textarea", text: "textarea 文本域" },
         { value: "combobox", text: "combobox 下拉列表框" },
         { value: "combotree", text: "combotree 下拉列表树" },
         { value: "modal", text: "modal 模态弹出（浏览）" },

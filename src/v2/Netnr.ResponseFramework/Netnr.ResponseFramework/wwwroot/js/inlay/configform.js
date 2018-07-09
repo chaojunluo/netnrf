@@ -364,7 +364,7 @@ function CFgetJson() {
             $(panel).children().each(function () {
                 if (this.className.indexOf('hidden') == -1) {
                     var item = {};
-                    item.field = $(this).find('input').first().attr('data-field');
+                    item.field = $(this).find('input,textarea').first().attr('data-field');
                     item.title = $(this).find('label').first().html();
                     item.span = this.className.indexOf('col-md-6') >= 0 ? 1 : 2;
                     item.area = i + 1;
@@ -376,7 +376,7 @@ function CFgetJson() {
         z.ConfigForm.CF.find('form').children().children().each(function () {
             if (this.className.indexOf('hidden') == -1) {
                 var item = {};
-                item.field = $(this).find('input').first().attr('data-field');
+                item.field = $(this).find('input,textarea').first().attr('data-field');
                 item.title = $(this).find('label').first().html();
                 item.span = this.className.indexOf('col-md-6') >= 0 ? 1 : 2;
                 item.area = 1;

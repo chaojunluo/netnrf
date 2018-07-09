@@ -340,6 +340,12 @@ button.close {
     text-align: center;
 }
 
+/*文本域高度*/
+.formui .area-height {
+    resize: none;
+    height: 83px;
+}
+
 /*Grid载入前*/
 .loadingimg {
     display: none;

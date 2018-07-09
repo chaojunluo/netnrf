@@ -2,6 +2,7 @@
     //绑定数据
     data: [
         { value: "text", text: "text 文本" },
+        { value: "textarea", text: "textarea 文本域" },
         { value: "date", text: "yyyy-MM-dd 日期" },
         { value: "time", text: "mm:ss 时间" },
         { value: "datetime", text: "yyyy-MM-dd HH:mm:ss 日期时间" },
@@ -112,14 +113,14 @@ z.DC["/setting/sysrole"] = {
             var wd = this.modal.find('iframe')[0].contentWindow;
             //获取iframe里面的选中行数据
             var rowData = wd.gd1.func('getSelected');
-
+            
             //由于新增、编辑、公共查询都调用一个模态框，需要对确定事件做不同处理
             //this.guide 指向触发模态框的节点
             //this.guidetype 触发类型，form 表单触发，table 表格编辑触发
             switch (this.guidetype) {
                 //表单输入，即新增、编辑
                 case "form":
-                    this.guide.val(rowData ? rowData.RoleName : '');
+                    this.guide.val(rowData ? rowData.Name : '');
                     break;
                 //表格编辑，公共查询
                 case "table":

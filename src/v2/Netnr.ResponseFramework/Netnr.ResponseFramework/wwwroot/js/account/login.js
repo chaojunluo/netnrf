@@ -8,7 +8,7 @@ $(document).keydown(function (e) {
 
 $('#btnLogin').click(function () {
     if ($("#username").val() != "" && $("#userpwd").val() != "" && $('#captcha').val() != "") {
-        writemsg('正在登录...');
+        writemsg('正在登录...', true);
 
         $('#btnLogin')[0].disabled = true;
 
@@ -56,9 +56,11 @@ $("#img_captcha").click(function () {
 
 //输出消息
 var defer1;
-function writemsg(msg) {
+function writemsg(msg, keep) {
     $('#loginmsg').html(msg);
-    clearTimeout(defer1);
+    if (keep == undefined) {
+        clearTimeout(defer1);
+    }
     defer1 = setTimeout(function () {
         $('#loginmsg').html('');
     }, 1000 * 7)
