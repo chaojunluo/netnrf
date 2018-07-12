@@ -44,70 +44,46 @@ namespace Netnr.ResponseFramework.Filters
         {
             public override void OnResultExecuted(ResultExecutedContext context)
             {
-                //异步获取系统信息于缓存
-                ThreadPool.QueueUserWorkItem(_ =>
+                var hc = context.HttpContext;
+
+                string controller = context.RouteData.Values["controller"].ToString().ToLower();
+                string action = context.RouteData.Values["action"].ToString().ToLower();
+                string url = hc.Request.Path.ToString() + hc.Request.QueryString.Value;
+
+                try
                 {
-                    var hc = context.HttpContext;
+                    //客户端信息
+                    var ct = new Core.ClientTo(hc);
 
-                    string controller = context.RouteData.Values["controller"].ToString().ToLower();
-                    string action = context.RouteData.Values["action"].ToString().ToLower();
-                    string url = hc.Request.Path.ToString() + hc.Request.QueryString.Value;
+                    //用户信息
+                    var userinfo = Func.Common.GetLoginUserInfo(hc);
 
-                    //判断是Ajax
-                    bool isAjax = false;
-                    if (hc.Request.Headers.ContainsKey("x-requested-with"))
+                    //日志保存
+                    var mo = new Domain.SysLog()
                     {
-                        isAjax = hc.Request.Headers["x-requested-with"] == "XMLHttpRequest";
-                    }
+                        ID = Guid.NewGuid().ToString(),
+                        UserName = userinfo.UserName,
+                        Nickname = userinfo.Nickname,
+                        Action = controller + "/" + action,
+                        Url = url,
+                        Ip = ct.IPv4,
+                        CreateTime = DateTime.Now,
+                        BrowserName = ct.BrowserName,
+                        SystemName = ct.SystemName,
+                        LogGroup = 1,
 
-                    if (!isAjax)
+                        LogContent = Func.ProjectDocs.QueryNotes(controller, action, hc)
+                    };
+
+                    using (var ru = new Data.RepositoryUse())
                     {
-                        //不是Ajax也记录
-                        string needlog = $"logout";
-                        if (needlog.Contains(action))
-                        {
-                            isAjax = true;
-                        }
+                        ru.SysLogRepository.Insert(mo);
                     }
-
-                    if (isAjax)
-                    {
-                        try
-                        {
-                            //客户端信息
-                            var ct = new Core.ClientTo(hc);
-
-                            //用户信息
-                            var userinfo = Func.Common.GetLoginUserInfo(hc);
-
-                            //日志保存
-                            var mo = new Domain.SysLog()
-                            {
-                                ID = Guid.NewGuid().ToString(),
-                                UserName = userinfo.UserName,
-                                Nickname = userinfo.Nickname,
-                                Action = controller + "/" + action,
-                                Url = url,
-                                Ip = ct.IPv4,
-                                CreateTime = DateTime.Now,
-                                BrowserName = ct.BrowserName,
-                                SystemName = ct.SystemName,
-                                LogGroup = 1,
-
-                                LogContent = Func.ProjectDocs.QueryNotes(controller, action, hc)
-                            };
-
-                            using (var ru = new Data.RepositoryUse())
-                            {
-                                ru.SysLogRepository.Insert(mo);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            //throw new System.Exception("写入操作日志失败");
-                        }
-                    }
-                });
+                }
+                catch (Exception)
+                {
+                    //throw new System.Exception("写入操作日志失败");
+                }
 
                 base.OnResultExecuted(context);
             }

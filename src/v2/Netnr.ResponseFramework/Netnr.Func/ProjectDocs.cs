@@ -25,11 +25,17 @@ namespace Netnr.Func
                     #region Account
                     switch (action)
                     {
+                        case "login":
+                            notes.Add("访问登录页面");
+                            break;
                         case "loginvalidation":
                             notes.Add("用户登录");
                             break;
                         case "logout":
                             notes.Add("用户注销");
+                            break;
+                        case "updatepassword":
+                            notes.Add("访问修改密码页面");
                             break;
                         case "updatenewpassword":
                             notes.Add("修改密码");
@@ -86,24 +92,56 @@ namespace Netnr.Func
                     #endregion
                     break;
 
+                case "io":
+                    #region IO
+                    switch (action)
+                    {
+                        case "export":
+                            notes.Add("导出Excel（" + context.Request.Form["uri"].ToString() + ")");
+                            break;
+                    }
+                    #endregion
+                    break;
+
                 case "setting":
                     #region Setting
                     switch (action)
                     {
+                        case "sysrole":
+                            notes.Add("访问系统角色页面");
+                            break;
                         case "savesysrole":
                             notes.Add("保存系统角色");
-                            break;
-                        case "savesysroleauth":
-                            notes.Add("保存系统角色权限配置");
                             break;
                         case "delsysrole":
                             notes.Add("删除系统角色");
                             break;
-                        case "SaveSysTableConfig":
+                        case "sysuser":
+                            notes.Add("访问系统用户页面");
+                            break;
+                        case "querysysuser":
+                            notes.Add("查询系统用户");
+                            break;
+                        case "savesysuser":
+                            notes.Add("保存系统用户");
+                            break;
+                        case "delsysuser":
+                            notes.Add("删除系统用户");
+                            break;
+                        case "syslog":
+                            notes.Add("访问系统日志页面");
+                            break;
+                        case "systableconfig":
+                            notes.Add("访问表配置页面");
+                            break;
+                        case "savesystableconfig":
                             notes.Add("保存表配置");
                             break;
                         case "delsystableconfig":
-                            notes.Add("删除列表配置");
+                            notes.Add("删除表配置");
+                            break;
+                        case "sysstyle":
+                            notes.Add("访问样式配置页面");
                             break;
                     }
                     #endregion

@@ -12,10 +12,10 @@
 
     <title>netnrf响应式框架</title>
 
-    <meta name="keywords" content="netnrf，netnrf响应式框架，响应式框架，Bootstrap后台框架" />
-    <meta name="description" content="netnrf响应式框架，基于Ace Admin框架菜单导航，Bootstrap布局，fontAwesome图标，内嵌Iframe用EasyUI做数据绑定，动态配置列表、动态配置表单。" />
+    <meta name="keywords" content="netnrf,netnrf响应式框架,响应式框架,Bootstrap后台框架" />
+    <meta name="description" content="netnrf响应式框架,基于Ace Admin框架菜单导航,Bootstrap布局,fontAwesome图标,内嵌Iframe用EasyUI做数据绑定,动态配置列表,动态配置表单。" />
 
-    <link href="https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://lib.baomitu.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         /*footer*/
@@ -47,66 +47,63 @@
                 transform: rotate(360deg);
             }
         }
+
+        .row img {
+            max-width: 100%
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-12">
                 <h1>netnrf 响应式框架</h1>
+                <ul>
+                    <li>GitHub：<a href="https://github.com/netnr/netnrf">https://github.com/netnr/netnrf</a></li>
+                    <li>Gitee：<a href="https://gitee.com/netnr/netnrf">https://gitee.com/netnr/netnrf</a></li>
+                    <li><a href="https://www.netnr.com/mix/contact">联系（打赏）</a></li>
+                    <li><a href="http://qm.qq.com/cgi-bin/qm/qr?k=oLmAflGAIODgeYw9tImSvBVX1SK_warh">加入QQ群</a></li>
+                </ul>
                 <hr>
-                <p>Site：<a href="https://rf.netnr.com">https://rf.netnr.com</a></p>
-                <p>Gitee：<a href="https://gitee.com/netnr/netnrf">https://gitee.com/netnr/netnrf</a></p>
-                <p>GitHub：<a href="https://github.com/netnr/netnrf">https://github.com/netnr/netnrf</a></p>
+                <h2>项目结构</h2>
+                <ul>
+                    <li>Nentr.Core 类库</li>
+                    <li>Nentr.Data 数据访问、仓储</li>
+                    <li>Netnr.Domain 实体</li>
+                    <li>Netnr.Mapping 映射</li>
+                    <li>Netnr.Func 应用</li>
+                    <li>Netnr.ResponseFramework Web站点</li>
+                </ul>
                 <hr>
-                <p>PoweredBy <a href="https://www.netnr.com">netnr.com</a>　　<a href="https://www.netnr.com/mix/contact"><code>联系（打赏）</code></a>　　<a href="http://qm.qq.com/cgi-bin/qm/qr?k=oLmAflGAIODgeYw9tImSvBVX1SK_warh"><code>加入QQ群</code></a></p>
+                <h2>数据表</h2>
+                <ul>
+                    <li>系统用户（SysUser）</li>
+                    <li>系统角色、角色权限（SysRole）</li>
+                    <li>系统菜单（SysMenu）</li>
+                    <li>系统按钮（SysButton）</li>
+                    <li>系统日志（SysLog）</li>
+                    <li>表配置（SysTableConfig）</li>
+                </ul>
                 <hr>
-                <h2>菜单、按钮、权控</h2>
-                <p>用户（User）、角色（Role）、菜单（Menu）、权限（Auth）</p>
-                <p>创建用户，设置角色，再设置角色权限（能操作的菜单、按钮）</p>
-                <h2>列表、表单、查询</h2>
-                <p>列表：动态配置标题、宽度、排序、对齐方式、格式化、冻结、点击排序等</p>
-                <p>表单：动态生成表单，自定义标题、排序、跨列、类型、必填等</p>
-                <p>查询：动态生成查询面板，自定义哪些字段支持查询</p>
+                <h2>功能</h2>
+                <ul>
+                    <li>表格：动态配置标题、宽度、排序、对齐方式、格式化、冻结、点击排序等</li>
+                    <li>表单：动态生成表单，自定义标题、排序、跨列、类型、必填等</li>
+                    <li>查询：动态生成查询面板，自定义哪些字段支持查询</li>
+                    <li>等等</li>
+                </ul>
                 <hr>
-                <h2>版本</h2>
-                <h3>v2　2018-05</h3>
-                <blockquote>
-                    <ul>
-                        <li>在线Demo：<a href="https://rf2.netnr.com">https://rf2.netnr.com</a></li>
-                    </ul>
-                </blockquote>
-                <blockquote>
-                    <ul>
-                        <li>页面组成：<code>全局（_Layout）</code>、<code>按钮（Button组件）</code>、<code>主体View视图</code>、<code>表配置（TableConfig组件）</code></li>
-                    </ul>
-                </blockquote>
-                <blockquote>
-                    <ul>
-                        <li>Asp.Net Core + EF + SQLServer</li>
-                        <li>优化ace导航</li>
-                        <li>重写iframe选项卡</li>
-                        <li>调整API，与官方API高度保持一致（最大调整）</li>
-                        <li>加入公共查询，以JSON结构表达查询条件</li>
-                        <li>若干调整...</li>
-                        <li>数据库设计用PD15.2，SQLServer版本，数据库服务器是虚拟主机附带，请不要摧毁数据库来成就自己，谢谢！</li>
-                        <li>由于数据库公开，出现问题先重置数据库再看，链接：<a href="https://rf2.netnr.com/tool/sqlserverreset">https://rf2.netnr.com/tool/sqlserverreset</a></li>
-                        <li>Iframe地址用indexOf判断是否打开，那么，/rf/modal 与 /rf/modallg 这两个链接会出问题，要么改indexOf或改url</li>
-                    </ul>
-                </blockquote>
-                <hr>
-                <h3>v1　2017-03</h3>
-                <blockquote>
-                    <ul>
-                        <li>在线Demo：<a href="https://rf1.netnr.com">https://rf1.netnr.com</a></li>
-                    </ul>
-                </blockquote>
-                <blockquote>
-                    <ul>
-                        <li>asp.net mvc4 + sqlite</li>
-                        <li><code>jquery</code> <code>bootstrap</code> <code>easyui</code> <code>ace-admin</code> <code>font-awesome</code></li>
-                    </ul>
-                </blockquote>
+                <h2>v2　2018-07</h2>
+                <ul>
+                    <li>在线演示：<a href="https://rf2.netnr.com">https://rf2.netnr.com</a></li>
+                    <li>前端采用 jQuery + Bootstrap + EasyUI + AceAdmin</li>
+                    <li>后端采用 Asp.Net Core + EF + SQLServer</li>
+                    <li>全新重写 <code>z.js</code> 脚本包，与EasyUI提供的API高度保持一致（最大调整）</li>
+                    <li>重写iframe选项卡</li>
+                    <li>精简ace导航</li>
+                    <li>若干调整...</li>
+                    <li>重置数据库链接：<code>https://rf2.netnr.com/tool/sqlserverreset</code></li>
+                </ul>
                 <hr>
                 <h2>截图</h2>
                 <h4>列表</h4>
@@ -117,8 +114,21 @@
                 <p><img src="https://netnr.gitee.io/gs/2018/05/18/13da6572a3.png" alt="列表配置"></p>
                 <h4>表单配置</h4>
                 <p><img src="https://netnr.gitee.io/gs/2018/05/18/0c98ee578c.png" alt="表单配置"></p>
+                <hr>
                 <h2>第三方文档API</h2>
-                <p><a href="https://ad.netnr.com/#EasyUI-1.5.2">EasyUI文档</a>、<a href="https://ad.netnr.com/#jQuery-1.11.3">jQuery文档</a></p>
+                <ul>
+                    <li><a href="https://ad.netnr.com/#EasyUI-1.5.2">EasyUI文档</a></li>
+                    <li><a href="https://ad.netnr.com/#jQuery-1.11.3">jQuery文档</a></li>
+                </ul>
+                <hr>
+                <h2>v1　2017-03（已停更）</h2>
+                <ul>
+                    <li>在线演示：<a href="https://rf1.netnr.com">https://rf1.netnr.com</a></li>
+                    <li>asp.net mvc4 + sqlite</li>
+                    <li><code>jquery</code> <code>bootstrap</code> <code>easyui</code> <code>ace-admin</code> <code>font-awesome</code></li>
+                </ul>
+                <hr>
+                <p>PoweredBy <a href="https://www.netnr.com">netnr.com</a></p>
             </div>
         </div>
     </div>
