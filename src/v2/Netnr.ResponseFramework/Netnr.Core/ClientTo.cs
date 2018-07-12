@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace Netnr.Core
 {
     public class ClientTo
     {
-        public ClientTo(IHeaderDictionary header)
+        public ClientTo(HttpContext content)
         {
-            IPv4 = header["X-Original-For"].ToString().Split(':')[0];
+            IPv4 = content.Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
-            Language = header["Accept-Language"].ToString().Split(';')[0];
+            var header = content.Request.HttpContext.Request.Headers;
 
-            string ua = header["User-Agent"].ToString();
+            Language = header[HeaderNames.AcceptLanguage].ToString().Split(';')[0];
+
+            string ua = header[HeaderNames.UserAgent].ToString();
 
             string sn = "Unknown";
             if (ua.Contains("NT 5.0"))

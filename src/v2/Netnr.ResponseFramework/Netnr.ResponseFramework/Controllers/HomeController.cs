@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace Netnr.ResponseFramework.Controllers
 {
@@ -16,10 +17,10 @@ namespace Netnr.ResponseFramework.Controllers
         /// </summary>
         /// <returns></returns>
         public IActionResult Index()
-        {      
+        {
             return View();
         }
-        
+
         /// <summary>
         /// 桌面
         /// </summary>

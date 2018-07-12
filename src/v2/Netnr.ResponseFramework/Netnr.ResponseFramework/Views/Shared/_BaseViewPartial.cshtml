@@ -20,17 +20,23 @@
     //绑定数据
     setTimeout(z.FormAttrAjax, 0);
 
-    //公共处理
+    //新增
     z.button("add", function () {
         //重置
         z.FormRequired('reset');
         //清空
         z.FormClear();
     });
+    //编辑
     z.button("edit", function () {
         z.FormRequired('reset');
     });
+    //查看
     z.button("see", function () {
         z.FormRequired('reset');
+    });
+    //导出
+    $('#m_Export').click(function () {
+        window.open('/io/export?uri=' + z.TableName);
     });
 </script>

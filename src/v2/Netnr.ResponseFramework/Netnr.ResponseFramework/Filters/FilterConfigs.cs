@@ -75,7 +75,7 @@ namespace Netnr.ResponseFramework.Filters
                         try
                         {
                             //客户端信息
-                            var ct = new Core.ClientTo(hc.Request.Headers);
+                            var ct = new Core.ClientTo(hc);
 
                             //用户信息
                             var userinfo = Func.Common.GetLoginUserInfo(hc);
