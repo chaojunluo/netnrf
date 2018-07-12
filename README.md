@@ -6,8 +6,8 @@
 
 ----------
 ## 项目结构
-- Nentr.Core 类库
-- Nentr.Data 数据访问、仓储
+- Netnr.Core 类库
+- Netnr.Data 数据访问、仓储
 - Netnr.Domain 实体
 - Netnr.Mapping 映射
 - Netnr.Func 应用
