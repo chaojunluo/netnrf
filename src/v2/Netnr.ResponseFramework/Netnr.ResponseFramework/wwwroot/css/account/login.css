@@ -1,18 +1,80 @@
-﻿.title {
-    font-size: 32px;
-    margin: 25% 0 30px;
+﻿body {
+    overflow: auto;
+    background-color: #edecec;
 }
 
-    .title span {
-        color: white;
-        padding: 10px;
-        font-size: 28px;
-        margin-left: 10px;
-        border-radius: 30px;
-        background-color: #5bc0de;
+.row-top::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 50%;
+    width: 100%;
+    content: "";
+    z-index: 0;
+    background-color: #00bcd4;
+}
+
+.cc {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    max-width: 480px;
+    margin-top: -162px;
+    margin-left: -240px;
+    border-radius: 2px;
+    padding: 0 50px;
+    border: 1px solid #ddd;
+    background-color: white;
+    box-shadow: 0 0 4px #e4d0d0;
+}
+
+.remember {
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+    .remember input {
+        width: 18px;
+        height: 18px;
+        vertical-align: bottom;
     }
 
-#img_captcha {
+.title {
+    color: #7E7E7E;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 70px;
+    text-align: center;
+}
+
+    .title::before, .title::after {
+        position: absolute;
+        content: "";
+        height: 1px;
+        width: 35%;
+        top: 35px;
+        left: 0;
+        background: rgb(126,126,126);
+        background: -moz-linear-gradient(right,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -webkit-linear-gradient(right,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -moz-linear-gradient(right,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -ms-linear-gradient(right,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: linear-gradient(right,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+    }
+
+    .title::after {
+        right: 0;
+        left: initial;
+        background: rgb(126,126,126);
+        background: -moz-linear-gradient(left,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -webkit-linear-gradient(left,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -moz-linear-gradient(left,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -ms-linear-gradient(left,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: linear-gradient(left,rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+    }
+
+.cc img {
     position: absolute;
     top: 2px;
     right: 2px;
@@ -20,16 +82,54 @@
     height: 42px;
     z-index: 999;
     cursor: pointer;
-    border-radius: 6px;
 }
 
-.form-group-lg .form-control {
-    border-radius: 6px;
+.form-group-lg {
+    position: relative;
 }
 
-.form-group-lg .btn {
-    border-radius: 6px;
+    .form-group-lg .form-control, .form-group-lg .form-control:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding-left: 35px;
+        border-bottom: 1px solid #cacaca;
+    }
+
+.form-group .btn {
+    border-radius: 2px;
     outline: none !important;
+}
+
+.fg {
+    color: #555;
+    font-size: 1.6em;
+}
+
+    .fg::before {
+        position: absolute;
+        height: 22px;
+        width: 22px;
+        top: 10px;
+        left: 0;
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+    }
+
+.fg-user::before {
+    content: "\f007"
+}
+
+.fg-pwd::before {
+    content: "\f084"
+}
+
+.fg-captcha::before {
+    content: "\f02b"
 }
 
 #loginmsg {

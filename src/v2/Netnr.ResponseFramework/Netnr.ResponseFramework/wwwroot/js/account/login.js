@@ -19,7 +19,7 @@ $('#btnLogin').click(function () {
             dataType: 'json',
             success: function (data) {
                 writemsg(data.message);
-
+                
                 if (data.code == 100) {
                     window.location.href = data.url;
                 }
@@ -57,11 +57,11 @@ $("#img_captcha").click(function () {
 //输出消息
 var defer1;
 function writemsg(msg, keep) {
-    $('#loginmsg').html(msg);
-    if (keep == undefined) {
-        clearTimeout(defer1);
+    $('#loginmsg').html(msg);    
+    clearTimeout(defer1);
+    if (!keep) {
+        defer1 = setTimeout(function () {
+            $('#loginmsg').html('');
+        }, 1000 * 7)
     }
-    defer1 = setTimeout(function () {
-        $('#loginmsg').html('');
-    }, 1000 * 7)
 }

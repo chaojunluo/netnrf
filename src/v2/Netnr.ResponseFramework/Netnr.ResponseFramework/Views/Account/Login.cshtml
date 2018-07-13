@@ -2,33 +2,33 @@
     ViewData["Title"] = "登录";
 }
 
-<link href="/css/account/login.css" rel="stylesheet" />
+<link href="/css/account/login.css?v1.0.1" rel="stylesheet" />
 
-<div class="container">
-    <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
-        <form onsubmit="return false" id="formLogin">
-            <div class="title">netnrf / 登录</div>
-            <div class="form-group form-group-lg">
-                <input type="text" class="form-control" name="username" id="username" placeholder="账号" autocomplete="off" value="admin">
-            </div>
-            <div class="form-group form-group-lg">
-                <input type="text" class="form-control" name="userpwd" id="userpwd" placeholder="密码" autocomplete="off" value="admin">
-            </div>
-            <div class="form-group form-group-lg" style="position:relative">
-                <input type="text" class="form-control" name="captcha" id="captcha" placeholder="验证码" autocomplete="off" maxlength="4">
-                <img id="img_captcha" src="/account/captcha" alt="验证码" title="点击验证码刷新" />
-            </div>
-            <div class="form-group" id="loginmsg"></div>
-            <div class="form-group-lg">
-                <button type="button" id="btnLogin" class="btn btn-info">立即登录</button>
-                <label class="pull-right mt5">
-                    <input type="checkbox" name="remember" value="1" checked="checked" /> 记住登录
-                </label>
-            </div>
-        </form>
-    </div>
+<div class="row row-top"></div>
+
+<div class="container cc">
+    <form onsubmit="return false" id="formLogin">
+        <div class="title">netnrf</div>
+        <div class="form-group form-group-lg fg fg-user">
+            <input type="text" class="form-control" name="username" id="username" placeholder="账号" autocomplete="off" value="admin">
+        </div>
+        <div class="form-group form-group-lg fg fg-pwd">
+            <input type="text" class="form-control" name="userpwd" id="userpwd" placeholder="密码" autocomplete="off" value="admin">
+        </div>
+        <div class="form-group form-group-lg fg fg-captcha">
+            <input type="text" class="form-control" name="captcha" id="captcha" placeholder="验证码" autocomplete="off" maxlength="4">
+            <img id="img_captcha" src="/account/captcha" alt="验证码" title="点击验证码刷新" />
+        </div>
+        <div class="form-group" id="loginmsg"></div>
+        <div class="form-group">
+            <label class="remember">
+                <input type="checkbox" name="remember" value="1" checked="checked" /> 保持登录状态
+            </label>
+            <button type="button" id="btnLogin" class="btn btn-info pull-right">登 录</button>
+        </div>
+    </form>
 </div>
 
-<script src="/js/account/login.js?v1.0.0"></script>
+<script src="/js/account/login.js?v1.0.1"></script>
 
-<a href="/tool/sqlserverreset" class="btn btn-danger btn-sm" target="_blank" style="position:fixed;right:5px;top:5px;">立即重置数据库（约5秒）</a>
+<a href="/tool/sqlserverreset" class="btn btn-danger btn-sm" target="_blank" style="position:fixed;right:5px;top:5px;">重置数据库（约5秒）</a>
