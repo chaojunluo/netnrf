@@ -5,4 +5,4 @@
 
 @await Component.InvokeAsync("Form", new { tablename = "TempExample", modalsize = 3, paneltitle = "面板一,面板二" })
 
-@{await Html.RenderPartialAsync("_BaseViewPartial");}
+<partial name="_BaseViewPartial" />

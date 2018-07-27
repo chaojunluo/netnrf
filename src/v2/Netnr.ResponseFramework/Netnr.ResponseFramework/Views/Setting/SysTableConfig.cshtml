@@ -4,4 +4,4 @@
 
 @await Component.InvokeAsync("Form", new { tablename = "systableconfig", paneltitle = "表格配置,表单配置" })
 
-@{await Html.RenderPartialAsync("_BaseViewPartial");}
+<partial name="_BaseViewPartial" />
