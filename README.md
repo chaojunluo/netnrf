@@ -1,7 +1,7 @@
 # netnrf 响应式框架
 - GitHub：<https://github.com/netnr/netnrf>
 - Gitee：<https://gitee.com/netnr/netnrf>
-- [联系（打赏）](https://www.netnr.com/mix/contact)
+- [联系（打赏）](https://ss.netnr.com/contact)
 - [加入QQ群](http://qm.qq.com/cgi-bin/qm/qr?k=oLmAflGAIODgeYw9tImSvBVX1SK_warh)
 
 ----------
