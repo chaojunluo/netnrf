@@ -60,6 +60,10 @@
 
 ![表单配置](https://netnr.gitee.io/gs/2018/05/18/0c98ee578c.png)
 
+#### 角色权限配置（树）
+
+![角色权限配置](https://netnr.gitee.io/gs/2018/08/16/31a55cac78.png)
+
 ----------
 ## 第三方文档API
 - [EasyUI文档](https://ad.netnr.com/#EasyUI-1.5.2)
