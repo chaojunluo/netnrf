@@ -18,7 +18,6 @@ namespace Netnr.ResponseFramework.Controllers
         /// <returns></returns>
         public IActionResult Index()
         {
-            var v1 = Func.Common.DicTable;
             return View();
         }
 

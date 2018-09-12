@@ -53,6 +53,36 @@ namespace Netnr.Data
         }
 
         /// <summary>
+        /// 排序拼接
+        /// </summary>
+        /// <param name="sortName">排序字段，支持多个，逗号分隔</param>
+        /// <param name="sortOrder">排序模式，支持多个，逗号分隔</param>
+        /// <param name="bracket">排序字段带方括号 默认是</param>
+        /// <returns></returns>
+        public static string OrderByJoin(string sortName, string sortOrder, bool bracket = true)
+        {
+            string result = string.Empty;
+
+            var sortlist = sortName.Split(',').ToList();
+            var orderlist = sortOrder.Split(',').ToList();
+            if (sortlist.Count == orderlist.Count)
+            {
+                for (int i = 0; i < sortlist.Count; i++)
+                {
+                    string sortField = sortlist[i].Trim().Replace("'", "").Replace(";", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                    if (bracket)
+                    {
+                        sortField = "[" + sortField + "]";
+                    }
+                    string orderType = orderlist[i].ToLower().Trim() == "asc" ? "asc" : "desc";
+                    result += sortField + " " + orderType + ",";
+                }
+            }
+
+            return result.TrimEnd(',');
+        }
+
+        /// <summary>
         /// 排序
         /// </summary>
         /// <param name="sorts">排序字段，支持多个，逗号分割</param>

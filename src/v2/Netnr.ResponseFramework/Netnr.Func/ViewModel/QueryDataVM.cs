@@ -19,7 +19,7 @@ namespace Netnr.Func.ViewModel
             /// 请求标识
             /// </summary>
             public string uri { get; set; }
-            
+
             /// <summary>
             /// 表名
             /// </summary>
@@ -54,7 +54,12 @@ namespace Netnr.Func.ViewModel
             /// 排序方式 默认 asc
             /// </summary>
             public string order { get; set; } = "asc";
-            
+
+            /// <summary>
+            /// 排序拼接
+            /// </summary>
+            public string sortOrderJoin { get; set; }
+
             /// <summary>
             /// 是否查询列信息 1不查询
             /// </summary>

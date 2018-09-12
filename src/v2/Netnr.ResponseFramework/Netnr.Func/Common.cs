@@ -5,6 +5,7 @@ using Netnr.Func.ViewModel;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -154,25 +155,25 @@ namespace Netnr.Func
         /// 查询数据库
         /// </summary>
         /// <returns></returns>
-        //public static DataSet QueryDS(QueryDataVM.GetParams param)
-        //{
-        //    var ds = new DataSet();
+        public static DataSet QueryDS(QueryDataVM.GetParams param)
+        {
+            var ds = new DataSet();
 
-        //    string sql = string.Empty;
-        //    //分页
-        //    if (param.pagination == 1)
-        //    {
-        //        sql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY " + param.sortOrderJoin + ")AS NumId, " + param.columnsFields + "  FROM " + param.tableName + " WHERE " + param.wheres + ") T WHERE NumId BETWEEN " + ((param.page - 1) * param.rows + 1) + " AND " + param.page * param.rows;
-        //        sql += "; SELECT COUNT(1) AS total FROM " + param.tableName + " WHERE " + param.wheres;
-        //    }
-        //    else
-        //    {
-        //        sql = "SELECT " + param.columnsFields + " FROM " + param.tableName + " WHERE " + param.wheres + " ORDER BY " + param.sortOrderJoin;
-        //    }
-        //    ds = SQLServerDB.GetDataSet(sql);
+            string sql = string.Empty;
+            //分页
+            if (param.pagination == 1)
+            {
+                sql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY " + param.sortOrderJoin + ")AS NumId,* FROM " + param.tableName + " WHERE " + param.wheres + ") T WHERE NumId BETWEEN " + ((param.page - 1) * param.rows + 1) + " AND " + param.page * param.rows;
+                sql += "; SELECT COUNT(1) AS total FROM " + param.tableName + " WHERE " + param.wheres;
+            }
+            else
+            {
+                sql = "SELECT * FROM " + param.tableName + " WHERE " + param.wheres + " ORDER BY " + param.sortOrderJoin;
+            }
+            ds = SQLServerDB.GetDataSet(sql);
 
-        //    return ds;
-        //}
+            return ds;
+        }
 
         /// <summary>
         /// 查询拼接，linq追加sql条件，不支持like、between and等
@@ -214,44 +215,6 @@ namespace Netnr.Func
             }
         }
 
-        public static string IQuery(QueryDataVM.GetParams param)
-        {
-            var rt = new QueryDataVM.OutputResult();
-
-            using (var ru = new RepositoryUse())
-            {
-                IQueryable<object> query = null;
-
-                switch (param.tableName.ToLower())
-                {
-                    case "sysuser":
-                        query = DataBase.OrderBy(from a in ru.Context.Set<SysUser>() select a, param.sort, param.order);
-                        break;
-                }
-
-                if (query != null)
-                {
-                    //总数
-                    rt.total = query.Count();
-                    //分页
-                    if (param.pagination == 1)
-                    {
-                        query = query.Skip((param.page - 1) * param.rows).Take(param.rows);
-                    }
-                    //数据
-                    rt.data = query.ToList();
-
-                    //查询列配置
-                    if (param.columnsExists != 1)
-                    {
-                        rt.columns = ru.SysTableConfigRepository.IQueryable(x => x.TableName == param.tableName).ToList();
-                    }
-                }
-            }
-
-            return rt.ToJson();
-        }
-
         /// <summary>
         /// 查询拼接，自定义查询SQL主体
         /// 关联查询时，注意避免相同字段列，如过查询条件字段存在多张表中则会出现字段不明确的错误
@@ -260,66 +223,66 @@ namespace Netnr.Func
         /// <param name="param"></param>
         /// <param name="or"></param>
         /// <param name="sqlcount">查询SQL总数量，默认查询SQL主体，注意：避免相同字段列</param>
-        //public static void QueryJoin(string sql, QueryDataVM.GetParams param, ref QueryDataVM.OutputResult or, string sqlcount = null)
-        //{
-        //    //条件
-        //    if (!string.IsNullOrWhiteSpace(param.wheres))
-        //    {
-        //        var jwhere = JObject.Parse(param.wheres) as JToken;
-        //        param.wheres = QueryDataVM.SqlQueryWhere(jwhere);
-        //    }
-        //    if (string.IsNullOrWhiteSpace(param.wheres))
-        //    {
-        //        param.wheres = " WHERE 1=1";
-        //    }
-        //    else
-        //    {
-        //        param.wheres = " WHERE " + param.wheres;
-        //    }
+        public static void QueryJoin(string sql, QueryDataVM.GetParams param, ref QueryDataVM.OutputResult or, string sqlcount = null)
+        {
+            //条件
+            if (!string.IsNullOrWhiteSpace(param.wheres))
+            {
+                var jwhere = JObject.Parse(param.wheres) as JToken;
+                param.wheres = QueryDataVM.SqlQueryWhere(jwhere);
+            }
+            if (string.IsNullOrWhiteSpace(param.wheres))
+            {
+                param.wheres = " WHERE 1=1";
+            }
+            else
+            {
+                param.wheres = " WHERE " + param.wheres;
+            }
 
-        //    //排序
-        //    param.sortOrderJoin = DataBase.OrderByJoin(param.sort, param.order);
+            //排序
+            param.sortOrderJoin = DataBase.OrderByJoin(param.sort, param.order);
 
-        //    //总条数
-        //    if (sqlcount == null)
-        //    {
-        //        sqlcount = "SELECT COUNT(1) FROM (" + sql + ") CR " + param.wheres;
-        //    }
-        //    else
-        //    {
-        //        sqlcount = sqlcount + param.wheres;
-        //    }
+            //总条数
+            if (sqlcount == null)
+            {
+                sqlcount = "SELECT COUNT(1) FROM (" + sql + ") CR " + param.wheres;
+            }
+            else
+            {
+                sqlcount = sqlcount + param.wheres;
+            }
 
-        //    //排序分页
-        //    if (param.pagination == 1)
-        //    {
-        //        sql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY " + param.sortOrderJoin + ") AS NumId,* FROM("
-        //            + sql + ")T " + param.wheres + " ) TT WHERE NumId BETWEEN "
-        //            + ((param.page - 1) * param.rows + 1) + " AND " + param.page * param.rows;
-        //    }
-        //    else
-        //    {
-        //        //排序不分页
-        //        sql += "SELECT * FROM (" + sql + ") T " + param.wheres + " ORDER BY " + param.sortOrderJoin;
-        //    }
+            //排序分页
+            if (param.pagination == 1)
+            {
+                sql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY " + param.sortOrderJoin + ") AS NumId,* FROM("
+                    + sql + ")T " + param.wheres + " ) TT WHERE NumId BETWEEN "
+                    + ((param.page - 1) * param.rows + 1) + " AND " + param.page * param.rows;
+            }
+            else
+            {
+                //排序不分页
+                sql += "SELECT * FROM (" + sql + ") T " + param.wheres + " ORDER BY " + param.sortOrderJoin;
+            }
 
-        //    //查询数据
-        //    var ds = SQLServerDB.GetDataSet(sql + ";" + Environment.NewLine + sqlcount);
+            //查询数据
+            var ds = SQLServerDB.GetDataSet(sql + ";" + Environment.NewLine + sqlcount);
 
-        //    //数据
-        //    or.data = ds.Tables[0];
-        //    //总条数
-        //    or.total = Convert.ToInt32(ds.Tables[ds.Tables.Count - 1].Rows[0][0].ToString());
+            //数据
+            or.data = ds.Tables[0];
+            //总条数
+            or.total = Convert.ToInt32(ds.Tables[ds.Tables.Count - 1].Rows[0][0].ToString());
 
-        //    //列
-        //    if (param.columnsExists != 1)
-        //    {
-        //        using (var ru = new RepositoryUse())
-        //        {
-        //            or.columns = ru.SysTableConfigRepository.IQueryable(x => x.TableName == param.tableName).OrderBy(x => x.ColOrder).ToList();
-        //        }
-        //    }
-        //}
+            //列
+            if (param.columnsExists != 1)
+            {
+                using (var ru = new RepositoryUse())
+                {
+                    or.columns = ru.SysTableConfigRepository.IQueryable(x => x.TableName == param.tableName).OrderBy(x => x.ColOrder).ToList();
+                }
+            }
+        }
 
         #endregion
 

@@ -75,48 +75,47 @@ namespace Netnr.ResponseFramework.Controllers
         [HttpPost]
         public string QueryData(QueryDataVM.GetParams param)
         {
-            //var or = new QueryDataVM.OutputResult();
+            var or = new QueryDataVM.OutputResult();
 
-            ////根据标识检索是否存在对应的数据表，（表字典DicTable 可过滤掉不让查询的表，也可以自定义DicTable表字典）
-            ////前端直传表名查询会有安全问题，所以通过uri标识在后台做对应且可过滤
-            //if (Func.Common.DicTable.ContainsKey(param.uri))
-            //{
-            //    //表名
-            //    param.tableName = Func.Common.DicTable[param.uri];
+            //根据标识检索是否存在对应的数据表，（表字典DicTable 可过滤掉不让查询的表，也可以自定义DicTable表字典）
+            //前端直传表名查询会有安全问题，所以通过uri标识在后台做对应且可过滤
+            if (Func.Common.DicTable.ContainsKey(param.uri))
+            {
+                //表名
+                param.tableName = Func.Common.DicTable[param.uri];
 
-            //    //条件
-            //    if (!string.IsNullOrWhiteSpace(param.wheres))
-            //    {
-            //        var jwhere = JObject.Parse(param.wheres) as JToken;
-            //        param.wheres = QueryDataVM.SqlQueryWhere(jwhere);
-            //    }
-            //    if (string.IsNullOrWhiteSpace(param.wheres))
-            //    {
-            //        param.wheres = "1=1";
-            //    }
+                //条件
+                if (!string.IsNullOrWhiteSpace(param.wheres))
+                {
+                    var jwhere = JObject.Parse(param.wheres) as JToken;
+                    param.wheres = QueryDataVM.SqlQueryWhere(jwhere);
+                }
+                if (string.IsNullOrWhiteSpace(param.wheres))
+                {
+                    param.wheres = "1=1";
+                }
 
-            //    //排序
-            //    param.sortOrderJoin = DataBase.OrderByJoin(param.sort, param.order);
+                //排序
+                param.sortOrderJoin = DataBase.OrderByJoin(param.sort, param.order);
 
-            //    //查询：列、数据表、总条数
-            //    if (param.columnsExists != 1)
-            //    {
-            //        or.columns = Func.Common.QuerySysTableConfigList(x => x.TableName == param.tableName);
-            //    }
-            //    var ds = Func.Common.QueryDS(param);
-            //    or.data = ds.Tables[0];
-            //    if (param.pagination == 1)
-            //    {
-            //        or.total = Convert.ToInt32(ds.Tables[1].Rows[0][0].ToString());
-            //    }
-            //    else
-            //    {
-            //        or.total = ds.Tables[0].Rows.Count;
-            //    }
-            //}
+                //查询：列、数据表、总条数
+                if (param.columnsExists != 1)
+                {
+                    or.columns = Func.Common.QuerySysTableConfigList(x => x.TableName == param.tableName);
+                }
+                var ds = Func.Common.QueryDS(param);
+                or.data = ds.Tables[0];
+                if (param.pagination == 1)
+                {
+                    or.total = Convert.ToInt32(ds.Tables[1].Rows[0][0].ToString());
+                }
+                else
+                {
+                    or.total = ds.Tables[0].Rows.Count;
+                }
+            }
 
-            //return or.ToJson();
-            return "";
+            return or.ToJson();
         }
 
         /// <summary>
