@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
+using System.Net;
 
 namespace Netnr.Core
 {
@@ -92,5 +93,16 @@ namespace Netnr.Core
         /// </summary>
         public string Language { get; set; }
 
+        /// <summary>
+        /// 获取指定服务器的信息
+        /// </summary>
+        /// <param name="url">服务器地址</param>
+        /// <returns></returns>
+        public static HttpWebResponse Response(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            return response;
+        }
     }
 }

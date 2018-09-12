@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Netnr.Data;
 using Netnr.Domain;
 using Netnr.Func.ViewModel;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -30,7 +28,7 @@ namespace Netnr.Func
             {
                 if (_DicTable == null)
                 {
-                    var ass = Assembly.Load("Netnr.Domain.dll").GetTypes();
+                    var ass = Assembly.LoadFile(GlobalVar.ContentRootPath + "/Netnr.Domain.dll").GetTypes();
                     var dic = new Dictionary<string, string>();
                     foreach (var item in ass)
                     {

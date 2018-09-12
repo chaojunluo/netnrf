@@ -29,8 +29,8 @@ namespace Netnr.Core
             {
                 //发送内容
                 byte[] bytes = Encoding.UTF8.GetBytes(postData);
-                request.ContentLength = postData.Length;
-                System.IO.Stream outputStream = request.GetRequestStream();
+                request.ContentLength = Encoding.UTF8.GetBytes(postData).Length;
+                Stream outputStream = request.GetRequestStream();
                 outputStream.Write(bytes, 0, bytes.Length);
                 outputStream.Close();
             }

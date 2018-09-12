@@ -16,7 +16,7 @@
         {
             if (cmdPath == "cmd.exe")
             {
-                cmdPath = System.Environment.SystemDirectory + "\\" + cmdPath;
+                cmdPath = System.Environment.SystemDirectory + "/" + cmdPath;
             }
 
             string strOutput = "";

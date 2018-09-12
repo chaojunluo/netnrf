@@ -25,14 +25,14 @@ namespace Netnr.Core
 
                 //标题样式
                 ICellStyle HeadercellStyle = workbook.CreateCellStyle();
-                HeadercellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                HeadercellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                HeadercellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                HeadercellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                HeadercellStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                HeadercellStyle.BorderBottom = BorderStyle.Thin;
+                HeadercellStyle.BorderLeft = BorderStyle.Thin;
+                HeadercellStyle.BorderRight = BorderStyle.Thin;
+                HeadercellStyle.BorderTop = BorderStyle.Thin;
+                HeadercellStyle.Alignment = HorizontalAlignment.Center;
                 HeadercellStyle.VerticalAlignment = VerticalAlignment.Center;
                 //字体
-                NPOI.SS.UserModel.IFont headerfont = workbook.CreateFont();
+                IFont headerfont = workbook.CreateFont();
                 headerfont.Boldweight = (short)FontBoldWeight.Bold;
                 HeadercellStyle.SetFont(headerfont);
 
@@ -53,13 +53,13 @@ namespace Netnr.Core
 
                 //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
                 cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
-                cellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                cellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                cellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                cellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                cellStyle.BorderBottom = BorderStyle.Thin;
+                cellStyle.BorderLeft = BorderStyle.Thin;
+                cellStyle.BorderRight = BorderStyle.Thin;
+                cellStyle.BorderTop = BorderStyle.Thin;
                 cellStyle.VerticalAlignment = VerticalAlignment.Center;
 
-                NPOI.SS.UserModel.IFont cellfont = workbook.CreateFont();
+                IFont cellfont = workbook.CreateFont();
                 cellfont.Boldweight = (short)FontBoldWeight.Normal;
                 cellStyle.SetFont(cellfont);
 
@@ -119,14 +119,14 @@ namespace Netnr.Core
 
                     //标题样式
                     ICellStyle HeadercellStyle = workbook.CreateCellStyle();
-                    HeadercellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                    HeadercellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                    HeadercellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                    HeadercellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                    HeadercellStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                    HeadercellStyle.BorderBottom = BorderStyle.Thin;
+                    HeadercellStyle.BorderLeft = BorderStyle.Thin;
+                    HeadercellStyle.BorderRight = BorderStyle.Thin;
+                    HeadercellStyle.BorderTop = BorderStyle.Thin;
+                    HeadercellStyle.Alignment = HorizontalAlignment.Center;
                     HeadercellStyle.VerticalAlignment = VerticalAlignment.Center;
                     //字体
-                    NPOI.SS.UserModel.IFont headerfont = workbook.CreateFont();
+                    IFont headerfont = workbook.CreateFont();
                     headerfont.Boldweight = (short)FontBoldWeight.Bold;
                     HeadercellStyle.SetFont(headerfont);
 
@@ -147,13 +147,13 @@ namespace Netnr.Core
 
                     //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
                     cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
-                    cellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                    cellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                    cellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                    cellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cellStyle.BorderBottom = BorderStyle.Thin;
+                    cellStyle.BorderLeft = BorderStyle.Thin;
+                    cellStyle.BorderRight = BorderStyle.Thin;
+                    cellStyle.BorderTop = BorderStyle.Thin;
                     cellStyle.VerticalAlignment = VerticalAlignment.Center;
 
-                    NPOI.SS.UserModel.IFont cellfont = workbook.CreateFont();
+                    IFont cellfont = workbook.CreateFont();
                     cellfont.Boldweight = (short)FontBoldWeight.Normal;
                     cellStyle.SetFont(cellfont);
 

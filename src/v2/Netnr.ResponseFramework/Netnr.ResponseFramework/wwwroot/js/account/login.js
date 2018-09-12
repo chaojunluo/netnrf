@@ -70,7 +70,8 @@ var defer2;
 function formautoheight() {
     clearTimeout(defer2);
     defer2 = setTimeout(function () {
-        $('.cc').animate({ "margin-top": $(window).height() / 2 - 162 });
+        var cc = $('.cc');
+        cc.animate({ "margin-top": $(window).height() / 2 - cc.height() / 2 });
     }, 200);
 }
 $(window).on('load resize', formautoheight);
