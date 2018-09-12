@@ -49,5 +49,34 @@ namespace Netnr.Core
             WriteText(content, path, fileName, Encoding.UTF8, type);
         }
 
+        /// <summary>
+        /// 读取
+        /// </summary>
+        /// <param name="path">物理目录</param>
+        /// <param name="fileName">文件名</param>
+        /// <param name="e">编码 默认UTF8</param>
+        /// <returns></returns>
+        public static string ReadText(string path, string fileName, Encoding e = null)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                if (e == null)
+                {
+                    e = Encoding.UTF8;
+                }
+
+                using (var sr = new StreamReader(path + fileName, Encoding.Default))
+                {
+                    result = sr.ReadToEnd();
+                }
+            }
+            catch (System.Exception)
+            {
+            }
+            return result;
+        }
+
     }
 }

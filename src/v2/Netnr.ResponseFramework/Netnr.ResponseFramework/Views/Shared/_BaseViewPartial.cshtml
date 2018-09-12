@@ -8,13 +8,13 @@
 </div>
 
 <!--配置表格-->
-<script src="/js/inlay/configtable.js?v1.0.0"></script>
+<script src="/js/inlay/configtable.js" asp-append-version="true"></script>
 <!--配置表单-->
-<script src="/js/inlay/configform.js?v1.0.0"></script>
+<script src="/js/inlay/configform.js" asp-append-version="true"></script>
 <!--搜索模块-->
-<script src="/js/inlay/configquery.js?v1.0.0"></script>
+<script src="/js/inlay/configquery.js" asp-append-version="true"></script>
 <!--引入页面JS-->
-<script src='/js/@ViewContext.RouteData.Values["controller"].ToString()/@(ViewContext.RouteData.Values["action"].ToString()+".js?v1.0.0")'></script>
+<script src='/js/@ViewContext.RouteData.Values["controller"].ToString()/@(ViewContext.RouteData.Values["action"].ToString()+".js")' asp-append-version="true"></script>
 
 <script>
     //绑定数据

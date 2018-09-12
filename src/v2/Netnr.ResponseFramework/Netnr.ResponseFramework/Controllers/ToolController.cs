@@ -67,7 +67,7 @@ namespace Netnr.ResponseFramework.Controllers
             }
 
             string sql = string.Empty;
-            string path = Startup.HostingEnvironment.WebRootPath + "\\script\\GetTableInfo.txt";
+            string path = GlobalVar.WebRootPath + "/script/GetTableInfo.txt";
             using (StreamReader sr = new StreamReader(path))
             {
                 sql = sr.ReadToEnd();
@@ -118,7 +118,7 @@ namespace Netnr.ResponseFramework.Controllers
                 cmd += "-S " + dbconn.DataSource + " -U " + uid + " -P " + pwd + " -d " + dbconn.Database;
             }
 
-            cmd += " -i " + Startup.HostingEnvironment.WebRootPath + "\\script\\";
+            cmd += " -i " + GlobalVar.WebRootPath + "/script/";
 
             result += "--------- Delete all the tables" + Environment.NewLine;
 

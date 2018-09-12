@@ -7,18 +7,18 @@ namespace Netnr.Data
     public class SQLServerDB
     {
         #region 数据库连接字符串（可自定义，默认取配置的值）
-        private static string _SqlConn;
+        private static string _sqlConn;
         public static string SqlConn
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_SqlConn))
+                if (string.IsNullOrWhiteSpace(_sqlConn))
                 {
-                    return DataBase.Configuration.GetConnectionString("SQLServerConn");
+                    _sqlConn = GlobalVar.GetValue("ConnectionStrings:SQLServerConn");
                 }
-                return _SqlConn;
+                return _sqlConn;
             }
-            set => _SqlConn = value;
+            set => _sqlConn = value;
         }
         #endregion
 
@@ -85,7 +85,7 @@ namespace Netnr.Data
                 return Reader;
             }
         }
-        
+
         /// <summary>
         /// 返回第一行第一列的值 类型为 object
         /// </summary>
@@ -113,7 +113,7 @@ namespace Netnr.Data
         }
 
         #endregion
-        
+
         #region 增、删、改
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Netnr.Data
         }
 
         #endregion
-        
+
         #region 存储过程 DataSet、执行存储过程返回结果
 
         /// <summary>

@@ -26,7 +26,6 @@ namespace Netnr.Data
         IQueryable<TEntity> IQueryable();
         IQueryable<TEntity> IQueryable(Expression<Func<TEntity, bool>> predicate);
 
-        List<TEntity> FindList(Expression<Func<TEntity, bool>> pWhere, DataBase.Pagination pag);
         List<TEntity> FindList(IQueryable<TEntity> query, DataBase.Pagination pag);
     }
 }

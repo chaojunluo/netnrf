@@ -30,7 +30,7 @@ namespace Netnr.ResponseFramework.Controllers
                 string filename = "导出表格";
 
                 //生成excel的临时文件目录
-                string path = Startup.HostingEnvironment.WebRootPath + "\\temp\\";
+                string path = GlobalVar.WebRootPath + "/temp/";
 
                 //存放导出的数据
                 var dt = new DataTable();

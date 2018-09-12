@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,33 +12,8 @@ namespace Netnr.ResponseFramework
 {
     public class Startup
     {
-        /// <summary>
-        /// 全局配置
-        /// </summary>
-        public static IConfiguration Configuration;
-
-        /// <summary>
-        /// 托管环境信息
-        /// 
-        /// //内部访问（项目根路径）
-        /// HostingEnvironment.ContentRootPath
-        /// 
-        /// //web外部访问（wwwroot）
-        /// HostingEnvironment.WebRootPath
-        /// 
-        /// </summary>
-        public static IHostingEnvironment HostingEnvironment;
-
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-            DataBase.Configuration = configuration;
-
-            //配置信息
-            //string s1 = Configuration.GetChildren().ToJson();
-            //取值
-            //string s2 = configuration.GetValue<string>("XX");
-
             //无创建，有忽略
             using (var db = new ContextBase())
             {
@@ -48,12 +24,20 @@ namespace Netnr.ResponseFramework
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                //cookie存储需用户同意，欧盟新标准，暂且关闭，否则用户没同意无法写入
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddMvc(options =>
             {
                 //注册全局过滤器
-                options.Filters.Add(new Filters.FilterConfigs.ErrorActionFilter());
+                options.Filters.Add(new Global.FilterConfigs.ErrorActionFilter());
+
                 options.Filters.Add(new Filters.FilterConfigs.LogActionAttribute());
             });
 
@@ -93,8 +77,6 @@ namespace Netnr.ResponseFramework
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache memoryCache)
         {
-            HostingEnvironment = env;
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -104,7 +86,9 @@ namespace Netnr.ResponseFramework
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
 
             //授权访问
             app.UseAuthentication();

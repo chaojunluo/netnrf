@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Linq.Dynamic.Core;
 
 namespace Netnr.Data
 {
@@ -77,28 +76,11 @@ namespace Netnr.Data
             return dbSet.Where(predicate);
         }
 
-
-        public List<TEntity> FindList(Expression<Func<TEntity, bool>> pWhere, DataBase.Pagination pag)
-        {
-            var query = dbSet.AsNoTracking().Where(pWhere);
-
-            pag.Total = query.Count();
-
-            string OrderBys = DataBase.OrderByJoin(pag.SortName, pag.SortOrder, false);
-
-            query = DynamicQueryableExtensions.OrderBy(query, OrderBys);
-
-            query = query.Skip((pag.PageNumber - 1) * pag.PageSize).Take(pag.PageSize);
-
-            return query.ToList();
-        }
         public List<TEntity> FindList(IQueryable<TEntity> query, DataBase.Pagination pag)
         {
+            query = query.AsNoTracking();
+
             pag.Total = query.Count();
-
-            string OrderBys = DataBase.OrderByJoin(pag.SortName, pag.SortOrder, false);
-
-            query = DynamicQueryableExtensions.OrderBy(query, OrderBys);
 
             query = query.Skip((pag.PageNumber - 1) * pag.PageSize).Take(pag.PageSize);
 

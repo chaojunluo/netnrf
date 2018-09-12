@@ -12,6 +12,13 @@
     <ProjectReference Include="..\Netnr.Core\Netnr.Core.csproj" />
     <ProjectReference Include="..\Netnr.Domain\Netnr.Domain.csproj" />
     <ProjectReference Include="..\Netnr.Func\Netnr.Func.csproj" />
+    <ProjectReference Include="..\Netnr.Global\Netnr.Global.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

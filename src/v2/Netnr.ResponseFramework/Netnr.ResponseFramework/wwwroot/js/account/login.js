@@ -19,7 +19,7 @@ $('#btnLogin').click(function () {
             dataType: 'json',
             success: function (data) {
                 writemsg(data.message);
-                
+
                 if (data.code == 100) {
                     window.location.href = data.url;
                 }
@@ -57,7 +57,7 @@ $("#img_captcha").click(function () {
 //输出消息
 var defer1;
 function writemsg(msg, keep) {
-    $('#loginmsg').html(msg);    
+    $('#loginmsg').html(msg);
     clearTimeout(defer1);
     if (!keep) {
         defer1 = setTimeout(function () {
@@ -65,3 +65,12 @@ function writemsg(msg, keep) {
         }, 1000 * 7)
     }
 }
+
+var defer2;
+function formautoheight() {
+    clearTimeout(defer2);
+    defer2 = setTimeout(function () {
+        $('.cc').animate({ "margin-top": $(window).height() / 2 - 162 });
+    }, 200);
+}
+$(window).on('load resize', formautoheight);

@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using System;
-using System.Linq;
-using System.Reflection;
 
 namespace Netnr.Data
 {
@@ -22,16 +21,24 @@ namespace Netnr.Data
             switch (TDB)
             {
                 case DataBase.TypeDB.SQLServer:
-                    optionsBuilder.UseSqlServer(DataBase.Configuration.GetConnectionString("SQLServerConn"), options =>
+                    optionsBuilder.UseSqlServer(GlobalVar.GetValue("ConnectionStrings:SQLServerConn"), options =>
                     {
                         //启用 row_number 分页 （兼容2005、2008）
-                        options.UseRowNumberForPaging();
+                        //options.UseRowNumberForPaging();
                     });
                     break;
                 case DataBase.TypeDB.SQLite:
-                    optionsBuilder.UseSqlite(DataBase.Configuration.GetConnectionString("SQLiteConn"));
+                    //optionsBuilder.UseSqlite(GlobalVar.GetValue("ConnectionStrings:SQLiteConn"));
                     break;
             }
+
+            //注册日志（修改日志等级为Information，可查看执行的SQL语句）
+            optionsBuilder.UseLoggerFactory(new LoggerFactory(new[]
+            {
+                new ConsoleLoggerProvider((category, level)
+                    => category == DbLoggerCategory.Database.Command.Name
+                    && level == LogLevel.Error, true)
+            }));
         }
 
         /// <summary>
@@ -53,15 +60,10 @@ namespace Netnr.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //实体映射模块名称
-            string MapNamespace = DataBase.ProjectAttr.Mapping + ".dll";
-            //Map dll path
-            string path = Assembly.GetExecutingAssembly().CodeBase.Replace(GetType().Module.Name, MapNamespace).Replace("file:///", "");
+            string MapNamespace = "Netnr.Mapping.dll";
+            string path = GlobalVar.ContentRootPath + "/" + MapNamespace;
 
-            var modelObject = Assembly.LoadFile(path).GetTypes();
-
-            //var moFilter = modelObject.Where(type => !String.IsNullOrEmpty(type.Namespace))
-            //    .Where(type => type.BaseType != null && type.BaseType.BaseType != null
-            //    && type.BaseType.BaseType.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>)).ToList();
+            var modelObject = System.Reflection.Assembly.LoadFile(path).GetTypes();
 
             foreach (var mo in modelObject)
             {

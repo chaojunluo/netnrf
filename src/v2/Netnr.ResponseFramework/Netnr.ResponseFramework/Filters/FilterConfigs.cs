@@ -18,26 +18,6 @@ namespace Netnr.ResponseFramework.Filters
     public class FilterConfigs
     {
         /// <summary>
-        /// 全局错误处理
-        /// </summary>
-        public class ErrorActionFilter : IExceptionFilter
-        {
-            public void OnException(ExceptionContext context)
-            {
-                DateTime dt = DateTime.Now;
-
-                string path = Startup.HostingEnvironment.ContentRootPath + "\\logs\\" + dt.ToString("yyyyMM") + "\\";
-
-                string msg = $"==========日志记录时间：{dt.ToString("yyyy-MM-dd HH:mm:ss")}{Environment.NewLine}"
-                           + $"消息内容：{context.Exception.Message}{Environment.NewLine}"
-                           + $"引发异常的方法：{context.Exception.StackTrace.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)[0]}"
-                           + Environment.NewLine + Environment.NewLine;
-
-                Core.FileTo.WriteText(msg, path, dt.ToString("yyyyMMdd") + ".log");
-            }
-        }
-
-        /// <summary>
         /// 全局日志记录
         /// </summary>
         public class LogActionAttribute : ActionFilterAttribute
