@@ -13,6 +13,16 @@ namespace Netnr.Data
         private DataBase.TypeDB TDB;
 
         /// <summary>
+        /// 应用程序不为每个上下文实例创建新的ILoggerFactory实例非常重要。这样做会导致内存泄漏和性能下降
+        /// </summary>
+        public static readonly LoggerFactory MyLoggerFactory = new LoggerFactory(new[]
+            {
+                new ConsoleLoggerProvider((category, level)
+                    => category == DbLoggerCategory.Database.Command.Name
+                    && level == LogLevel.Error, true)
+            });
+
+        /// <summary>
         /// 配置连接字符串
         /// </summary>
         /// <param name="optionsBuilder"></param>
@@ -33,12 +43,7 @@ namespace Netnr.Data
             }
 
             //注册日志（修改日志等级为Information，可查看执行的SQL语句）
-            optionsBuilder.UseLoggerFactory(new LoggerFactory(new[]
-            {
-                new ConsoleLoggerProvider((category, level)
-                    => category == DbLoggerCategory.Database.Command.Name
-                    && level == LogLevel.Error, true)
-            }));
+            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
         }
 
         /// <summary>

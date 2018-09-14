@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Shell.NET" Version="0.2.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System;
+using Shell.NET;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -122,14 +123,15 @@ namespace Netnr.ResponseFramework.Controllers
 
             result += "--------- Delete all the tables" + Environment.NewLine;
 
-            string cmdout = Core.CmdTo.Run(cmd + "DataDropTable.txt");
-            result += cmdout.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
+            var cmdout = new Bash().Command(cmd + "DataDropTable.txt");
+
+            result += cmdout.Output.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
             result += Environment.NewLine;
 
             result += "--------- Init tables" + Environment.NewLine;
 
-            cmdout = Core.CmdTo.Run(cmd + "DataInit.txt");
-            result += cmdout.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
+            cmdout = new Bash().Command(cmd + "DataInit.txt");
+            result += cmdout.Output.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
 
             result = result.Insert(0, "time consuming ：" + (DateTime.Now - nowdt).Seconds + " S" + Environment.NewLine);
 
