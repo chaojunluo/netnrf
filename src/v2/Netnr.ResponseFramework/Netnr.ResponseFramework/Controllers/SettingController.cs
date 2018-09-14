@@ -86,12 +86,12 @@ namespace Netnr.ResponseFramework.Controllers
 
             #region 自定义SQL查询主体
 
-            ////查询主体，select 开头 ，QueryJoin里面会处理分页排序及查询条件
-            //string sql = "select a.*,UserPwd as OldUserPwd,b.Name as RoleName from SysUser a left join SysRole b on a.RoleID=b.ID";
-            ////查询总条数，可选，不传，则以查询主体sql查询总条数，此处如果用主体SQL多了不必要的关联查询
-            //string sqlcount = "select count(1) from SysUser";
+            //查询主体，select 开头 ，QueryJoin里面会处理分页排序及查询条件
+            string sql = "select a.*,UserPwd as OldUserPwd,b.Name as RoleName from SysUser a left join SysRole b on a.RoleID=b.ID";
+            //查询总条数，可选，不传，则以查询主体sql查询总条数，此处如果用主体SQL多了不必要的关联查询
+            string sqlcount = "select count(1) from SysUser";
 
-            //Func.Common.QueryJoin(sql, param, ref or, sqlcount);
+            Func.Common.QueryJoin(sql, param, ref or, sqlcount);
 
             #endregion
 

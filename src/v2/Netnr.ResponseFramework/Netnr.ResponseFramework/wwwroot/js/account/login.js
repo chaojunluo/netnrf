@@ -18,12 +18,12 @@ $('#btnLogin').click(function () {
             data: $('#formLogin').serialize(),
             dataType: 'json',
             success: function (data) {
-                writemsg(data.message);
-
                 if (data.code == 100) {
+                    writemsg('<span class="green">' + data.message + '</span>');
                     window.location.href = data.url;
                 }
                 else {
+                    writemsg(data.message);
                     if (data.code == 104) {
                         $('#captcha').val('')[0].focus();
                         $("#img_captcha")[0].click();

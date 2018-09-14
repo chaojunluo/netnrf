@@ -1,11 +1,9 @@
 ﻿using System;
-using Shell.NET;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Netnr.Data;
@@ -92,50 +90,51 @@ namespace Netnr.ResponseFramework.Controllers
         #region SQLServer 重置数据库初始化脚本
         public IActionResult SQLServerReset()
         {
-            string result = string.Empty;
-            var nowdt = DateTime.Now;
-            string cmd = "Sqlcmd ";
-            using (var ru = new RepositoryUse())
-            {
-                var dbconn = ru.Context.Database.GetDbConnection();
-                var listConn = dbconn.ConnectionString.Split(';').ToList();
-                string uid = string.Empty;
-                string pwd = string.Empty;
-                foreach (var kv in listConn)
-                {
-                    var listkv = kv.Split('=').ToList();
-                    string key = listkv.FirstOrDefault().ToLower();
+            return Content("暂时取消，正在计划新的方案");
+            //string result = string.Empty;
+            //var nowdt = DateTime.Now;
+            //string cmd = "Sqlcmd ";
+            //using (var ru = new RepositoryUse())
+            //{
+            //    var dbconn = ru.Context.Database.GetDbConnection();
+            //    var listConn = dbconn.ConnectionString.Split(';').ToList();
+            //    string uid = string.Empty;
+            //    string pwd = string.Empty;
+            //    foreach (var kv in listConn)
+            //    {
+            //        var listkv = kv.Split('=').ToList();
+            //        string key = listkv.FirstOrDefault().ToLower();
 
-                    if ("uid,user id".Split(',').ToList().Contains(key))
-                    {
-                        uid = listkv.LastOrDefault();
-                    }
-                    if ("pwd,password".Split(',').ToList().Contains(key))
-                    {
-                        pwd = listkv.LastOrDefault();
-                    }
-                }
+            //        if ("uid,user id".Split(',').ToList().Contains(key))
+            //        {
+            //            uid = listkv.LastOrDefault();
+            //        }
+            //        if ("pwd,password".Split(',').ToList().Contains(key))
+            //        {
+            //            pwd = listkv.LastOrDefault();
+            //        }
+            //    }
 
-                cmd += "-S " + dbconn.DataSource + " -U " + uid + " -P " + pwd + " -d " + dbconn.Database;
-            }
+            //    cmd += "-S " + dbconn.DataSource + " -U " + uid + " -P " + pwd + " -d " + dbconn.Database;
+            //}
 
-            cmd += " -i " + GlobalVar.WebRootPath + "/script/";
+            //cmd += " -i " + GlobalVar.WebRootPath + "/script/";
 
-            result += "--------- Delete all the tables" + Environment.NewLine;
+            //result += "--------- Delete all the tables" + Environment.NewLine;
 
-            var cmdout = new Bash().Command(cmd + "DataDropTable.txt");
+            //var cmdout = Core.CmdTo.Run(cmd + "DataDropTable.txt");
 
-            result += cmdout.Output.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
-            result += Environment.NewLine;
+            //result += cmdout.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
+            //result += Environment.NewLine;
 
-            result += "--------- Init tables" + Environment.NewLine;
+            //result += "--------- Init tables" + Environment.NewLine;
 
-            cmdout = new Bash().Command(cmd + "DataInit.txt");
-            result += cmdout.Output.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
+            //cmdout = Core.CmdTo.Run(cmd + "DataInit.txt");
+            //result += cmdout.Replace("Sqlcmd ", "^").Split('^').ToList().LastOrDefault();
 
-            result = result.Insert(0, "time consuming ：" + (DateTime.Now - nowdt).Seconds + " S" + Environment.NewLine);
+            //result = result.Insert(0, "time consuming ：" + (DateTime.Now - nowdt).Seconds + " S" + Environment.NewLine);
 
-            return Content(result);
+            //return Content(result);
         }
         #endregion
     }
