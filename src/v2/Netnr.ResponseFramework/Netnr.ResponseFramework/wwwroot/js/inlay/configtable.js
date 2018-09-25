@@ -83,15 +83,7 @@ gdct.onBeforeLoad = function (row, param) {
     sqitem1.relation = "Equal";
     sqitem1.value = z.TableName;
 
-    var sqitem2 = sq.item();
-    sqitem2.field = "ColHide";
-    sqitem2.relation = "Equal";
-    sqitem2.value = 0;
-
-    sq.wheres.andor = "and";
-    sq.wheres.items = [];
-    sq.wheres.items.push(sqitem1);
-    sq.wheres.items.push(sqitem2);
+    sq.wheres = sqitem1;
 
     param.wheres = sq.stringify();
 }
