@@ -263,7 +263,7 @@ namespace Netnr.Func
             else
             {
                 //排序不分页
-                sql += "SELECT * FROM (" + sql + ") T " + param.wheres + " ORDER BY " + param.sortOrderJoin;
+                sql = "SELECT * FROM (" + sql + ") T " + param.wheres + " ORDER BY " + param.sortOrderJoin;
             }
 
             //查询数据
