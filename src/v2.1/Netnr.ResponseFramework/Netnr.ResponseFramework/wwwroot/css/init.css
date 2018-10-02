@@ -1,0 +1,133 @@
+﻿/*选项卡*/
+.mtab {
+    position: relative;
+    margin-top: 3px;
+    border-bottom: 1px solid #2C6AA0;
+}
+
+    .mtab .mtab-btn {
+        width: 38px;
+        height: 38px;
+        line-height: 38px;
+        text-align: center;
+        display: inline-block;
+    }
+
+        .mtab .mtab-btn:hover {
+            background-color: #f2f2f2;
+        }
+
+    .mtab .mtab-body, .mtab .mtab-main {
+        position: absolute;
+        top: 0;
+        left: 38px;
+        right: 78px;
+        height: 38px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .mtab .mtab-main {
+        left: 0;
+        right: 0;
+        -webkit-transition: left .5s;
+        -moz-transition: left .5s;
+        -o-transition: left .5s;
+        transition: left .5s;
+    }
+
+        .mtab .mtab-main a {
+            color: #000;
+            margin: 0 3px 0 0;
+            white-space: nowrap;
+            display: inline-block;
+            text-decoration: none;
+            outline: none !important;
+            padding: 10px 12px 8px !important;
+            border-radius: 3px 3px 0 0 !important;
+        }
+
+            .mtab .mtab-main a.active {
+                color: #fff !important;
+                background-color: #438eb9;
+            }
+
+            .mtab .mtab-main a:hover {
+                color: #FFF !important;
+                background-color: #438eb9;
+            }
+
+            .mtab .mtab-main a em:hover {
+                color: #ecbfbf;
+            }
+
+        .mtab .mtab-main .fa-close {
+            font-size: 16px;
+            margin-left: 5px;
+        }
+
+/* 选项卡·内容 */
+.tab-content {
+    padding: 0;
+    border: 1px solid transparent;
+}
+
+    .tab-content .tab-pane {
+        position: relative;
+    }
+
+    .tab-content iframe {
+        position: absolute;
+        height: 100%;
+        border: none;
+        width: 100%;
+    }
+
+
+/*大三角*/
+.caret-lg {
+    border-top-width: 8px;
+    border-right-width: 6px;
+    border-left-width: 6px;
+}
+
+/*下拉菜单*/
+.dropdown-yellow > li > a {
+    cursor: pointer;
+    padding: 5px 15px;
+}
+
+    .dropdown-yellow > li > a:hover, .dropdown-yellow > li > a:focus, .dropdown-yellow > li > a:active, .dropdown-yellow > li.active > a, .dropdown-yellow > li.active > a:hover, .dropdown-yellow .dropdown-submenu:hover > a {
+        color: #444;
+        background: #fee188;
+    }
+
+/*单色*/
+.orange {
+    color: #ff892a !important;
+}
+
+.blue {
+    color: #478fca !important;
+}
+
+.white {
+    color: #fff !important;
+}
+
+.red {
+    color: #dd5a43 !important;
+}
+
+.green {
+    color: #69aa46 !important;
+}
+
+.white {
+    color: #fff !important;
+}
+
+/*小屏菜单按钮*/
+.navbar-toggle {
+    margin: 5px 15px 0 5px;
+}

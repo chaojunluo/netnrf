@@ -1,0 +1,48 @@
+﻿@model List<Netnr.Domain.SysButton>
+
+@if (Model.Count > 0)
+{
+    <div class="row">
+        <div class="col-md-12 btn-menu bgwhite" id="BtnMenu">
+            @foreach (var item in Model)
+            {
+                if (item.Pid == Guid.Empty.ToString())
+                {
+                    var list_sub = Model.Where(m => m.Pid == item.Id).ToList();
+                    int? group = -1;
+
+                    if (list_sub.Count == 0)
+                    {
+                        <button id="@item.BtnId" class="@item.BtnClass">
+                            <i class="@item.BtnIcon"></i>@item.BtnText
+                        </button>
+                    }
+                    else
+                    {
+                        <div class="btn-group">
+                            <button id="@item.BtnId" class="@item.BtnClass" data-toggle="dropdown">
+                                <i class="@item.BtnIcon"></i>@item.BtnText <i class="caret"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-yellow">
+                                @foreach (var item_sub in list_sub)
+                                {
+                                    if (group != -1 && group != item_sub.BtnGroup)
+                                    {
+                                        <li class="divider"></li>
+                                    }
+                                    group = item_sub.BtnGroup;
+
+                                    <li>
+                                        <a id="@item_sub.BtnId" href="javascript:void(0)">
+                                            <i class="@item_sub.BtnIcon"></i>@item_sub.BtnText
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+}
