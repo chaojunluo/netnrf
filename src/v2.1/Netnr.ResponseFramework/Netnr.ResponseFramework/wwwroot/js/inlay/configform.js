@@ -305,6 +305,8 @@ $('#list_Config_Form').click(function () {
         //保存
         $('#' + z.ConfigForm.prefix + z.ConfigForm.save + z.TableIndex).click(function () {
             var data = CFgetJson();
+            var that = this;
+            that.disabled = true;
             $.ajax({
                 url: '/Inlay/SaveConfigForm',
                 type: 'post',
@@ -324,6 +326,9 @@ $('#list_Config_Form').click(function () {
                 },
                 error: function () {
                     art('error');
+                },
+                complete: function () {
+                    that.disabled = false;
                 }
             })
         });

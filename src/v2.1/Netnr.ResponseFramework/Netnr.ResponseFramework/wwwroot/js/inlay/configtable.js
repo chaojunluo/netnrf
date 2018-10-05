@@ -119,8 +119,9 @@ $('#list_Config_Table').click(function () {
             gdct.load();
         }
         z.mdct.okText = "<i class='fa fa-save'></i> 保存";
-        z.mdct.okClick = function () {
+        z.mdct.okClick = function (btn) {
             var rowData = gdct.func('getRows');
+            btn[0].disabled = true;
             //保存
             $.ajax({
                 url: '/inlay/SaveConfigTable',
@@ -141,6 +142,9 @@ $('#list_Config_Table').click(function () {
                 },
                 error: function () {
                     art('error');
+                },
+                complete: function () {
+                    btn[0].disabled = false;
                 }
             })
         };

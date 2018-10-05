@@ -1107,10 +1107,10 @@
             !this.showCancel && btnCancel.hide();
 
             btnOk.click(function () {
-                typeof that.okClick == "function" && that.okClick.call(that)
+                typeof that.okClick == "function" && that.okClick.call(that, btnOk)
             });
             btnCancel.click(function () {
-                typeof that.cancelClick == "function" && that.cancelClick.call(that)
+                typeof that.cancelClick == "function" && that.cancelClick.call(that, btnCancel)
             });
 
             return this;

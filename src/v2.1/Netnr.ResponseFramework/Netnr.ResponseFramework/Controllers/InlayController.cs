@@ -42,7 +42,7 @@ namespace Netnr.ResponseFramework.Controllers
                 int order = 0;
                 foreach (JToken jt in ja)
                 {
-                    string id = jt["ID"].ToString();
+                    string id = jt["Id"].ToString();
 
                     var mo = listRow.Where(x => x.Id == id).FirstOrDefault();
 

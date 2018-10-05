@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Netnr.Func
 {
@@ -19,29 +17,37 @@ namespace Netnr.Func
         /// <summary>
         /// Cookie名
         /// </summary>
-        public string Name { get; set; } = "__Session";
-
-        /// <summary>
-        /// 过期时间，默认5分钟
-        /// </summary>
-        public DateTime TimeOut { get; set; } = DateTime.Now.AddMinutes(5);
+        public string Name { get; set; } = ".session";
 
         /// <summary>
         /// 加密因子
         /// </summary>
-        private string SecretKey { get; set; } = "netnrf";
+        private string SecretKey { get; set; } = "netnr";
 
-        public Session(HttpContext context, string CookieName = null, DateTime? CookieTimeOut = null)
+        /// <summary>
+        /// 过期
+        /// </summary>
+        private string ExpireSuffix { get; set; } = "-Expires";
+
+        public Session(HttpContext context, string CookieName = null)
         {
             Context = context;
             if (!string.IsNullOrWhiteSpace(CookieName))
             {
                 Name = CookieName;
             }
-            if (CookieTimeOut.HasValue)
+        }
+
+        /// <summary>
+        /// 保存Cookie
+        /// </summary>
+        /// <param name="context"></param>
+        private void SaveCookie(string context)
+        {
+            Context.Response.Cookies.Append(Name, context, new CookieOptions()
             {
-                TimeOut = CookieTimeOut.Value;
-            }
+                HttpOnly = true
+            });
         }
 
         /// <summary>
@@ -59,9 +65,9 @@ namespace Netnr.Func
                 if (Context.Request.Cookies.TryGetValue(Name, out string cooks))
                 {
                     var jo = JObject.Parse(Core.CalcTo.DeDES(cooks, SecretKey));
-                    if (jo.TryGetValue(Key, out JToken jval))
+                    if (DateTime.Parse(jo[Key + ExpireSuffix].ToString()) > DateTime.Now)
                     {
-                        val = jval.ToString();
+                        val = jo[Key].ToString();
                     }
                 }
             }
@@ -76,9 +82,10 @@ namespace Netnr.Func
         /// <summary>
         /// 赋值
         /// </summary>
-        /// <param name="Key"></param>
-        /// <param name="Value"></param>
-        public void Set(string Key, string Value)
+        /// <param name="Key">键</param>
+        /// <param name="Value">值</param>
+        /// <param name="Expiress">过期时间 默认5分钟</param>
+        public void Set(string Key, string Value, DateTime? Expiress = null)
         {
             var jo = new JObject();
             if (Context.Request.Cookies.TryGetValue(Name, out string cooks))
@@ -86,13 +93,26 @@ namespace Netnr.Func
                 jo = JObject.Parse(Core.CalcTo.DeDES(cooks, SecretKey));
             }
             jo[Key] = Value;
+            jo[Key + ExpireSuffix] = Expiress ?? DateTime.Now.AddMinutes(5);
             string newcooks = Core.CalcTo.EnDES(jo.ToJson(), SecretKey);
-            Context.Response.Cookies.Append(Name, newcooks, new CookieOptions()
+            SaveCookie(newcooks);
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="Key">键</param>
+        public void Remove(string Key)
+        {
+            var jo = new JObject();
+            if (Context.Request.Cookies.TryGetValue(Name, out string cooks))
             {
-                HttpOnly = true,
-                Expires = TimeOut,
-                SameSite = SameSiteMode.Strict
-            });
+                jo = JObject.Parse(Core.CalcTo.DeDES(cooks, SecretKey));
+            }
+            jo.Remove(Key);
+            jo.Remove(Key + ExpireSuffix);
+            string newcooks = Core.CalcTo.EnDES(jo.ToJson(), SecretKey);
+            SaveCookie(newcooks);
         }
     }
 }
