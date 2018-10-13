@@ -1,8 +1,11 @@
-# netnrf 响应式框架
+# netnrf 响应式框架	
 - GitHub：<https://github.com/netnr/netnrf>
 - Gitee：<https://gitee.com/netnr/netnrf>
 - [联系（打赏）](https://ss.netnr.com/contact)
 - [加入QQ群](http://qm.qq.com/cgi-bin/qm/qr?k=oLmAflGAIODgeYw9tImSvBVX1SK_warh)
+
+----------
+## [更新日志](CHANGELOG.md)
 
 ----------
 ## 项目结构
@@ -29,12 +32,16 @@
 - 等等
 ----------
 
+## 使用
+1. 创建表、写字段注释（方便生成表配置）
+2. 
+- 查询：动态生成查询面板，自定义哪些字段支持查询
+- 等等
+----------
+
 > 如果该项目对你有帮助，请你为项目Star，谢谢，这是对我精神上的支持，也是能一直坚持下去的动力。
 
 > 在线演示：<https://rf2.netnr.com>
-----------
-
-## [变更日志](CHANGELOG.md)
 ----------
 
 ## v2.X

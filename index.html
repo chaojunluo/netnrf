@@ -45,6 +45,8 @@
                     <li><a href="http://qm.qq.com/cgi-bin/qm/qr?k=oLmAflGAIODgeYw9tImSvBVX1SK_warh">加入QQ群</a></li>
                 </ul>
                 <hr>
+                <h2><a href="CHANGELOG.md">更新日志</a></h2>
+                <hr>
                 <h2>项目结构</h2>
                 <ul>
                     <li>Netnr.Core 类库</li>
@@ -72,14 +74,24 @@
                     <li>等等</li>
                 </ul>
                 <hr>
+                <h2>使用</h2>
+                <ol>
+                    <li>创建表、写字段注释（方便生成表配置）</li>
+                    <li>生成表配置，可以用【工具箱】-【表管理】-【生成表配置】，也可以直接拷贝文件夹<code>wwwroot/scripts/table-config/</code>对应的<code>SQL</code>脚本运行</li>
+                    <li>修改表配置，表格，表单、查询，调整为需要展示的形式（标题、宽度、排序、输入类型、列格式化、必填、默认值等，根据业务拓展配置项）</li>
+                    <li>修改表配置，输入类型配置，需要配置下拉框、下拉树等，在<code>Common</code>控制器写方法，<code>url</code>源指向这个方法访问的地址</li>
+                    <li>修改表配置，列格式化配置，比如状态需要格式化为<code>启用</code>、<code>停用</code>，有常用公共的格式化方法，也可以配置自定义格式化方法<code>col_custom_字段小写</code></li>
+                    <li>创建一个页面，菜单表添加此页面，配置操作按钮</li>
+                    <li>写表对应的查询、保存（新增/修改）、删除方法，参考【系统设置】里面的功能</li>
+                    <li>基于<code>z.js</code>封装的表格方法（API与EasyUI保持一致，看EasyUI文档即可），配置查询表的请求地址、表格类型、分页、复选等</li>
+                </ol>
+                <hr>
                 <blockquote>
                     <p>如果该项目对你有帮助，请你为项目Star，谢谢，这是对我精神上的支持，也是能一直坚持下去的动力。</p>
                 </blockquote>
                 <blockquote>
                     <p>在线演示：<a href="https://rf2.netnr.com">https://rf2.netnr.com</a></p>
                 </blockquote>
-                <hr>
-                <h2><a href="CHANGELOG.md">变更日志</a></h2>
                 <hr>
                 <h2>v2.X</h2>
                 <ul>
