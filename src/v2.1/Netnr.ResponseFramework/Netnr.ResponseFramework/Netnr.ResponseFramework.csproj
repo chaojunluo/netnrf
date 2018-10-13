@@ -59,6 +59,9 @@
     <Content Update="wwwroot\scripts\table-pd\sqlserver.pdm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\scripts\table-reset\mysql.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

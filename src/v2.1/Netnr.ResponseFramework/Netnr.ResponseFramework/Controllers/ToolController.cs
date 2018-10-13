@@ -39,13 +39,22 @@ namespace Netnr.ResponseFramework.Controllers
         [Description("重置数据库")]
         public string ResetDataBase()
         {
-            var list = new List<string>()
+            var list = new List<string>();
+            var startTime = DateTime.Now;
+            using (var db = new ContextBase())
             {
-                "很抱歉，目前该功能已搁置",
-                "你可以把项目部署本地运行",
-                "当你发现数据异常需要重置数据库时，你可以进群联反馈",
-                "感谢你！"
-            };
+                string sql = QueryScripts(db.TDB.ToString(), "reset");
+                using (var conn = db.Database.GetDbConnection())
+                {
+                    conn.Open();
+                    var cmd = conn.CreateCommand();
+                    cmd.CommandText = sql;
+                    int num = cmd.ExecuteNonQuery();
+                    list.Add("受影响行数：" + num);
+                }
+            }
+            list.Add("已重置成功！！！");
+            list.Add("共耗时：" + (DateTime.Now - startTime).Seconds.ToString());
             return string.Join(Environment.NewLine + Environment.NewLine, list);
         }
 
