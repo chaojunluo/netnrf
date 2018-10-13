@@ -144,13 +144,16 @@ namespace Netnr.Func
 
             //总条数
             or.total = query.Count();
+
+            //排序
+            query = DataBase.OrderBy(query, param.sort, param.order);
+
             //分页
             if (param.pagination == 1)
             {
                 query = query.Skip((param.page - 1) * param.rows).Take(param.rows);
             }
-            //排序
-            query = DataBase.OrderBy(query, param.sort, param.order);
+
             //数据
             or.data = query.ToList();
 

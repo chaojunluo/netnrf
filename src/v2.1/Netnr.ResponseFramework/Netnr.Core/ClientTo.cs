@@ -12,6 +12,12 @@ namespace Netnr.Core
 
             var header = content.Request.HttpContext.Request.Headers;
 
+            //取代理IP
+            if (header.ContainsKey("X-Forwarded-For"))
+            {
+                IPv4 = header["X-Forwarded-For"].ToString();
+            }
+
             Language = header[HeaderNames.AcceptLanguage].ToString().Split(';')[0];
 
             string ua = header[HeaderNames.UserAgent].ToString();

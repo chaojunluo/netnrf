@@ -811,15 +811,17 @@
      * @param {any} key 键
      */
     z.FindTreeNode = function (data, value, key) {
-        var node;
-        $(data).each(function () {
-            if (this[key] == value) {
-                node = this;
-                return false;
+        var node, len = data.length;
+        for (var i = 0; i < len; i++) {
+            var item = data[i];
+            if (item[key] == value) {
+                node = item;
+            } else if (item.children) {
+                node = arguments.callee(item.children, value, key);
             }
-        });
-        if (!node && this.children) {
-            node = arguments.callee(this.children, key, value);
+            if (node) {
+                break;
+            }
         }
         if (node) {
             return node;
@@ -835,11 +837,13 @@
             var t = $('#' + i), rdi = rowData[i], dtype = t.attr('data-type') || t.attr('type'), durl = t.attr('data-url');
             switch (dtype) {
                 case 'combobox':
-                    if (t[dtype]("options").multiple && rdi != null) {
-                        var arr = $.trim(rdi).split(',') || [];
-                        t[dtype]('setValues', arr);
-                    } else {
-                        t[dtype]('setValue', rdi.toString());
+                    if (rdi != null) {
+                        if (t[dtype]("options").multiple) {
+                            var arr = $.trim(rdi).split(',') || [];
+                            t[dtype]('setValues', arr);
+                        } else {
+                            t[dtype]('setValue', rdi.toString());
+                        }
                     }
                     break;
                 case 'combotree':

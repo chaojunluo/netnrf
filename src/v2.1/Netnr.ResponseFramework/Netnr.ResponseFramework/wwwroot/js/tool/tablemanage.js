@@ -36,7 +36,7 @@ $('#btnBuilder').click(function () {
             },
             success: function (data) {
                 if (data == "success") {
-                    loadTableInfo();
+                    gd1.load();
                 }
                 art(data);
             },

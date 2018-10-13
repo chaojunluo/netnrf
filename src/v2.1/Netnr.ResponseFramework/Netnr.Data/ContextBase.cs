@@ -38,7 +38,7 @@ namespace Netnr.Data
             {
                 new ConsoleLoggerProvider((category, level)
                     => category == DbLoggerCategory.Database.Command.Name
-                    && level == LogLevel.Error, true)
+                    && level == LogLevel.Information, true)
             });
 
         /// <summary>
