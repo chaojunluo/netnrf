@@ -1,10 +1,9 @@
 /*
-
 Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2018-10-13 08:06:20
+Date: 2018-10-13 09:42:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -218,13 +217,13 @@ INSERT INTO `SysTableConfig` VALUES ('2f0aa86d-c6e1-11e8-98fc-aaaa0010af81', 'Sy
 INSERT INTO `SysTableConfig` VALUES ('2f0aa8af-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Nickname', '昵称', '昵称', '150', '1', '0', '2', '0', '0', '0', '1', '0', '', 'text', '1', '1', '0', '3', '0', '', '', '');
 INSERT INTO `SysTableConfig` VALUES ('2f0aa8e1-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Action', '动作', '动作', '200', '1', '0', '3', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '4', null, null, null, null);
 INSERT INTO `SysTableConfig` VALUES ('2f0aa913-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'LogContent', '内容', '内容', '180', '1', '0', '4', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '5', null, null, null, null);
-INSERT INTO `SysTableConfig` VALUES ('2f0aa944-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Url', '链接', '链接', '150', '1', '0', '5', '0', '0', '0', '1', '0', '', 'text', '1', '1', '0', '6', '0', '', '', '');
-INSERT INTO `SysTableConfig` VALUES ('2f0aa975-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Ip', 'IP', 'IP', '100', '1', '0', '6', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '7', null, null, null, null);
-INSERT INTO `SysTableConfig` VALUES ('2f0aa9a5-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'CreateTime', '时间', '时间', '150', '2', '0', '7', '0', '0', null, '1', '1', null, 'datetime', '1', '1', '0', '8', null, null, null, null);
-INSERT INTO `SysTableConfig` VALUES ('2f0aa9d7-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'BrowserName', '浏览器名称', '浏览器名称', '100', '1', '0', '8', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '9', null, null, null, null);
-INSERT INTO `SysTableConfig` VALUES ('2f0aaa0a-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'SystemName', '操作系统', '操作系统', '120', '1', '0', '9', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '10', null, null, null, null);
-INSERT INTO `SysTableConfig` VALUES ('2f0aaa3b-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'LogGroup', '分组', '分组', '100', '1', '1', '10', '0', '0', '0', '1', '0', '', 'text', '1', '1', '0', '11', '0', '', '', '');
-INSERT INTO `SysTableConfig` VALUES ('2f0aaa6b-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Remark', '备注', '备注', '100', '1', '1', '11', '0', '0', '0', '1', '0', '', 'text', '1', '1', '0', '12', '0', '', '', '');
+INSERT INTO `SysTableConfig` VALUES ('2f0aa944-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Url', '链接', '链接', '250', '1', '0', '5', '0', '0', '0', '1', '0', '', 'text', '1', '1', '0', '6', '0', '', '', '');
+INSERT INTO `SysTableConfig` VALUES ('2f0aa975-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Ip', 'IP', 'IP', '130', '2', '0', '6', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '7', null, null, null, null);
+INSERT INTO `SysTableConfig` VALUES ('2f0aa9a5-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'CreateTime', '时间', '时间', '160', '2', '0', '7', '0', '0', null, '1', '1', null, 'datetime', '1', '1', '0', '8', null, null, null, null);
+INSERT INTO `SysTableConfig` VALUES ('2f0aa9d7-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'BrowserName', '浏览器名称', '浏览器名称', '150', '1', '0', '8', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '9', null, null, null, null);
+INSERT INTO `SysTableConfig` VALUES ('2f0aaa0a-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'SystemName', '操作系统', '操作系统', '150', '1', '0', '9', '0', '0', null, '1', '1', null, 'text', '1', '1', '0', '10', null, null, null, null);
+INSERT INTO `SysTableConfig` VALUES ('2f0aaa3b-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'LogGroup', '分组', '分组', '100', '1', '1', '10', null, '0', null, '1', null, null, 'text', '1', '1', '1', '11', null, null, null, null);
+INSERT INTO `SysTableConfig` VALUES ('2f0aaa6b-c6e1-11e8-98fc-aaaa0010af81', 'SysLog', 'Remark', '备注', '备注', '100', '1', '1', '11', null, '0', null, '1', null, null, 'text', '1', '1', '1', '12', null, null, null, null);
 INSERT INTO `SysTableConfig` VALUES ('2f180d9c-c6e1-11e8-98fc-aaaa0010af81', 'SysRole', 'Id', 'Id', 'Id', '100', '1', '1', '0', '0', '0', null, '1', null, null, 'text', '1', '1', '1', '0', null, null, null, null);
 INSERT INTO `SysTableConfig` VALUES ('2f180e18-c6e1-11e8-98fc-aaaa0010af81', 'SysRole', 'Name', '名称', '名称', '150', '1', '0', '1', '0', '0', null, '1', null, null, 'text', '1', '2', '0', '0', '1', null, null, null);
 INSERT INTO `SysTableConfig` VALUES ('2f180ec0-c6e1-11e8-98fc-aaaa0010af81', 'SysRole', 'Status', '状态，1启用', '状态', '100', '2', '0', '3', null, '17', '1', '1', null, null, 'checkbox', '1', '2', '0', '1', null, null, '1', '启用角色');
