@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +23,22 @@ namespace Netnr.ResponseFramework.Controllers
         [Description("公共导出")]
         public void Export(QueryDataVM.GetParams param)
         {
-            if (!string.IsNullOrWhiteSpace(param.tableName))
+            if (!string.IsNullOrWhiteSpace(param.uri))
             {
+                //根据uri转换表名，不建议直接传表名（有些表涉密不允许导出）
+                string tablename = "";
+                var listtb = new List<string>()
+                {
+                    "syslog",
+                    "systableconfig",
+                    "sysuser"
+                };
+                tablename = listtb.Where(x => x.ToLower() == param.uri).FirstOrDefault();
+                if (string.IsNullOrWhiteSpace(tablename))
+                {
+                    return;
+                }
+
                 //导出文件名
                 string filename = "导出表格";
 
@@ -36,22 +49,14 @@ namespace Netnr.ResponseFramework.Controllers
                 var dt = new DataTable();
 
                 //查询导出的数据
-                string sql = ExportSql(param.tableName.ToLower());
+                string sql = ExportSql(tablename);
 
                 #region 表配置处理（列排序、列改名、剔除不要的列）
                 using (var db = new ContextBase())
                 {
-                    using (var conn = db.Database.GetDbConnection())
-                    {
-                        conn.Open();
-                        var cmd = conn.CreateCommand();
-                        cmd.CommandText = sql;
-                        dt.Load(cmd.ExecuteReader());
-                    }
-
                     var configquery = from a in db.SysTableConfig
                                       where a.TableName == param.tableName && a.ColHide == 0 && a.ColExport == 1
-                                      orderby (a.ColFrozen == null ? 0 : a.ColFrozen) descending, a.ColOrder ascending
+                                      orderby (a.ColFrozen ?? 0) descending, a.ColOrder ascending
                                       select new
                                       {
                                           a.ColField,
@@ -59,8 +64,18 @@ namespace Netnr.ResponseFramework.Controllers
                                       };
                     //配置信息
                     var configlist = configquery.ToList();
-
                     var listcol = configlist.Select(x => x.ColField.ToLower()).ToList();
+
+                    using (var conn = db.Database.GetDbConnection())
+                    {
+                        conn.Open();
+                        var cmd = conn.CreateCommand();
+                        cmd.CommandText = sql;
+                        dt.Load(cmd.ExecuteReader());
+                    }
+                    //清空表格主键（不允许移除主键列）
+                    dt.PrimaryKey = null;
+
                     //需要删除的列
                     var listcolRemove = new List<string>();
                     foreach (DataColumn dc in dt.Columns)
@@ -127,16 +142,6 @@ namespace Netnr.ResponseFramework.Controllers
 
             switch (tablename)
             {
-                #region 用户表
-                case "sysuser":
-                    {
-                        //RoleId是角色表name字段的别名
-                        //Status状态调用公共格式化方法
-                        sql = "SELECT b.Name AS RoleId,UserName,Nickname," + FormatColumn("a.CreateTime", 4) + "," + FormatColumn("a.status", 1) + " FROM SysUser a LEFT JOIN SysRole b ON a.RoleId = b.ID;";
-                    }
-                    break;
-                #endregion
-
                 #region 角色表
                 case "sysrole":
                     {
@@ -170,21 +175,6 @@ namespace Netnr.ResponseFramework.Controllers
                 //1×
                 case 2:
                     result += "CASE " + field + " WHEN 1 THEN '×' ELSE '√' END";
-                    break;
-
-                //yyyy-MM-dd HH:mm:ss
-                case 3:
-                    result += "CONVERT(VARCHAR(19), " + field + ", 120)";
-                    break;
-
-                //yyyy-MM-dd
-                case 4:
-                    result += "CONVERT(VARCHAR(10), " + field + ", 120)";
-                    break;
-
-                //HH:mm:ss
-                case 5:
-                    result += "CONVERT(VARCHAR(8), " + field + ", 108)";
                     break;
             }
 

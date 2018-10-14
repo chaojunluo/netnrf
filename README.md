@@ -48,9 +48,11 @@
 8. 基于`z.js`封装的表格方法（API与EasyUI保持一致，看EasyUI文档即可），配置查询表的请求地址、表格类型、分页、复选等
 ----------
 
-## v2.X
+## v2.x
 - 前端采用 jQuery + Bootstrap + EasyUI + AceAdmin + fontAwesome
 - 后端采用 Asp.Net Core + EF + SQL（SQLServer、MySQL、SQLite）
+- 数据库脚本放置于 `wwwroot/scripts/`目录下
+- Visual Studio 2017 运行项目，跨数据库、跨平台支持（在线demo部署在Linux服务器上）
 ----------
 ## 截图
 
