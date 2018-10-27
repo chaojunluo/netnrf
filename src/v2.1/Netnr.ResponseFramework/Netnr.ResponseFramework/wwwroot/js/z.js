@@ -463,6 +463,8 @@
                             cb.editable = false;
                             cb.height = 33;
                             cb.type = ec.FormType;
+                            //不显示清除按钮
+                            cb.icons = null;
                             cb.onLoadSuccess = function () {
                                 var that = $(this);
                                 setTimeout(function () {
@@ -531,6 +533,14 @@
         method: "POST",/*请求类型*/
         queryParams: {},/*请求参数*/
         type: "combobox",/*类型：combobox、combotree tree*/
+        //默认拓展清除按钮
+        icons: [{
+            iconCls: 'comboclear',
+            handler: function (e) {
+                var tt = $(e.data.target);
+                tt[tt.data().textbox.options.type]('clear');
+            }
+        }],
         urlHide: function (isHide) {
             isHide = isHide == null ? true : isHide;
             if (isHide) {
@@ -779,6 +789,10 @@
                 case 'combotree':
                     val = ipt[dtype](ipt[dtype]("options").multiple ? 'getValues' : 'getValue');
                     colorTarget = ipt.next();
+                    break;
+                case 'file':
+                    val = $('#hid_' + ipt[0].id).val();
+                    colorTarget = ipt;
                     break;
                 default:
                     val = ipt.val();
@@ -1363,8 +1377,7 @@ if ($.fn.datagrid) {
             var input = $(target).find("input");
             input.val(value);
         }
-    };
-}
+    };}
 
 /**
  * 消息提示或询问

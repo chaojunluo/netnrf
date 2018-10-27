@@ -113,7 +113,7 @@ z.DC["/setting/sysrole"] = {
             var wd = this.modal.find('iframe')[0].contentWindow;
             //获取iframe里面的选中行数据
             var rowData = wd.gd1.func('getSelected');
-            
+
             //由于新增、编辑、公共查询都调用一个模态框，需要对确定事件做不同处理
             //this.guide 指向触发模态框的节点
             //this.guidetype 触发类型，form 表单触发，table 表格编辑触发
@@ -278,3 +278,8 @@ z.button('del', function () {
         })
     });
 });
+
+setTimeout(function () {
+    //模拟点击新增
+    z.buttonClick('add');
+}, 1000 * 1.5);

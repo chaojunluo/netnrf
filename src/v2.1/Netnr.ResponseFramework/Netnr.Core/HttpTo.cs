@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Netnr.Core
 {
-    public class RequestTo
+    public class HttpTo
     {
         #region 服务器 发送请求
 
@@ -76,7 +76,7 @@ namespace Netnr.Core
         /// </summary>
         /// <param name="url">URL</param>
         /// <returns></returns>
-        public static string Url(string url)
+        public static string Get(string url)
         {
             return Url(HWRequest(url));
         }
@@ -87,7 +87,7 @@ namespace Netnr.Core
         /// <param name="url">URL</param>
         /// <param name="postData">发送内容</param>
         /// <returns></returns>
-        public static string Url(string url, string postData)
+        public static string Post(string url, string postData)
         {
             return Url(HWRequest(url, "POST", postData));
         }

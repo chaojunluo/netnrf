@@ -90,9 +90,22 @@
                                                         {
                                                             <textarea id="@item.ColField" name="@item.ColField" class="form-control area-height" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder">@item.FormValue</textarea>
                                                         }
+                                                        else if ("password".Equals(item.FormType))
+                                                        {
+                                                            <input type='password' id="@item.ColField" name="@item.ColField" class="form-control" value="@item.FormValue" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder" />
+                                                        }
+                                                        else if ("file".Equals(item.FormType))
+                                                        {
+                                                            <input type='file' id="@item.ColField" class="form-control" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" />
+                                                            <input type="hidden" id="hid_@item.ColField" name="@item.ColField" value="@item.FormValue" />
+                                                            @if (!string.IsNullOrWhiteSpace(item.FormPlaceholder))
+                                                            {
+                                                                <p class="help-block">@item.FormPlaceholder</p>
+                                                            }
+                                                        }
                                                         else
                                                         {
-                                                            <input type='@(item.FormValue=="password"?item.FormValue:"text")' id="@item.ColField" name="@item.ColField" class="form-control" value="@item.FormValue" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder" />
+                                                            <input type='text' id="@item.ColField" name="@item.ColField" class="form-control" value="@item.FormValue" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder" />
                                                         }
                                                     </div>
                                                 </div>
@@ -133,9 +146,22 @@
                                                 {
                                                     <textarea id="@item.ColField" name="@item.ColField" class="form-control area-height" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder">@item.FormValue</textarea>
                                                 }
+                                                else if ("password".Equals(item.FormType))
+                                                {
+                                                    <input type='password' id="@item.ColField" name="@item.ColField" class="form-control" value="@item.FormValue" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder" />
+                                                }
+                                                else if ("file".Equals(item.FormType))
+                                                {
+                                                    <input type='file' id="@item.ColField" class="form-control" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" />
+                                                    <input type="hidden" id="hid_@item.ColField" name="@item.ColField" value="@item.FormValue" />
+                                                    @if (!string.IsNullOrWhiteSpace(item.FormPlaceholder))
+                                                    {
+                                                        <p class="help-block">@item.FormPlaceholder</p>
+                                                    }
+                                                }
                                                 else
                                                 {
-                                                    <input type='@(item.FormType=="password"?item.FormType:"text")' id="@item.ColField" name="@item.ColField" class="form-control" value="@item.FormValue" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder" />
+                                                    <input type='text' id="@item.ColField" name="@item.ColField" class="form-control" value="@item.FormValue" data-type="@item.FormType" data-query="@item.ColQuery" data-url="@item.FormUrl" placeholder="@item.FormPlaceholder" />
                                                 }
                                             </div>
                                         </div>

@@ -15,6 +15,145 @@ namespace Netnr.ResponseFramework.Controllers
     [Authorize]
     public class SettingController : Controller
     {
+        #region 系统按钮
+
+        [Description("系统按钮页面")]
+        public IActionResult SysButton()
+        {
+            return View();
+        }
+
+        [Description("查询系统按钮")]
+        public string QuerySysButton(QueryDataVM.GetParams param)
+        {
+            var or = new QueryDataVM.OutputResult();
+            using (var db = new ContextBase())
+            {
+                var list = db.SysButton.OrderBy(x => x.BtnOrder).ToList();
+                var tree = Func.Common.ListToTree(list, "Pid", "Id", new List<string> { Guid.Empty.ToString() });
+                or.data = tree.ToJArray();
+
+                //列
+                if (param.columnsExists != 1)
+                {
+                    or.columns = db.SysTableConfig.Where(x => x.TableName == param.tableName).OrderBy(x => x.ColOrder).ToList();
+                }
+            }
+            return or.ToJson();
+        }
+
+        [Description("保存系统按钮")]
+        public string SaveSysButton(SysButton mo, string savetype)
+        {
+            int num = 0;
+
+            if (string.IsNullOrWhiteSpace(mo.Pid))
+            {
+                mo.Pid = Guid.Empty.ToString();
+            }
+            using (var db = new ContextBase())
+            {
+                if (savetype == "add")
+                {
+                    db.SysButton.Add(mo);
+                }
+                else
+                {
+                    db.SysButton.Update(mo);
+                }
+                num = db.SaveChanges();
+            }
+
+            //清理缓存
+            Core.CacheTo.Remove(Func.Common.GlobalCacheKey.SysButton);
+
+            return num > 0 ? "success" : "fail";
+        }
+
+        [Description("删除系统按钮")]
+        public string DelSysButton(string id)
+        {
+            int num = 0;
+            using (var db = new ContextBase())
+            {
+                var mo = db.SysButton.Find(id);
+                db.SysButton.Remove(mo);
+                num = db.SaveChanges();
+            }
+            return num > 0 ? "success" : "fail";
+        }
+
+        #endregion
+
+        #region 系统菜单
+
+        [Description("系统菜单页面")]
+        public IActionResult SysMenu()
+        {
+            return View();
+        }
+
+        [Description("查询系统菜单")]
+        public string QuerySysMenu(QueryDataVM.GetParams param)
+        {
+            var or = new QueryDataVM.OutputResult();
+            using (var db = new ContextBase())
+            {
+                var list = db.SysMenu.OrderBy(x => x.MenuOrder).ToList();
+                var tree = Func.Common.ListToTree(list, "Pid", "Id", new List<string> { Guid.Empty.ToString() });
+                or.data = tree.ToJArray();
+
+                //列
+                if (param.columnsExists != 1)
+                {
+                    or.columns = db.SysTableConfig.Where(x => x.TableName == param.tableName).OrderBy(x => x.ColOrder).ToList();
+                }
+            }
+            return or.ToJson();
+        }
+
+        [Description("保存系统菜单")]
+        public string SaveSysMenu(SysMenu mo, string savetype)
+        {
+            int num = 0;
+            if (string.IsNullOrWhiteSpace(mo.Pid))
+            {
+                mo.Pid = Guid.Empty.ToString();
+            }
+            using (var db = new ContextBase())
+            {
+                if (savetype == "add")
+                {
+                    db.SysMenu.Add(mo);
+                }
+                else
+                {
+                    db.SysMenu.Update(mo);
+                }
+                num = db.SaveChanges();
+            }
+
+            //清理缓存
+            Core.CacheTo.Remove(Func.Common.GlobalCacheKey.SysMenu);
+
+            return num > 0 ? "success" : "fail";
+        }
+
+        [Description("删除系统菜单")]
+        public string DelSysMenu(string id)
+        {
+            int num = 0;
+            using (var db = new ContextBase())
+            {
+                var mo = db.SysMenu.Find(id);
+                db.SysMenu.Remove(mo);
+                num = db.SaveChanges();
+            }
+            return num > 0 ? "success" : "fail";
+        }
+
+        #endregion
+
         #region 系统角色
 
         [Description("系统角色页面")]

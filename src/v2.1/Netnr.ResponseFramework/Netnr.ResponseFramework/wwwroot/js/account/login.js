@@ -66,12 +66,7 @@ function writemsg(msg, keep) {
     }
 }
 
-var defer2;
-function formautoheight() {
-    clearTimeout(defer2);
-    defer2 = setTimeout(function () {
-        var cc = $('.cc');
-        cc.animate({ "margin-top": $(window).height() / 2 - cc.height() / 2 });
-    }, 200);
-}
-$(window).on('load resize', formautoheight);
+$(window).on('load resize', function () {
+    var cc = $('.cc');
+    cc.css('margin-top', $(window).height() / 2 - cc.height() / 2)
+});

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
-public static class ExpandFunc
+public static class Extend
 {
-    #region object ⇋ json
-
     /// <summary>
     /// object 转 JSON 字符串
     /// </summary>
@@ -33,9 +32,16 @@ public static class ExpandFunc
         return Newtonsoft.Json.Linq.JObject.Parse(json);
     }
 
-    #endregion
+    /// <summary>
+    /// 解析 JSON字符串 为JArray对象
+    /// </summary>
+    /// <param name="json">JSON字符串</param>
+    /// <returns>JObject对象</returns>
+    public static Newtonsoft.Json.Linq.JArray ToJArray(this string json)
+    {
+        return Newtonsoft.Json.Linq.JArray.Parse(json);
+    }
 
-    #region JSON转义
     /// <summary>
     /// 字符串 JSON转义
     /// </summary>
@@ -72,10 +78,6 @@ public static class ExpandFunc
         return sb.ToString();
     }
 
-    #endregion
-
-    #region 解析 JToken 里面的键转为字符串 null值返回空字符串
-
     /// <summary>
     /// 把jArray里面的json对象转为字符串
     /// </summary>
@@ -92,10 +94,6 @@ public static class ExpandFunc
             return "";
         }
     }
-
-    #endregion
-
-    #region 实体 ⇋ 表
 
     /// <summary>
     /// 实体转为表
@@ -159,9 +157,6 @@ public static class ExpandFunc
         return list;
     }
 
-    #endregion
-
-    #region SQL值单引号转移
     /// <summary>
     /// SQL单引号转义
     /// </summary>
@@ -172,88 +167,59 @@ public static class ExpandFunc
         return s.Replace("'", "''");
     }
 
-    #endregion
-
-    #region Ascii、Unicode 编码转换
-
     /// <summary>
-    /// 字符串 Unicode编码
+    /// 编码
     /// </summary>
-    /// <param name="s"></param>
+    /// <param name="uri"></param>
+    /// <param name="charset"></param>
     /// <returns></returns>
-    public static string ToUnicode(this string s)
+    public static string ToEncode(this string uri, string charset = "utf-8")
     {
-        string val = "";
-        byte[] bytes = Encoding.Unicode.GetBytes(s);
-        for (int i = 0; i < bytes.Length; i++)
-        {
-            val += @"\u" + bytes[i + 1].ToString("x2") + bytes[i].ToString("x2");
-            i = bytes.Length - i > 1 ? i += 1 : i;
-        }
-        return val;
-    }
+        string URL_ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
-    /// <summary>
-    /// Unicode 转码字符串
-    /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
-    public static string ToUnUnicode(this string s)
-    {
-        try
+        if (string.IsNullOrEmpty(uri))
+            return string.Empty;
+
+        const string escapeFlag = "%";
+        var encodedUri = new StringBuilder(uri.Length * 2);
+        var bytes = Encoding.GetEncoding(charset).GetBytes(uri);
+        foreach (var b in bytes)
         {
-            string val = "";
-            string[] sts = s.Remove(0, 2).Replace("\\", "").Split('u');
-            for (int i = 0; i < sts.Length; i++)
+            char ch = (char)b;
+            if (URL_ALLOWED_CHARS.IndexOf(ch) != -1)
+                encodedUri.Append(ch);
+            else
             {
-                val += (char)int.Parse(sts[i], System.Globalization.NumberStyles.HexNumber);
+                encodedUri.Append(escapeFlag).Append(string.Format(CultureInfo.InstalledUICulture, "{0:X2}", (int)b));
             }
-            return val;
         }
-        catch (Exception)
-        {
-            return s;
-        }
+        return encodedUri.ToString();
     }
 
     /// <summary>
-    /// 字符串 Ascii编码
+    /// 解码
     /// </summary>
-    /// <param name="s"></param>
+    /// <param name="uriToDecode"></param>
     /// <returns></returns>
-    public static string ToAscii(this string s)
+    public static string ToDecode(this string uriToDecode)
     {
-        string val = "";
-        char[] chs = s.ToCharArray();
-        for (int i = 0; i < chs.Length; i++)
+        if (!string.IsNullOrEmpty(uriToDecode))
         {
-            val += "&#" + (int)chs[i] + ";";
+            uriToDecode = uriToDecode.Replace("+", " ");
+            return Uri.UnescapeDataString(uriToDecode);
         }
-        return val;
+
+        return string.Empty;
     }
 
     /// <summary>
-    /// Ascii 转字符串
+    /// 将Datetime转换成时间戳，10位，秒
     /// </summary>
-    /// <param name="s"></param>
+    /// <param name="datetime"></param>
     /// <returns></returns>
-    public static string ToUnAscii(this string s)
+    public static long ToTimestamp(this DateTime datetime)
     {
-        try
-        {
-            string val = "";
-            string[] sts = s.Remove(s.Length - 1, 1).Replace("&#", "").Split(';');
-            for (int i = 0; i < sts.Length; i++)
-            {
-                val += ((char)Convert.ToInt32(sts[i])).ToString();
-            }
-            return val;
-        }
-        catch (Exception)
-        {
-            return s;
-        }
+        return (datetime.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
     }
 
-    #endregion
 }

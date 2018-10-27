@@ -8,11 +8,6 @@
 ## [更新日志](CHANGELOG.md)
 
 ----------
-> 如果该项目对你有帮助，请你为项目Star，谢谢，这是对我精神上的支持，也是能一直坚持下去的动力。
-
-> 在线演示：<https://rf2.netnr.com>
-
-----------
 ## 项目结构
 - Netnr.Core 类库
 - Netnr.Data 数据访问、仓储
@@ -48,6 +43,11 @@
 8. 基于`z.js`封装的表格方法（API与EasyUI保持一致，看EasyUI文档即可），配置查询表的请求地址、表格类型、分页、复选等
 ----------
 
+> 在线演示：<https://rf2.netnr.com>
+
+> 如果该项目对你有帮助，请你为项目Star，谢谢，这是对我精神上的支持，也是能一直坚持下去的动力。
+
+----------
 ## v2.x
 - 前端采用 jQuery + Bootstrap + EasyUI + AceAdmin + fontAwesome
 - 后端采用 Asp.Net Core + EF + SQL（SQLServer、MySQL、SQLite）

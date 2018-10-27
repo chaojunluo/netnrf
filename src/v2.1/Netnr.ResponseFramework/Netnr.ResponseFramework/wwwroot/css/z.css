@@ -372,3 +372,18 @@ button.close {
     font-weight: 600;
     position: absolute;
 }
+
+/*清除值*/
+.comboclear::before {
+    content: "✖";
+}
+
+.comboclear {
+    opacity: .3;
+    font-size: 14px;
+    line-height: 2.4;
+    text-align: center;
+    outline: none !important;
+    filter: alpha(opacity=30);
+    text-decoration: none !important;
+}

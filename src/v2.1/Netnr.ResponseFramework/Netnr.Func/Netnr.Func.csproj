@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Session.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Netnr.Core\Netnr.Core.csproj" />

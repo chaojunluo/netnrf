@@ -12,9 +12,10 @@ namespace Netnr.Data
         /// </summary>
         public enum TypeDB
         {
-            MySql,
+            MySQL,
             SQLite,
-            SQLServer
+            SQLServer,
+            PostgreSQL
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace Netnr.Data
         /// 上下文
         /// </summary>
         /// <param name="typeDB">数据库类型</param>
-        public ContextBase(TypeDB typeDB = TypeDB.MySql) : base()
+        public ContextBase(TypeDB typeDB = TypeDB.MySQL) : base()
         {
             TDB = typeDB;
         }
@@ -38,7 +39,7 @@ namespace Netnr.Data
             {
                 new ConsoleLoggerProvider((category, level)
                     => category == DbLoggerCategory.Database.Command.Name
-                    && level == LogLevel.Information, true)
+                    && level == LogLevel.Warning, true)
             });
 
         /// <summary>
@@ -49,6 +50,12 @@ namespace Netnr.Data
         {
             switch (TDB)
             {
+                case TypeDB.MySQL:
+                    optionsBuilder.UseMySql(GlobalVar.GetValue("ConnectionStrings:MySQLConn"));
+                    break;
+                case TypeDB.SQLite:
+                    optionsBuilder.UseSqlite(GlobalVar.GetValue("ConnectionStrings:SQLiteConn"));
+                    break;
                 case TypeDB.SQLServer:
                     optionsBuilder.UseSqlServer(GlobalVar.GetValue("ConnectionStrings:SQLServerConn"), options =>
                     {
@@ -56,11 +63,8 @@ namespace Netnr.Data
                         //options.UseRowNumberForPaging();
                     });
                     break;
-                case TypeDB.MySql:
-                    optionsBuilder.UseMySql(GlobalVar.GetValue("ConnectionStrings:MySqlConn"));
-                    break;
-                case TypeDB.SQLite:
-                    optionsBuilder.UseSqlite(GlobalVar.GetValue("ConnectionStrings:SQLiteConn"));
+                case TypeDB.PostgreSQL:
+                    optionsBuilder.UseNpgsql(GlobalVar.GetValue("ConnectionStrings:PostgreSQL"));
                     break;
             }
 
@@ -68,6 +72,7 @@ namespace Netnr.Data
             optionsBuilder.UseLoggerFactory(MyLoggerFactory);
         }
 
+        public virtual DbSet<SysAuthorize> SysAuthorize { get; set; }
         public virtual DbSet<SysButton> SysButton { get; set; }
         public virtual DbSet<SysLog> SysLog { get; set; }
         public virtual DbSet<SysMenu> SysMenu { get; set; }
@@ -78,6 +83,39 @@ namespace Netnr.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<SysAuthorize>(entity =>
+            {
+                entity.HasIndex(e => e.Id)
+                    .HasName("Id")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.SysUserId)
+                    .HasName("SysUserId")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId1).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId2).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId3).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId4).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId5).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId6).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId7).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId8).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.OpenId9).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.SysUserId).HasColumnType("varchar(50)");
+            });
+
             modelBuilder.Entity<SysButton>(entity =>
             {
                 entity.HasIndex(e => e.Id)

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Netnr.Data;
+using Netnr.Login;
 
 namespace Netnr.ResponseFramework
 {
@@ -19,6 +20,31 @@ namespace Netnr.ResponseFramework
             {
                 db.Database.EnsureCreated();
             }
+
+            #region 第三方登录配置（如果不用，请以最快的速度删了，^_^）
+            //也可把秘钥配置到appsettings.json，如：GlobalVar.GetValue("Login:QQConfig:APPID")
+
+            QQConfig.APPID = "101511640";
+            QQConfig.APPKey = "f26b4af4a9d68bec2bbcbeee443feb83";
+            QQConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/qq";
+
+            WeiboConfig.AppKey = "";
+            WeiboConfig.AppSecret = "";
+            WeiboConfig.Redirect_Uri = "";
+
+            GitHubConfig.ClientID = "73cd8c706b166968db5b";
+            GitHubConfig.ClientSecret = "7e0495dff8e34e07b37b19b1f8762a36d4bb07a7";
+            GitHubConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/github";
+            GitHubConfig.ApplicationName = "netnrf";
+
+            TaobaoConfig.AppKey = "25163813";
+            TaobaoConfig.AppSecret = "c3b45e2605aa8696fb5e8d399fd0ca54";
+            TaobaoConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/taobao";
+
+            MicroSoftConfig.ClientID = "6b5f41be-975d-48a4-a971-950bb01097b4";
+            MicroSoftConfig.ClientSecret = "ttzJRE0;()xgmdPQKC3211^";
+            MicroSoftConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/microsoft";
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -44,7 +70,7 @@ namespace Netnr.ResponseFramework
             //授权访问信息
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
-                options.Cookie.Name = ".netnrf.Auth";
+                options.Cookie.Name = "__Auth";
                 options.LoginPath = new PathString("/account/login");
                 options.AccessDeniedPath = new PathString("/account/login");
                 options.ExpireTimeSpan = System.DateTime.Now.AddDays(10) - System.DateTime.Now;
@@ -54,7 +80,7 @@ namespace Netnr.ResponseFramework
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
-                options.Cookie.Name = ".netnrf.Session";
+                options.Cookie.Name = "__Session";
                 //5分钟过期
                 options.IdleTimeout = System.TimeSpan.FromMinutes(5);
                 options.Cookie.HttpOnly = true;

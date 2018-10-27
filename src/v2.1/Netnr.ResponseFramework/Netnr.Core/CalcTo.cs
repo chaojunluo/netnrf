@@ -50,7 +50,6 @@ namespace Netnr.Core
             }
             result = sb.ToString();
 
-            //result = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(s, "MD5").ToLower();
             return len == 32 ? result : result.Substring(8, 16);
         }
 
@@ -71,8 +70,8 @@ namespace Netnr.Core
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             byte[] inputByteArray;
             inputByteArray = Encoding.Default.GetBytes(Text);
-            des.Key = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
-            des.IV = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
+            des.Key = Encoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
+            des.IV = Encoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
             cs.Write(inputByteArray, 0, inputByteArray.Length);
@@ -104,11 +103,11 @@ namespace Netnr.Core
             int x, i;
             for (x = 0; x < len; x++)
             {
-                i = System.Convert.ToInt32(Text.Substring(x * 2, 2), 16);
+                i = Convert.ToInt32(Text.Substring(x * 2, 2), 16);
                 inputByteArray[x] = (byte)i;
             }
-            des.Key = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
-            des.IV = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
+            des.Key = Encoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
+            des.IV = Encoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(), CryptoStreamMode.Write);
             cs.Write(inputByteArray, 0, inputByteArray.Length);

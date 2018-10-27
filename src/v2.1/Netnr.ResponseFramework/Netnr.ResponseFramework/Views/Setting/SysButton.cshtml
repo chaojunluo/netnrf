@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "按钮管理";
+}
+
+@await Component.InvokeAsync("Form", new { tablename = "sysbutton" })
+
+<partial name="_BaseViewPartial" />

@@ -349,6 +349,9 @@ $('#usermenu').click(function (e) {
     });
     if (ct && ct.hash) {
         switch (ct.hash) {
+            case "#authbind":
+                rf.OpenPage('/account/authbind', '<i class="fa fa-user-plus"></i> 授权关联');
+                break;
             case "#updatepassword":
                 rf.OpenPage('/account/updatepassword', '<i class="fa fa-edit"></i> 修改密码');
                 break;
@@ -371,7 +374,3 @@ rf.loadNav();
 
 //打开页面 桌面（默认第一个，不能关闭，不然会影响：关闭其他、关闭全部）
 rf.OpenPage('/home/desk', '<i class="fa fa-home"></i> 桌面', false);
-
-setTimeout(function () {
-    rf.OpenPage('https://rf.netnr.com', '<i class="fa fa-flag"></i> netnrf');
-}, 1000 * 3);

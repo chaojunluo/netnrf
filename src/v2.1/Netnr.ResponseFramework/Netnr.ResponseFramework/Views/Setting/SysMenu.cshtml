@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "菜单管理";
+}
+
+@await Component.InvokeAsync("Form", new { tablename = "sysmenu" })
+
+<partial name="_BaseViewPartial" />

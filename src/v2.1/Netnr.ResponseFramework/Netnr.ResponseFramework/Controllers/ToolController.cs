@@ -99,9 +99,11 @@ namespace Netnr.ResponseFramework.Controllers
                     {
                         var key = dr[0].ToString();
                         var val = (listHas.Exists(x => x.ToLower() == key.ToLower()) ? "1" : "");
-                        var row = new JObject();
-                        row["name"] = key;
-                        row["exists"] = val;
+                        var row = new JObject
+                        {
+                            ["name"] = key,
+                            ["exists"] = val
+                        };
                         listRow.Add(row);
                     }
                 }
@@ -208,7 +210,7 @@ namespace Netnr.ResponseFramework.Controllers
             //mysql默认值，单独查询
             switch (tdb)
             {
-                case ContextBase.TypeDB.MySql:
+                case ContextBase.TypeDB.MySQL:
                     using (var db = new ContextBase())
                     {
                         var conn = db.Database.GetDbConnection();

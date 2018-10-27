@@ -16,8 +16,7 @@ namespace Netnr.Core
         /// <param name="CacheKey">键</param>
         public static object Get(string CacheKey)
         {
-            object result;
-            memoryCache.TryGetValue(CacheKey, out result);
+            memoryCache.TryGetValue(CacheKey, out object result);
             return result;
         }
 

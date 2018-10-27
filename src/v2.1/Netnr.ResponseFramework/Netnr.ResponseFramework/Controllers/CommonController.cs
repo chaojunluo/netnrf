@@ -54,7 +54,7 @@ namespace Netnr.ResponseFramework.Controllers
             }
             #endregion
 
-            result = Func.Common.ListToTree(listNode, "pid", "id", new List<object> { Guid.Empty.ToString() });
+            result = Func.Common.ListToTree(listNode, "pid", "id", new List<string> { Guid.Empty.ToString() });
 
             if (string.IsNullOrWhiteSpace(result))
             {
@@ -86,7 +86,7 @@ namespace Netnr.ResponseFramework.Controllers
             }
             #endregion
 
-            result = Func.Common.ListToTree(listNode, "pid", "id", new List<object> { Guid.Empty.ToString() });
+            result = Func.Common.ListToTree(listNode, "pid", "id", new List<string> { Guid.Empty.ToString() });
 
             if (string.IsNullOrWhiteSpace(result))
             {
@@ -115,6 +115,5 @@ namespace Netnr.ResponseFramework.Controllers
             }
             return result;
         }
-
     }
 }

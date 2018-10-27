@@ -6,18 +6,13 @@
 <html style="overflow:hidden; padding:0;">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-
     <title>netnrf响应式框架</title>
-
 </head>
 
 <body class="no-skin">
-
     <!--遮罩层-->
     <partial name="_LoadingPartial" />
 
@@ -34,7 +29,6 @@
     <!--顶部-->
     <div id="navbar" class="navbar navbar-default navbar-fixed-top">
         <div class="navbar-container" id="navbar-container">
-
             <!--导航小按钮-->
             <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
                 <span class="sr-only">Toggle sidebar</span>
@@ -42,18 +36,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-
             <!--Logo-->
             <div class="navbar-header pull-left hidden-xs">
                 <a href="javascript:void(0);" class="navbar-brand">
-                    netnrf 响应式框架 <sup>v 2.1.1</sup>
+                    netnrf 响应式框架 <sup>v 2.1.2</sup>
                 </a>
             </div>
-
             <!--右侧-->
             <div class="navbar-buttons navbar-header pull-right" style="white-space:nowrap">
                 <ul class="nav ace-nav">
-
                     <!--通知-->
                     <li class="purple">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -101,7 +92,6 @@
                             </li>
                         </ul>
                     </li>
-
                     <!--消息-->
                     <li class="green">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -142,7 +132,6 @@
                             </li>
                         </ul>
                     </li>
-
                     <!--个人信息-->
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
@@ -158,8 +147,8 @@
                             <li><a href="#"><i class="fa fa-wechat green"></i>关注公众号</a></li>
                             <li><a href="#"><i class="fa fa-apple"></i>App下载</a></li>
                             <li class="divider"></li>
+                            <li><a href="#authbind"><i class="fa fa-user-plus orange"></i>授权关联</a></li>
                             <li><a href="#updatepassword"><i class="fa fa-edit orange"></i>修改密码</a></li>
-                            <li><a href="#"><i class="fa fa-lock orange"></i>锁住屏幕</a></li>
                             <li class="divider"></li>
                             <li><a href="/account/logout"><i class="ace-icon fa fa-power-off red"></i>安全退出</a></li>
                         </ul>
@@ -168,19 +157,15 @@
             </div>
         </div>
     </div>
-
     <!--主-->
     <div class="main-container" id="main-container">
         <div id="sidebar" class="sidebar responsive sidebar-fixed">
-
             <div class="sidebar-shortcuts" id="sidebar-shortcuts">
                 <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-
                     <!--折叠菜单-->
                     <button class="btn btn-success sidebar-collapse" id="sidebar-collapse" title="折叠菜单">
                         <i class="ace-icon fa fa-expand"></i>
                     </button>
-
                     <!--菜单模式-->
                     <div class="btn btn-warning dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#" style="color: white; display: block;">
@@ -197,7 +182,6 @@
                             </li>
                         </ul>
                     </div>
-
                     <!--主题-->
                     <div id="divTheme" title="皮肤切换" class="btn btn-info dropdown dropdown-colorpicker">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#" style="color: white; display: block;">
@@ -210,13 +194,11 @@
                             <li><a class="colorpick-btn" href="#" style="background-color:#D0D0D0;" data-skin="skin-3 no-skin"></a></li>
                         </ul>
                     </div>
-
                     <!--样式设置-->
                     <button class="btn btn-danger" id="btn_style_config" title="样式配置">
                         <i class="ace-icon fa fa-text-height"></i>
                     </button>
                 </div>
-
                 <!--四色菜单-->
                 <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
                     <span class="btn btn-info"></span>
@@ -225,15 +207,11 @@
                     <span class="btn btn-danger"></span>
                 </div>
             </div>
-
             <!--菜单-->
             <ul id="ulnav" class="nav nav-list"></ul>
-
         </div>
-
         <!--主体-->
         <div class="main-content">
-
             <!--选项卡·标签-->
             <div class="hidden-xs mtab" id="mtab">
                 <!--左滑-->
@@ -241,13 +219,8 @@
                 <!--标签主体-->
                 <div class="mtab-body"><div class="mtab-main" id="mtab-main"></div></div>
                 <!--下拉菜单-->
-                <div class="dropdown pull-right">
-                    <a href="#" class="mtab-btn" data-toggle="dropdown"><span class="caret caret-lg"></span></a>
-                    <ul class="dropdown-menu dropdown-yellow" id="mtab-menu">
-                        <li><a><i class="fa fa-fw fa-refresh blue"></i> 刷新当前</a></li>
-                        <li><a><i class="fa fa-fw fa-close orange"></i> 关闭其他</a></li>
-                        <li><a><i class="fa fa-fw fa-power-off red"></i> 关闭全部</a></li>
-                    </ul>
+                <div class="pull-right" id="mtab-menu">
+                    <a href="javascript:void(0);" class="mtab-btn" title="刷新"><i class="fa fa-refresh"></i></a>
                 </div>
                 <!--右滑-->
                 <a href="javascript:void(0);" class="pull-right mtab-btn"><i class="fa fa-forward"></i></a>

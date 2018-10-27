@@ -73,11 +73,11 @@ namespace Netnr.Func
         /// <param name="idField">ID键</param>
         /// <param name="listStartId">开始的PID</param>
         /// <returns></returns>
-        public static string ListToTree<T>(List<T> list, string pidField, string idField, List<object> listStartId)
+        public static string ListToTree<T>(List<T> list, string pidField, string idField, List<string> listStartId)
         {
             StringBuilder sbTree = new StringBuilder();
 
-            var rdt = list.Where(Core.LambdaTo.Contains<T>(pidField, listStartId).Compile()).ToList();
+            var rdt = list.Where(x => listStartId.Contains(x.GetType().GetProperty(pidField).GetValue(x, null).ToString())).ToList();
 
             for (int i = 0; i < rdt.Count; i++)
             {
@@ -102,10 +102,10 @@ namespace Netnr.Func
 
                 var pi = pis.Where(x => x.Name == idField).FirstOrDefault();
                 listStartId.Clear();
-                object id = pi.GetValue(dr, null);
+                var id = pi.GetValue(dr, null).ToString();
                 listStartId.Add(id);
-
-                var nrdt = list.Where(Core.LambdaTo.Equal<T>(pidField, id).Compile()).ToList();
+                
+                var nrdt = list.Where(x => x.GetType().GetProperty(pidField).GetValue(x, null).ToString() == id.ToString()).ToList();
 
                 if (nrdt.Count > 0)
                 {
@@ -146,7 +146,10 @@ namespace Netnr.Func
             or.total = query.Count();
 
             //排序
-            query = DataBase.OrderBy(query, param.sort, param.order);
+            if (!string.IsNullOrWhiteSpace(param.sort))
+            {
+                query = DataBase.OrderBy(query, param.sort, param.order);
+            }
 
             //分页
             if (param.pagination == 1)

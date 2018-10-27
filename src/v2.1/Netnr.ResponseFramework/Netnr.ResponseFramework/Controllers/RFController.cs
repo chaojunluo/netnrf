@@ -95,6 +95,5 @@ namespace Netnr.ResponseFramework.Controllers
         {
             return View();
         }
-
     }
 }
