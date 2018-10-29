@@ -50,7 +50,7 @@
 ----------
 ## v2.x
 - 前端采用 jQuery + Bootstrap + EasyUI + AceAdmin + fontAwesome
-- 后端采用 Asp.Net Core + EF + SQL（SQLServer、MySQL、SQLite）
+- 后端采用 Asp.Net Core + EF + SQL（SQLServer、MySQL、PostgreSQL、SQLite）
 - 数据库脚本放置于 `wwwroot/scripts/`目录下
 - Visual Studio 2017 运行项目，跨数据库、跨平台支持（在线demo部署在Linux服务器上）
 ----------
