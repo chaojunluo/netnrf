@@ -55,6 +55,7 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 if (savetype == "add")
                 {
+                    mo.Id = Guid.NewGuid().ToString();
                     db.SysButton.Add(mo);
                 }
                 else
@@ -124,6 +125,7 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 if (savetype == "add")
                 {
+                    mo.Id = Guid.NewGuid().ToString();
                     db.SysMenu.Add(mo);
                 }
                 else
@@ -182,6 +184,7 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 if (savetype == "add")
                 {
+                    mo.Id = Guid.Empty.ToString();
                     mo.CreateTime = DateTime.Now;
                     db.SysRole.Add(mo);
                 }
@@ -263,6 +266,7 @@ namespace Netnr.ResponseFramework.Controllers
                     {
                         return "exists";
                     }
+                    mo.Id = Guid.NewGuid().ToString();
                     mo.CreateTime = DateTime.Now;
                     mo.UserPwd = Core.CalcTo.MD5(mo.UserPwd);
                     db.SysUser.Add(mo);
@@ -349,6 +353,7 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 if (savetype == "add")
                 {
+                    mo.Id = Guid.NewGuid().ToString();
                     db.SysTableConfig.Add(mo);
                 }
                 else
