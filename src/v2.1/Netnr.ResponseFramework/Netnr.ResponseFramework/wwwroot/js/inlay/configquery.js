@@ -17,16 +17,15 @@ z.DC["dataurl_cq_relation"] = {
             return row.text;
         };
         this.onClick = function (record) {
+            var ei = gdquery.ei;
+            setTimeout(function () {
+                //结束编辑
+                if (gdquery.ei != null) {
+                    gdquery.func('endEdit', gdquery.ei);
+                    gdquery.ei = null;
+                }
+            }, 50);
             if (record.value == "Clear") {
-                var ei = gdquery.ei;
-                setTimeout(function () {
-                    //结束编辑
-                    if (gdquery.ei != null) {
-                        gdquery.func('endEdit', gdquery.ei);
-                        gdquery.ei = null;
-                    }
-                }, 50);
-
                 setTimeout(function () {
                     var rowData = gdquery.func('getSelected');
                     rowData.relation = null;
@@ -37,7 +36,7 @@ z.DC["dataurl_cq_relation"] = {
             }
         };
         this.onSelect = function (record) {
-            if (record.value == "BetweenAnd") {
+            if (record.value != "BetweenAnd") {
                 var rowData = gdquery.func('getSelected');
                 rowData.value2 = "";
                 gdquery.func('updateRow', { index: gdquery.ei, row: rowData });
@@ -123,6 +122,9 @@ gdquery.onClickCell = function (index, field, value) {
         var row, allowedit = true;
         if ("value1,value2".indexOf(field) >= 0) {
             row = gdquery.func('getSelected');
+            if (row.relation == null || row.relation == "") {
+                allowedit = false;
+            }
             if (field == "value2" && row.relation != "BetweenAnd") {
                 allowedit = false;
             }
@@ -238,25 +240,17 @@ function QueryWhereGet() {
 $('#fq_ok_' + z.TableIndex).click(QueryWhereOk);
 $('#fq_okclone_' + z.TableIndex).click(QueryWhereOk);
 function QueryWhereOk() {
-    //有值1无关系符提示
     var errs = [];
     $(gdquery.data).each(function () {
-        if (this.relation == undefined || this.relation == "") {
-            if ("checkbox".indexOf(this.FormType) >= 0) {
-                if (this.value1 != undefined) {
-                    errs.push(this.title);
-                }
-            } else {
-                if (this.value1 != undefined && this.value1 != "") {
-                    errs.push(this.title);
-                }
+        if (this.relation == "BetweenAnd") {
+            if (this.value1 == undefined || this.value1 == "" || this.value2 == undefined || this.value2 == "") {
+                errs.push(this.title);
             }
         }
     });
-
     if (errs.length) {
         var mo = art('<div style="font-size:initial;">' + errs.join('</br>') + '</div>');
-        mo.modal.find('h4.modal-title').html('<b class="red">请选择关系符</b>');
+        mo.modal.find('h4.modal-title').html('<b class="red">请输入值范围</b>');
     } else {
         if (typeof QueryWhereCallBack == "function") {
             if (QueryWhereCallBack() != false) {
