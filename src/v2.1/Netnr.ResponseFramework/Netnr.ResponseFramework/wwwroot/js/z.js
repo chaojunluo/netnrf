@@ -1,6 +1,6 @@
 ﻿/*                      *\
     Author：netnr
-    Date：2018-09-28
+    Date：2018-11-01
 
     z.Grid：datagrid、treegrid、propertygrid、datalist
     z.Combo：combobox、combotree、tree
@@ -153,6 +153,8 @@
 
             //分页
             if (that.pagination) {
+                that.func('options').pageNumber = that.pageNumber;
+
                 that.func('getPager').pagination({
                     pageNumber: that.pageNumber,
                     pageSize: that.pageSize,
