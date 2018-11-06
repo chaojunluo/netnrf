@@ -60,19 +60,14 @@ gdct.onClickCell = function (index, field, value) {
     z.GridEditor(gdct, index, field);
 }
 gdct.columns = [[
-    { field: "DvTitle", title: "<span style='color:#ff892a'>默认标题</span>" },
-    { field: "ColTitle", title: "标题", FormType: "text" },
-    { field: "ColAlign", title: "对齐方式", FormType: "combobox", FormUrl: "dataurl_ct_colalign", formatter: function (value) { return value == 2 ? "居中" : value == 3 ? "居右" : "居左"; } },
-    { field: "ColWidth", title: "列宽", FormType: "text" },
-    { field: "ColHide", title: "隐藏", FormType: "combobox", FormUrl: "dataurl_ct_colhide", formatter: function (value) { return value == 1 ? "隐藏" : "显示" } },
-    { field: "ColFrozen", title: "冻结", FormType: "combobox", FormUrl: "dataurl_ct_colfrozen", formatter: function (value) { return value == 1 ? "冻结" : "不冻结" } },
-    { field: "ColExport", title: "导出", FormType: "combobox", FormUrl: "dataurl_ct_colexport", formatter: function (value) { return value == 1 ? "导出" : "不导出" } }
+    { field: "DvTitle", title: "<span style='color:#ff892a'>默认标题</span>", width: 180 },
+    { field: "ColTitle", title: "标题", width: 180, FormType: "text" },
+    { field: "ColAlign", title: "对齐方式", width: 70, FormType: "combobox", FormUrl: "dataurl_ct_colalign", formatter: function (value) { return value == 2 ? "居中" : value == 3 ? "居右" : "居左"; } },
+    { field: "ColWidth", title: "列宽", width: 70, FormType: "text" },
+    { field: "ColHide", title: "隐藏", width: 70, FormType: "combobox", FormUrl: "dataurl_ct_colhide", formatter: function (value) { return value == 1 ? "隐藏" : "显示" } },
+    { field: "ColFrozen", title: "冻结", width: 70, FormType: "combobox", FormUrl: "dataurl_ct_colfrozen", formatter: function (value) { return value == 1 ? "冻结" : "不冻结" } },
+    { field: "ColExport", title: "导出", width: 70, FormType: "combobox", FormUrl: "dataurl_ct_colexport", formatter: function (value) { return value == 1 ? "导出" : "不导出" } }
 ]];
-gdct.onBeforeBind = function () {
-    $(this.columns[0]).each(function (i) {
-        this.width = 1 > 1 ? 100 : 130;
-    })
-}
 //查询条件
 gdct.onBeforeLoad = function (row, param) {
     //条件

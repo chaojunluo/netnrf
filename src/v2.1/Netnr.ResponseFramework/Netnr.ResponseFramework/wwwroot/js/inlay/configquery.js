@@ -38,7 +38,7 @@ z.DC["dataurl_cq_relation"] = {
         this.onSelect = function (record) {
             if (record.value != "BetweenAnd") {
                 var rowData = gdquery.func('getSelected');
-                rowData.value2 = "";
+                rowData.value2 = null;
                 gdquery.func('updateRow', { index: gdquery.ei, row: rowData });
             }
         }
@@ -143,9 +143,9 @@ gdquery.onClickCell = function (index, field, value) {
 gdquery.data = [];
 gdquery.columns = [[
     { field: "field", title: "键", width: 100, halign: "center", hidden: true },
-    { field: "title", title: "条件名称", width: 100, halign: "center" },
+    { field: "title", title: "条件名称", width: 90, halign: "center" },
     {
-        field: "relation", title: "关系符", width: 80, halign: "center", FormType: "combobox", FormUrl: "dataurl_cq_relation", formatter: function (value) {
+        field: "relation", title: "关系符", width: 60, halign: "center", FormType: "combobox", FormUrl: "dataurl_cq_relation", formatter: function (value) {
             if (value == "Clear") {
                 return "";
             }
@@ -158,8 +158,8 @@ gdquery.columns = [[
             return value;
         }
     },
-    { field: "value1", title: "值1", width: 100, halign: "center", FormType: "text", formatter: col_custom_value12 },
-    { field: "value2", title: "值2", width: 100, halign: "center", FormType: "text", formatter: col_custom_value12 }
+    { field: "value1", title: "值1", width: 120, halign: "center", FormType: "text", formatter: col_custom_value12 },
+    { field: "value2", title: "值2", width: 80, halign: "center", FormType: "text", formatter: col_custom_value12 }
 ]];
 $('#fv_form_' + z.TableIndex).find('label.control-label').each(function () {
     var that = $(this), txt = that.next().find('input[data-query=1]');
