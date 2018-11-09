@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    var user = ViewData["user"] as Netnr.Func.ViewModel.LoginUserVM;
 }
 
 <!DOCTYPE html>
@@ -136,7 +137,7 @@
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <img class="nav-user-photo" src="/images/bird.jpg" alt="头像" />
-                            <span class="user-info">netnr</span>
+                            <span class="user-info">@user.Nickname</span>
                             <i class="ace-icon fa fa-caret-down"></i>
                         </a>
                         <!--个人菜单-->

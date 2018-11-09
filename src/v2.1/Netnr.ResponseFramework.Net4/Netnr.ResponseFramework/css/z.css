@@ -1,0 +1,389 @@
+﻿html {
+    overflow-x: hidden;
+}
+
+body {
+    font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
+    background-color: #fff;
+    -webkit-font-smoothing: antialiased;
+}
+
+/*Ext*/
+.required {
+    color: blue;
+}
+
+.mt5 {
+    margin-top: 5px;
+}
+
+.mb5 {
+    margin-bottom: 5px;
+}
+
+.mt15 {
+    margin-top: 15px;
+}
+
+.mb15 {
+    margin-bottom: 15px;
+}
+
+.orange {
+    color: #ff892a !important;
+}
+
+.blue {
+    color: #478fca !important;
+}
+
+.white {
+    color: #fff !important;
+}
+
+.red {
+    color: #dd5a43 !important;
+}
+
+.green {
+    color: #69aa46 !important;
+}
+
+.selectbig {
+    width: 22px;
+    height: 22px;
+}
+
+/*grid编辑，modal类型*/
+.dimodal {
+    position: relative;
+}
+
+    .dimodal .datagrid-editable-input {
+        padding-right: 20px;
+    }
+
+    .dimodal .form-control-feedback {
+        position: absolute;
+        top: 0;
+        right: -4px;
+        cursor: pointer;
+        line-height: 33px;
+        text-align: center;
+        pointer-events: initial;
+    }
+
+/*dropdown*/
+.dropdown-yellow > li > a {
+    padding: 5px 15px;
+}
+
+    .dropdown-yellow > li > a:hover, .dropdown-yellow > li > a:focus, .dropdown-yellow > li > a:active, .dropdown-yellow > li.active > a, .dropdown-yellow > li.active > a:hover, .dropdown-yellow .dropdown-submenu:hover > a {
+        color: #444;
+        background: #fee188;
+    }
+
+/*modal*/
+.modal-content {
+    border-radius: 3px;
+}
+
+.modal-header {
+    padding: 10px 15px 5px;
+}
+
+.modal-dialog {
+    margin: 15px auto 0;
+}
+
+.modal-title i {
+    font-size: 1.6em;
+    vertical-align: middle;
+}
+
+.modal-title span {
+    margin: 0 15px;
+}
+
+.modal-title em {
+    color: red;
+    font-size: 13px;
+}
+
+.modal-footer {
+    padding: 8px 10px;
+}
+
+button.close {
+    font-size: 1.9em;
+}
+
+.modal-backdrop.in {
+    filter: alpha(opacity=35);
+    opacity: .35;
+}
+
+/*modal 高自适应*/
+.modalautoheight .modal-body {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.modalautoheight .modalscroll {
+    overflow-y: auto;
+    position: relative;
+}
+
+
+/* 选项卡重写 */
+.modalautoheight .nav-tabs {
+    border-bottom-color: #438eb9;
+}
+
+    .modalautoheight .nav-tabs > li > a {
+        padding: 6px 10px;
+    }
+
+        .modalautoheight .nav-tabs > li > a:hover {
+            color: #fff;
+            background-color: #438eb9;
+            border: 1px solid #438eb9;
+            border-bottom-color: transparent;
+        }
+
+    .modalautoheight .nav-tabs > li.active > a:hover {
+        color: inherit;
+        background-color: #fff;
+        border: 1px solid #438eb9;
+        border-bottom-color: transparent;
+    }
+
+    .modalautoheight .nav-tabs > li.active > a, .modalautoheight .nav-tabs > li.active > a:hover, .modalautoheight .nav-tabs > li.active > a:focus {
+        border: 1px solid #438eb9;
+        border-bottom-color: transparent;
+    }
+
+.modalautoheight .tab-content .active {
+    border: 1px solid #438eb9;
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+}
+
+@media screen and (max-width: 992px) {
+    .modalautoheight .modal-lg {
+        width: auto;
+    }
+}
+
+.modalautoheight .panel-heading {
+    padding: 7px 15px;
+}
+
+/*form*/
+.form-group {
+    min-height: 34px;
+}
+
+    .form-group label {
+        font-weight: 400;
+    }
+
+/*页面按钮*/
+.btn-menu {
+    margin-bottom: 10px;
+    background-color: #F8FAFC;
+    border-bottom: 1px solid #eaeaea;
+}
+
+    .btn-menu button {
+        margin-top: 3px;
+        margin-bottom: 3px;
+    }
+
+    .btn-menu i.fa {
+        min-width: 16px;
+    }
+
+    .btn-menu .btn.disabled, .btn-menu .btn[disabled] {
+        opacity: .2;
+    }
+
+
+/*页面按钮-白色*/
+.bgwhite .btn {
+    outline: none;
+    font-size: 14px;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+    .bgwhite .btn:hover {
+        background-color: #ededed;
+    }
+
+.bgwhite .btn-success, .bgwhite .btn-success:hover {
+    color: #648A5E;
+}
+
+.bgwhite .btn-info, .bgwhite .btn-info:hover {
+    color: #70a0c1;
+}
+
+.bgwhite .btn-primary, .bgwhite .btn-primary:hover {
+    color: #428bca;
+}
+
+.bgwhite .btn-warning, .bgwhite .btn-warning:hover {
+    color: #DAA458;
+}
+
+.bgwhite .btn-danger, .bgwhite .btn-danger:hover {
+    color: #d9534f;
+}
+
+
+
+/* 表单 */
+.formui .row {
+    margin-bottom: -15px;
+}
+
+.formui .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+    .formui .form-group label.control-label {
+        float: left;
+        width: 100px;
+        padding-top: 7px;
+        overflow: hidden;
+        text-align: right;
+        margin-right: 15px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .formui .form-group > div {
+        overflow: hidden;
+    }
+
+        .formui .form-group > div i.fa {
+            right: 25px;
+            width: 20px;
+            color: #66afe9;
+            text-align: left;
+            margin-top: 10px;
+            cursor: pointer;
+            pointer-events: painted;
+        }
+
+    .formui .form-group .form-control {
+        border-radius: 0;
+        padding: 6px 25px 6px 12px;
+    }
+
+    .formui .form-group label.checkbox {
+        padding: 0;
+        height: 34px;
+        line-height: 34px;
+        padding-left: 20px;
+    }
+
+        .formui .form-group label.checkbox input {
+            width: 18px;
+            height: 28px;
+        }
+
+    /*combo 调整*/
+    .formui .form-group span.combo, .gridedit span.combo {
+        width: 100% !important;
+    }
+
+        .formui .form-group span.combo input, .gridedit span.combo input {
+            margin: 0 !important;
+            width: 100% !important;
+            line-height: normal !important;
+            padding: 6px 25px 6px 12px !important;
+        }
+
+        .formui .form-group span.combo a.combo-arrow:focus, .gridedit span.combo a.combo-arrow:focus {
+            outline: none;
+        }
+
+/*禁用样式*/
+.formui .form-control[disabled], .formui .form-control[readonly], .formui fieldset[disabled] .form-control {
+    background-color: #fff;
+}
+
+.formui .input[disabled], .formui .input[readonly] {
+    cursor: not-allowed;
+}
+
+.formui .nav-tabs, .formui .tab-content {
+    margin: 0 15px 0;
+}
+    /*选项卡时 上间距*/
+    .formui .tab-content > .tab-pane {
+        padding-top: 15px;
+        margin-bottom: 15px;
+    }
+
+/*图标*/
+.formui .form-group > div i.form-control-feedback {
+    margin: 0;
+    z-index: 1;
+    right: 15px;
+    width: 25px;
+    font-size: 16px;
+    line-height: 34px;
+    text-align: center;
+}
+
+/*文本域高度*/
+.formui .area-height {
+    resize: none;
+    height: 83px;
+}
+
+/*Grid载入前*/
+.loadingimg {
+    display: none;
+    text-align: center;
+    line-height: 150px;
+}
+
+/*表单配置*/
+.ief {
+    position: absolute;
+    top: 10px;
+    z-index: 9;
+    right: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.eef {
+    top: 3px;
+    left: 3px;
+    color: red;
+    font-size: 1.2em;
+    font-weight: 600;
+    position: absolute;
+}
+
+/*清除值*/
+.comboclear::before {
+    content: "✖";
+}
+
+.comboclear {
+    opacity: .3;
+    font-size: 14px;
+    line-height: 2.4;
+    text-align: center;
+    outline: none !important;
+    filter: alpha(opacity=30);
+    text-decoration: none !important;
+}

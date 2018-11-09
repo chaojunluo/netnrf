@@ -17,6 +17,7 @@ namespace Netnr.ResponseFramework.Controllers
         [Description("首页")]
         public IActionResult Index()
         {
+            ViewData["user"] = Func.Common.GetLoginUserInfo(HttpContext);
             return View();
         }
 

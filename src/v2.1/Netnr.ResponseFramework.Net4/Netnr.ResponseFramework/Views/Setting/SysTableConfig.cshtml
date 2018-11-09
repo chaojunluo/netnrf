@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "表配置";
+}
+
+@{Html.RenderAction("Form", "Inlay", new { tablename = "systableconfig", paneltitle = "表格配置,表单配置" });}
+
+@{Html.RenderPartial("_BaseViewPartial");}

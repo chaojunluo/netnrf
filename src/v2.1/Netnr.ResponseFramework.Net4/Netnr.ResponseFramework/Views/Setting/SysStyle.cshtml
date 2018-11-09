@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "样式配置";
+}
+
+<div class="container">
+    <form class="form-horizontal mt5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">预览效果</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static"> 这是一段样式文字效果演示。<br />说明：切换浏览器后会失效，需重新设置。 </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">字体大小</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="seFontSize">
+                            <option value="14px">（ 正常 14px ）</option>
+                            <option value="16px"> 大（16px） </option>
+                            <option value="18px"> 超大（18px） </option>
+                            <option value="12px"> 小（12px） </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">字体类型</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="seFontFamily">
+                            <option value="">（ 默认字体 ）</option>
+                            <option value="Verdana"> Verdana </option>
+                            <option value="Microsoft YaHei"> 微软雅黑 </option>
+                            <option value="MS Sans Serif"> MS Sans Serif </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">功能按钮</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="seButtonStyle">
+                            <option value="">（ 默认小清新风格 ）</option>
+                            <option value="1"> 深色背景风格 </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-3">
+                        <button id="btnSaveStyle" type="button" class="btn btn-lg btn-primary btn-block"> 保 存 </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@{Html.RenderPartial("_BaseViewPartial");}

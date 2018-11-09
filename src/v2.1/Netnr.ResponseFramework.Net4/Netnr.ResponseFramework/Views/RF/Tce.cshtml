@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "表配置示例";
+}
+
+@{Html.RenderAction("Form", "Inlay", new { tablename = "TempExample", modalsize = 3, paneltitle = "面板一,面板二" });}
+
+@{ Html.RenderPartial("_BaseViewPartial");}
