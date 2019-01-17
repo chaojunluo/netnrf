@@ -52,8 +52,9 @@
 - 前端采用 jQuery + Bootstrap + EasyUI + AceAdmin + fontAwesome
 - 后端采用 .NET Core + EF + SQL（SQLServer、MySQL、PostgreSQL、SQLite）
     - 以`.NET Core`版本为主，同步更新`.NET Framework`版本
+    - 数据库转换使用的工具：http://www.szmesoft.com/DB2DB
 - 数据库脚本放置于 `wwwroot/scripts/`目录下
-- Visual Studio 2017 运行项目，跨数据库、跨平台支持（在线demo部署在Linux服务器上）
+- Visual Studio 2017+ 运行项目，跨数据库、跨平台支持（在线demo部署在Linux服务器上）
 
 ----------
 ## 截图
@@ -82,12 +83,6 @@
 ## 第三方文档API
 - [EasyUI文档](https://ad.netnr.com/#EasyUI-1.5.2)
 - [jQuery文档](https://ad.netnr.com/#jQuery-1.11.3)
-
-----------
-## v1　2017-03（已停更）
-- 在线演示：<https://rf1.netnr.com>
-- asp.net mvc4 + sqlite
-- `jquery` `bootstrap` `easyui` `ace-admin` `font-awesome`
 
 ----------
 PoweredBy [netnr.com](https://www.netnr.com)

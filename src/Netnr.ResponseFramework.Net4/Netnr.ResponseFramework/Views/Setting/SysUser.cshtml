@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "用户管理";
+}
+
+@{Html.RenderAction("Form", "Inlay", new { tablename = "sysuser", modalsize = 2 });}
+
+@{Html.RenderPartial("_BaseViewPartial");}

@@ -1,0 +1,48 @@
+﻿<!--列表-->
+<div class="row">
+    <div class="col-md-12">
+        <div id="PGrid1" class="gridedit">
+            <div id="Grid1" class="loadingimg"></div>
+        </div>
+    </div>
+</div>
+
+<!--配置表格-->
+<script src="/js/inlay/configtable.js"></script>
+<!--配置表单-->
+<script src="/js/inlay/configform.js"></script>
+<!--搜索模块-->
+<script src="/js/inlay/configquery.js"></script>
+
+<script>
+    //新增
+    z.button("add", function () {
+        //重置
+        z.FormRequired('reset');
+        //清空
+        z.FormClear();
+    });
+    //编辑
+    z.button("edit", function () {
+        //重置
+        z.FormRequired('reset');
+        //清空
+        z.FormClear();
+    });
+    //查看
+    z.button("see", function () {
+        z.FormRequired('reset');
+    });
+    //查看
+    z.button("see", function () {
+        z.FormRequired('reset');
+    });
+</script>
+
+<!--引入页面JS-->
+<script src='/js/@ViewContext.RouteData.Values["controller"].ToString()/@(ViewContext.RouteData.Values["action"].ToString()+".js")'></script>
+
+<script>
+    //绑定数据
+    setTimeout(z.FormAttrAjax, 0);
+</script>
