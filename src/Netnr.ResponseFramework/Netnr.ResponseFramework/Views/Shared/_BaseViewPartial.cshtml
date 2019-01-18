@@ -40,7 +40,7 @@
 </script>
 
 <!--引入页面JS-->
-<script src='/js/@ViewContext.RouteData.Values["controller"].ToString()/@(ViewContext.RouteData.Values["action"].ToString()+".js")' asp-append-version="true"></script>
+<script src='/js/@ViewContext.RouteData.Values["controller"].ToString().ToLower()/@(ViewContext.RouteData.Values["action"].ToString().ToLower()+".js")' asp-append-version="true"></script>
 
 <script>
     //绑定数据

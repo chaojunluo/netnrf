@@ -26,7 +26,8 @@ namespace Netnr.ResponseFramework.Controllers
             var listBtn = new List<SysButton>();
 
             //根据路由反查页面对应的菜单
-            var moMenu = Func.Common.QuerySysMenuList(x => x.SmUrl == current_url).FirstOrDefault();
+            //所有链接保持小写
+            var moMenu = Func.Common.QuerySysMenuList(x => x.SmUrl == current_url.ToLower()).FirstOrDefault();
             if (moMenu != null)
             {
                 //登录用户的角色信息

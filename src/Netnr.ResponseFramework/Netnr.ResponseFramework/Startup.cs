@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,13 +14,10 @@ namespace Netnr.ResponseFramework
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            //无创建，有忽略
-            using (var db = new ContextBase())
-            {
-                db.Database.EnsureCreated();
-            }
+            GlobalVar.Configuration = configuration;
+            GlobalVar.HostingEnvironment = env;
 
             #region 第三方登录配置（如果不用，请以最快的速度删了，^_^）
             //也可把秘钥配置到appsettings.json，如：GlobalVar.GetValue("Login:QQConfig:APPID")
@@ -45,6 +43,12 @@ namespace Netnr.ResponseFramework
             MicroSoftConfig.ClientSecret = "ttzJRE0;()xgmdPQKC3211^";
             MicroSoftConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/microsoft";
             #endregion
+
+            //无创建，有忽略
+            using (var db = new ContextBase())
+            {
+                db.Database.EnsureCreated();
+            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -57,7 +61,7 @@ namespace Netnr.ResponseFramework
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMvc(options =>
             {
@@ -70,19 +74,19 @@ namespace Netnr.ResponseFramework
             //授权访问信息
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
-                options.Cookie.Name = "__Auth";
+                options.Cookie.Name = "netnrf_auth";
                 options.LoginPath = new PathString("/account/login");
                 options.AccessDeniedPath = new PathString("/account/login");
-                options.ExpireTimeSpan = System.DateTime.Now.AddDays(10) - System.DateTime.Now;
+                options.ExpireTimeSpan = DateTime.Now.AddDays(10) - DateTime.Now;
             });
 
             //session
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
-                options.Cookie.Name = "__Session";
+                options.Cookie.Name = "netnrf_session";
                 //5分钟过期
-                options.IdleTimeout = System.TimeSpan.FromMinutes(5);
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
                 options.Cookie.HttpOnly = true;
             });
 
@@ -111,6 +115,9 @@ namespace Netnr.ResponseFramework
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache memoryCache)
         {
+            //缓存
+            Core.CacheTo.memoryCache = memoryCache;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -118,9 +125,9 @@ namespace Netnr.ResponseFramework
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
@@ -133,12 +140,9 @@ namespace Netnr.ResponseFramework
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                   name: "default",
-                   template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            //缓存
-            Core.CacheTo.memoryCache = memoryCache;
         }
     }
 }

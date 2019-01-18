@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Netnr.Domain;
 
 namespace Netnr.Data
@@ -35,12 +35,20 @@ namespace Netnr.Data
         /// <summary>
         /// 应用程序不为每个上下文实例创建新的ILoggerFactory实例非常重要。这样做会导致内存泄漏和性能下降
         /// </summary>
-        public static readonly LoggerFactory MyLoggerFactory = new LoggerFactory(new[]
+        private static ILoggerFactory _loggerFactory = null;
+        public static ILoggerFactory LoggerFactory
+        {
+            get
             {
-                new ConsoleLoggerProvider((category, level)
-                    => category == DbLoggerCategory.Database.Command.Name
-                    && level == LogLevel.Warning, true)
-            });
+                if (_loggerFactory == null)
+                {
+                    var sc = new ServiceCollection();
+                    sc.AddLogging(builder => builder.AddConsole().AddFilter(level => level >= LogLevel.Warning));
+                    _loggerFactory = sc.BuildServiceProvider().GetService<ILoggerFactory>();
+                }
+                return _loggerFactory;
+            }
+        }
 
         /// <summary>
         /// 配置连接字符串
@@ -69,7 +77,7 @@ namespace Netnr.Data
             }
 
             //注册日志（修改日志等级为Information，可查看执行的SQL语句）
-            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+            optionsBuilder.UseLoggerFactory(LoggerFactory);
         }
 
         public virtual DbSet<SysAuthorize> SysAuthorize { get; set; }

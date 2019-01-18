@@ -107,8 +107,8 @@ namespace Netnr.Core
 		{ 			
 			//从字符串中取得Hash描述 
 			byte[] Buffer; 
-			System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5"); 
-			Buffer = System.Text.Encoding.GetEncoding("GB2312").GetBytes(m_strSource); 
+			System.Security.Cryptography.HashAlgorithm MD5 = HashAlgorithm.Create("MD5"); 
+			Buffer = Encoding.GetEncoding("GB2312").GetBytes(m_strSource); 
 			HashData = MD5.ComputeHash(Buffer); 
 
 			return true; 			
@@ -121,8 +121,8 @@ namespace Netnr.Core
 			//从字符串中取得Hash描述 
 			byte[] Buffer; 
 			byte[] HashData; 
-			System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5"); 
-			Buffer = System.Text.Encoding.GetEncoding("GB2312").GetBytes(m_strSource); 
+			System.Security.Cryptography.HashAlgorithm MD5 = HashAlgorithm.Create("MD5"); 
+			Buffer = Encoding.GetEncoding("GB2312").GetBytes(m_strSource); 
 			HashData = MD5.ComputeHash(Buffer); 
 
 			strHashData = Convert.ToBase64String(HashData); 
@@ -135,7 +135,7 @@ namespace Netnr.Core
 		{ 
 			
 			//从文件中取得Hash描述 
-			System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5"); 
+			System.Security.Cryptography.HashAlgorithm MD5 = HashAlgorithm.Create("MD5"); 
 			HashData = MD5.ComputeHash(objFile); 
 			objFile.Close(); 
 
@@ -149,7 +149,7 @@ namespace Netnr.Core
 			
 			//从文件中取得Hash描述 
 			byte[] HashData; 
-			System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5"); 
+			System.Security.Cryptography.HashAlgorithm MD5 = HashAlgorithm.Create("MD5"); 
 			HashData = MD5.ComputeHash(objFile); 
 			objFile.Close(); 
 

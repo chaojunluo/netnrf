@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Session.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Netnr.Core\Netnr.Core.csproj" />
     <ProjectReference Include="..\Netnr.Data\Netnr.Data.csproj" />
     <ProjectReference Include="..\Netnr.Domain\Netnr.Domain.csproj" />

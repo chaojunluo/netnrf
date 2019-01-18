@@ -1,14 +1,16 @@
-﻿using Netnr.Core;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 public class GlobalVar
 {
     /// <summary>
     /// 全局配置
     /// </summary>
-    //public static IConfiguration Configuration;
+    public static IConfiguration Configuration;
 
     /// <summary>
     /// 托管环境信息
@@ -20,43 +22,28 @@ public class GlobalVar
     /// HostingEnvironment.WebRootPath
     /// 
     /// </summary>
-    //public static IHostingEnvironment HostingEnvironment;
-
-    /// 在Windows环境中上面的 配置、环境 就够用，而linux中，有问题，思路是：反射拿到dotnet运行目录
+    public static IHostingEnvironment HostingEnvironment;
 
     /// <summary>
     /// 内部访问（项目根路径）
     /// </summary>
-    private static string contentRootPath;
     public static string ContentRootPath
     {
         get
         {
-            if (string.IsNullOrWhiteSpace(contentRootPath))
-            {
-                var path = Path.GetDirectoryName(new GlobalVar().GetType().Assembly.Location);
-                contentRootPath = path;
-            }
-            return contentRootPath;
+            return HostingEnvironment.ContentRootPath;
         }
-        set => contentRootPath = value;
     }
 
     /// <summary>
     /// web外部访问（wwwroot）
     /// </summary>
-    private static string webRootPath;
     public static string WebRootPath
     {
         get
         {
-            if (string.IsNullOrWhiteSpace(webRootPath))
-            {
-                webRootPath = ContentRootPath + "/wwwroot";
-            }
-            return webRootPath;
+            return HostingEnvironment.WebRootPath;
         }
-        set => webRootPath = value;
     }
 
     /// <summary>
@@ -69,8 +56,10 @@ public class GlobalVar
         {
             if (appsettingsJson == null)
             {
-                string appJson = FileTo.ReadText(ContentRootPath + "/", "appsettings.json");
-                appsettingsJson = appJson.ToJObject();
+                using (var sr = new StreamReader(ContentRootPath + "/appsettings.json", Encoding.Default))
+                {
+                    appsettingsJson = sr.ReadToEnd().ToJObject();
+                }
             }
             return appsettingsJson;
         }
@@ -109,6 +98,6 @@ public class GlobalVar
             }
             result = jo.ToStringOrEmpty();
         }
-        output: return result;
+    output: return result;
     }
 }
