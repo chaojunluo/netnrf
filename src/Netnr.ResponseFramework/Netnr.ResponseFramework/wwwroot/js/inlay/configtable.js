@@ -41,9 +41,9 @@ z.DC["dataurl_ct_colexport"] = {
 };
 
 //页面表索引
-z.TableIndex = $('#hidtableindex').val();
+z.TableIndex = $('input[name="hidtableindex"]').first().val();
 //页面表名
-z.TableName = $('#hidtablename').val();
+z.TableName = $('input[name="hidtablename"]').first().val();
 
 //载入
 var gdct = z.Grid();

@@ -89,11 +89,11 @@ z.DC["/setting/sysuser"] = {
                 case "table":
                     {
                         //当前行
-                        var queryRow = gdquery.func('getSelected');
+                        var queryRow = z.queryin.grid.func('getSelected');
                         //当前行索引
-                        var queryIndex = gdquery.func('getRowIndex', queryRow);
+                        var queryIndex = z.queryin.grid.func('getRowIndex', queryRow);
                         //当前行对应的字段(小写)
-                        var field = gdquery.data[queryIndex].field.toLowerCase();
+                        var field = z.queryin.grid.data[queryIndex].field.toLowerCase();
 
                         switch (field) {
                             //人员姓名
@@ -106,9 +106,9 @@ z.DC["/setting/sysuser"] = {
                                 break;
                         }
                         //更新行
-                        gdquery.func('updateRow', { index: queryIndex, row: queryRow });
+                        z.queryin.grid.func('updateRow', { index: queryIndex, row: queryRow });
                         //刷新行
-                        gdquery.func('refreshRow', queryIndex);
+                        z.queryin.grid.func('refreshRow', queryIndex);
                     }
                     break;
             }
@@ -197,17 +197,13 @@ gd1.onDblClickRow = function (index, row) {
     //双击行模拟点编辑
     z.buttonClick('edit');
 }
-gd1.onBeforeLoad = function (row, param) {
-    var sq = QueryWhereGet();
-    param.wheres = sq.stringify();
-}
+
 gd1.load();
 
-//查询回调
-function QueryWhereCallBack() {
-    gd1.pageNumber = 1;
-    gd1.load();
-}
+//查询
+z.button('query', function () {
+    gd1.QueryOpen();
+});
 
 //刷新
 z.button('reload', function () {

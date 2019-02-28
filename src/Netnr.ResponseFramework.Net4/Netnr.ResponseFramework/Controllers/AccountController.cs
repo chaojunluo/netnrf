@@ -19,7 +19,7 @@ namespace Netnr.ResponseFramework.Controllers
         public FileResult Captcha()
         {
             string num = Core.RandomTo.NumCode(4);
-            byte[] bytes = Core.ImageTo.CreateImg(num);
+            byte[] bytes = Fast.ImageTo.CreateImg(num);
             var hc = new HttpCookie("captcha", Core.CalcTo.MD5(num.ToLower()));
             Response.Cookies.Add(hc);
             return File(bytes, "image/jpeg");

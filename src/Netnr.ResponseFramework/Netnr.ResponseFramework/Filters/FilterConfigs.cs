@@ -17,6 +17,17 @@ namespace Netnr.ResponseFramework.Filters
     /// </summary>
     public class FilterConfigs
     {
+        /// <summary>
+        /// 全局错误处理
+        /// </summary>
+        public class ErrorActionFilter : IExceptionFilter
+        {
+            public void OnException(ExceptionContext context)
+            {
+                Core.ConsoleTo.Log(context.Exception);
+            }
+        }
+
         private static Dictionary<string, string> _dicDescription;
 
         public static Dictionary<string, string> DicDescription

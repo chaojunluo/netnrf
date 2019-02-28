@@ -10,16 +10,17 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />
+    <PackageReference Include="Netnr.Core" Version="1.0.1" />
     <PackageReference Include="Netnr.Login" Version="2.0.0" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Netnr.Core\Netnr.Core.csproj" />
     <ProjectReference Include="..\Netnr.Data\Netnr.Data.csproj" />
     <ProjectReference Include="..\Netnr.Domain\Netnr.Domain.csproj" />
+    <ProjectReference Include="..\Netnr.Fast\Netnr.Fast.csproj" />
     <ProjectReference Include="..\Netnr.Func\Netnr.Func.csproj" />
-    <ProjectReference Include="..\Netnr.Global\Netnr.Global.csproj" />
   </ItemGroup>
 
 

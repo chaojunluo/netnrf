@@ -19,9 +19,9 @@ z.DC["dataurl_cf_colarea"] = {
 }
 
 //页面表索引
-z.TableIndex = $('#hidtableindex').val();
+z.TableIndex = $('input[name="hidtableindex"]').first().val();
 //页面表名
-z.TableName = $('#hidtablename').val();
+z.TableName = $('input[name="hidtablename"]').first().val();
 
 z.ConfigForm = {
     CF: null,
@@ -102,7 +102,7 @@ $('#list_Config_Form').click(function () {
                 if (!z.ConfigForm.edit) {
                     //创建模态框
                     var zm = z.Modal();
-                    zm.size = 1;
+                    zm.size = 2;
                     zm.showCancel = false;
                     zm.okText = '<span class="fa fa-search"></span>&nbsp;预览';
                     zm.okClick = function () {
@@ -177,8 +177,8 @@ $('#list_Config_Form').click(function () {
                         order: "顺序"
                     }
                     for (var i in formitem) {
-                        htm.push('<div class="col-xs-12"><div class="form-group"><label class="col-xs-4 control-label required" style="width:auto">' + formitem[i] + '</label>');
-                        htm.push('<div class="col-xs-7" style="padding:0;"><input class="form-control" id="' + z.ConfigForm.prefix + z.ConfigForm.formitem + i + '" name="' + i + '" /></div></div></div>');
+                        htm.push('<div class="col-xs-12"><div class="form-group"><label class="col-xs-4 control-label required" >' + formitem[i] + '</label>');
+                        htm.push('<div class="col-xs-8" style="padding:0;"><input class="form-control" id="' + z.ConfigForm.prefix + z.ConfigForm.formitem + i + '" name="' + i + '" /></div></div></div>');
                     }
                     htm.push('</form></div>');
                     zm.modal.attr('data-backdrop', 'static').find('div.modal-body').html(htm.join(''));
@@ -262,11 +262,14 @@ $('#list_Config_Form').click(function () {
                 var shadowNode = $(z.ConfigForm.shadowNode), upEnd;
                 shadowNode.css({
                     position: "absolute",
-                    border: "2px dashed #FF892A",
                     "z-index": 6666,
                     "display": "none"
                 });
-                shadowNode.children().css('margin-bottom', 0).css('opacity', 0.8);
+                shadowNode.children().css({
+                    'margin-bottom': 0,
+                    opacity: .8,
+                    border: '2px dashed #FF892A'
+                });
                 shadowNode.appendTo(sNode.parent()[0]);
                 //用子元素移动事件监听 获取松开鼠标所在节点
                 this.onmousemove = this.onmouseover = function (e) {

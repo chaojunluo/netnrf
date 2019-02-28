@@ -1,4 +1,6 @@
-﻿using Netnr.Login;
+﻿using Netnr.Data;
+using Netnr.Login;
+using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -12,7 +14,7 @@ namespace Netnr.ResponseFramework
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            
+
             #region 第三方登录配置（如果不用，请以最快的速度删了，^_^）
             //也可把秘钥配置到appsettings.json，如：GlobalVar.GetValue("Login:QQConfig:APPID")
 
@@ -37,6 +39,18 @@ namespace Netnr.ResponseFramework
             MicroSoftConfig.ClientSecret = "ttzJRE0;()xgmdPQKC3211^";
             MicroSoftConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/microsoft";
             #endregion
+
+            //无创建，有忽略
+            using (var db = new ContextBase())
+            {
+                if (!db.Database.Exists())
+                {
+                    db.Database.Initialize(true);
+
+                    //调用重置数据库（实际开发中，你可能不需要，或只初始化一些表数据）
+                    new Controllers.ToolController().ResetDataBase();
+                }
+            }
         }
     }
 }

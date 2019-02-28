@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Netnr.Core\Netnr.Core.csproj" />
+    <PackageReference Include="Netnr.Core" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Netnr.Data\Netnr.Data.csproj" />
     <ProjectReference Include="..\Netnr.Domain\Netnr.Domain.csproj" />
+    <ProjectReference Include="..\Netnr.Fast\Netnr.Fast.csproj" />
   </ItemGroup>
 
 </Project>

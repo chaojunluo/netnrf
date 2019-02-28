@@ -54,8 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContextBase.cs" />
-    <Compile Include="DataBase.cs" />
-    <Compile Include="DbSetTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

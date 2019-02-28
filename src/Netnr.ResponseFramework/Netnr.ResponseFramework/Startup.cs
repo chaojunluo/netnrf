@@ -16,8 +16,8 @@ namespace Netnr.ResponseFramework
     {
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            GlobalVar.Configuration = configuration;
-            GlobalVar.HostingEnvironment = env;
+            GlobalTo.Configuration = configuration;
+            GlobalTo.HostingEnvironment = env;
 
             #region 第三方登录配置（如果不用，请以最快的速度删了，^_^）
             //也可把秘钥配置到appsettings.json，如：GlobalVar.GetValue("Login:QQConfig:APPID")
@@ -47,7 +47,12 @@ namespace Netnr.ResponseFramework
             //无创建，有忽略
             using (var db = new ContextBase())
             {
-                db.Database.EnsureCreated();
+                //不存在创建，创建后返回true
+                if (db.Database.EnsureCreated())
+                {
+                    //调用重置数据库（实际开发中，你可能不需要，或只初始化一些表数据）
+                    new Controllers.ToolController().ResetDataBase();
+                }
             }
         }
 
@@ -66,7 +71,7 @@ namespace Netnr.ResponseFramework
             services.AddMvc(options =>
             {
                 //注册全局过滤器
-                options.Filters.Add(new Global.FilterConfigs.ErrorActionFilter());
+                options.Filters.Add(new Filters.FilterConfigs.ErrorActionFilter());
 
                 options.Filters.Add(new Filters.FilterConfigs.LogActionAttribute());
             });

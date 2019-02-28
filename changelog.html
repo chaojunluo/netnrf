@@ -15,7 +15,7 @@
     <meta name="keywords" content="netnrf,netnrf响应式框架,响应式框架,Bootstrap后台框架" />
     <meta name="description" content="netnrf响应式框架,基于Ace Admin框架菜单导航,Bootstrap布局,fontAwesome图标,内嵌Iframe用EasyUI做数据绑定,动态配置列表,动态配置表单。" />
 
-    <link href="https://lib.baomitu.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         /*footer*/
@@ -38,16 +38,31 @@
         <div class="row">
             <div class="col-12 mt-4">
                 <h1>更新日志</h1>
-                <h2>[ⅴ2.2] - 2019-01-17</h2>
+                <h2>[v2.2.1] - 2019-02-28</h2>
                 <ul>
-                    <li>调整Grid行数可选列表,可选200行</li>
-                    <li>修复多个Grid传参有干扰的问题,修复方式为先清空 <code>queryparams</code> 对象</li>
-                    <li>调整去除日期时间插件 <code>bootstrap-datetimepicker</code>  改为 <code>EasyUI</code> 提供曰期时间组件，减少两次请求</li>
+                    <li>调整 导出 Excel的 <code>NPOITo</code> 类，支持 <code>.xls</code>、<code>.xlsx</code>导出</li>
+                    <li>调整 表格查询面板生成模式，基于表格列配置生成，支持多表格查询面板</li>
+                    <li>移除 快捷键 <code>Ctrl + Q</code> 打开查询面板（因存在多个查询面板）</li>
+                    <li>添加 表格列标题快捷打开定位条件查询面板</li>
+                    <li>调整 首次运行项目，自动创建数据库、调重置数据库（<code>scripts/table-reset</code> 目录需有对应的数据库脚本）</li>
+                    <li>修复 datetime日期时间输入类型查询面板赋值存在的问题（没阻止冒泡，先结束编辑再赋值造成赋值失败）</li>
+                </ul>
+                <ul>
+                    <li>调整 <code>Netnr.Core</code> 类库项目从NuGet引入，新增 <code>Netnr.Fast</code> 项目，具体看 <a href="https://github.com/netnr/Netnr.ClassLibrary">https://github.com/netnr/Netnr.ClassLibrary</a></li>
+                </ul>
+                <ul>
+                    <li>调整 支持多表单生成（页面的表单、表格配置默认第一个，暂不支持多表单、表格配置）</li>
+                </ul>
+                <h2>[v2.2.0] - 2019-01-17</h2>
+                <ul>
+                    <li>调整 Grid行数可选列表,可选200行</li>
+                    <li>修复 多个Grid传参有干扰的问题,修复方式为先清空 <code>queryparams</code> 对象</li>
+                    <li>调整 去除日期时间插件 <code>bootstrap-datetimepicker</code>  改为 <code>EasyUI</code> 提供曰期时间组件，减少两次请求</li>
                     <li>添加 Modal弹出窗设置 <code>autorefresh</code> 属性，每次打开 <code>iframe</code> 自动刷新</li>
                     <li>调整 Moda1弹出窗默认为全屏弹窗</li>
-                    <li>调整表单必填项提示改为红星</li>
-                    <li>添加中文语言包</li>
-                    <li>修复页面嵌套大于两层出现样式不一样的问题,修复方式为把 <code>parent</code> 对象改成 <code>top</code></li>
+                    <li>调整 表单必填项提示改为红星</li>
+                    <li>添加 中文语言包</li>
+                    <li>修复 页面嵌套大于两层出现样式不一样的问题,修复方式为把 <code>parent</code> 对象改成 <code>top</code></li>
                     <li>调整 <code>init.css</code> 样式包嵌入 <code>z.css</code></li>
                     <li>调整 <code>easel-custom.css</code> 调整的样式嵌入 <code>z.css</code> ,页面直接引入原有包 <code>easyul.css</code></li>
                     <li>调整 表配置隐藏添加系统级隐藏</li>
@@ -60,38 +75,38 @@
                 </ul>
                 <h2>[v2.1.2] - 2018-11-09</h2>
                 <ul>
-                    <li>增加<code>.NET Framework 4.5</code>框架源代码，同步更新Core版本</li>
+                    <li>增加 <code>.NET Framework 4.5</code>框架源代码，同步更新Core版本</li>
                 </ul>
                 <h2>[v2.1.2] - 2018-11-01</h2>
                 <ul>
-                    <li>修复<code>DataGrid</code>执行<code>updateRow</code>更新有翻页时行号有问题（没设置pageNumber的原因）</li>
-                    <li>调整公共查询的一些操作</li>
+                    <li>修复 <code>DataGrid</code>执行<code>updateRow</code>更新有翻页时行号有问题（没设置pageNumber的原因）</li>
+                    <li>调整 公共查询的一些操作</li>
                 </ul>
                 <h2>[v2.1.2] - 2018-10-27</h2>
                 <ul>
-                    <li>添加<code>按钮管理</code>功能</li>
-                    <li>添加<code>菜单管理</code>功能</li>
-                    <li>添加<code>授权关联</code>功能（支持第三方登录）</li>
-                    <li>添加<code>z.Combo</code>方法添加清除值按钮支持</li>
-                    <li>添加<code>PostgreSQL</code>数据库支持</li>
-                    <li>调整<code>Linq</code>查询，可不传排序列，即默认排序</li>
-                    <li>调整选项卡右侧仅为刷新按钮</li>
+                    <li>添加 <code>按钮管理</code>功能</li>
+                    <li>添加 <code>菜单管理</code>功能</li>
+                    <li>添加 <code>授权关联</code>功能（支持第三方登录）</li>
+                    <li>添加 <code>z.Combo</code>方法添加清除值按钮支持</li>
+                    <li>添加 <code>PostgreSQL</code>数据库支持</li>
+                    <li>调整 <code>Linq</code>查询，可不传排序列，即默认排序</li>
+                    <li>调整 选项卡右侧仅为刷新按钮</li>
                 </ul>
                 <h2>[v2.1.1] - 2018-10-13</h2>
                 <ul>
-                    <li>修复方法<code>z.FindTreeNode</code>存在的问题</li>
-                    <li>修复方法<code>z.FormEdit</code>存在的问题</li>
-                    <li>修复<code>Linq</code>查询先分页后排序的问题</li>
-                    <li>修复系统操作日志，<code>IP</code>获取始终为<code>127.0.0.1</code>的问题，原因是<code>nginx</code>代理，需要判断代理环境</li>
+                    <li>修复 方法<code>z.FindTreeNode</code>存在的问题</li>
+                    <li>修复 方法<code>z.FormEdit</code>存在的问题</li>
+                    <li>修复 <code>Linq</code>查询先分页后排序的问题</li>
+                    <li>修复 系统操作日志，<code>IP</code>获取始终为<code>127.0.0.1</code>的问题，原因是<code>nginx</code>代理，需要判断代理环境</li>
                 </ul>
-                <h2>[v2.1]　2018-10</h2>
+                <h2>[v2.1.0]　2018-10</h2>
                 <ul>
-                    <li>跨平台跨数据库支持，<a href="https://github.com/aspnet/EntityFrameworkCore">https://github.com/aspnet/EntityFrameworkCore</a> ，已测试<code>SQLite</code>、<code>MySql</code>、<code>SQLServer</code></li>
+                    <li>添加 跨平台跨数据库支持，<a href="https://github.com/aspnet/EntityFrameworkCore">https://github.com/aspnet/EntityFrameworkCore</a> ，已测试<code>SQLite</code>、<code>MySql</code>、<code>SQLServer</code></li>
                     <li>生成实体依赖于<code>Scaffold-DbContext</code>命令 <a href="https://www.netnr.com/gist/code/5283651389582691979">https://www.netnr.com/gist/code/5283651389582691979</a></li>
-                    <li>公共查询从SQL语句改为Linq</li>
-                    <li>修复<code>z.js</code>若干问题</li>
-                    <li>表管理工具，生成表配置、表字典</li>
-                    <li>演示项目调整，从<code>SQLServer</code>改为<code>MySql</code>，服务器迁移国外搬瓦工（Centos7、Nginx、MySql、CN2线路）</li>
+                    <li>调整 公共查询从SQL语句改为Linq</li>
+                    <li>修复 <code>z.js</code>若干问题</li>
+                    <li>添加 表管理工具，生成表配置、表字典</li>
+                    <li>调整 演示项目调整，从<code>SQLServer</code>改为<code>MySql</code>，服务器迁移国外搬瓦工（Centos7、Nginx、MySql、CN2线路）</li>
                 </ul>
                 <hr>
                 <ul>
@@ -116,14 +131,13 @@
                         </ul>
                     </li>
                 </ul>
-                <h2>[v2] - 2018-07</h2>
+                <h2>[v2.0.0] - 2018-07</h2>
                 <ul>
                     <li>前端采用 jQuery + Bootstrap + EasyUI + AceAdmin</li>
                     <li>后端采用 Asp.Net Core + EF + SQLServer</li>
                     <li>全新重写 <code>z.js</code> 脚本包，与EasyUI提供的API高度保持一致（最大调整）</li>
                     <li>重写iframe选项卡</li>
                     <li>精简ace导航</li>
-                    <li>若干调整...</li>
                 </ul>
             </div>
         </div>
@@ -133,15 +147,5 @@
     <footer class="footer">
         &copy; <a href="https://www.netnr.com">netnr</a>
     </footer>
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124641448-3"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'UA-124641448-3');
-    </script>
-
 </body>
 </html>

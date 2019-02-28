@@ -15,7 +15,7 @@ SELECT UUID() AS Id,
            ELSE
                c.COLUMN_COMMENT
        END AS ColTitle,
-       100 AS ColWidth,
+       120 AS ColWidth,
        1 AS ColAlign,
        0 AS ColHide,
        c.ORDINAL_POSITION AS ColOrder,

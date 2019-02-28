@@ -8,7 +8,6 @@ using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Netnr.Func
 {
@@ -59,72 +58,6 @@ namespace Netnr.Func
         #endregion
 
         #region 辅助方法
-
-        /// <summary>
-        /// 数据集合转JSON
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="pidField">父ID键</param>
-        /// <param name="idField">ID键</param>
-        /// <param name="listStartId">开始的PID</param>
-        /// <returns></returns>
-        public static string ListToTree<T>(List<T> list, string pidField, string idField, List<string> listStartId)
-        {
-            StringBuilder sbTree = new StringBuilder();
-
-            var rdt = list.Where(x => listStartId.Contains(x.GetType().GetProperty(pidField).GetValue(x, null).ToString())).ToList();
-
-            for (int i = 0; i < rdt.Count; i++)
-            {
-                //数组“[”开始
-                if (i == 0)
-                {
-                    sbTree.Append("[");
-                }
-                else
-                {
-                    sbTree.Append(",");
-                }
-
-                sbTree.Append("{");
-
-                //数据行
-                var dr = rdt[i];
-                string mojson = dr.ToJson();
-                sbTree.Append(mojson.TrimStart('{').TrimEnd('}'));
-
-                var pis = dr.GetType().GetProperties();
-
-                var pi = pis.Where(x => x.Name == idField).FirstOrDefault();
-                listStartId.Clear();
-                var id = pi.GetValue(dr, null).ToString();
-                listStartId.Add(id);
-                
-                var nrdt = list.Where(x => x.GetType().GetProperty(pidField).GetValue(x, null).ToString() == id.ToString()).ToList();
-
-                if (nrdt.Count > 0)
-                {
-                    string rs = ListToTree(list, pidField, idField, listStartId);
-
-                    //子数组源于递归
-                    sbTree.Append(",\"children\":" + rs + "}");
-                }
-                else
-                {
-                    sbTree.Append("}");
-                }
-
-                //数组结束“]”
-                if (i == rdt.Count - 1)
-                {
-                    sbTree.Append("]");
-                }
-            }
-
-            return sbTree.ToString();
-        }
-
         /// <summary>
         /// 查询拼接
         /// </summary>
@@ -144,7 +77,7 @@ namespace Netnr.Func
             //排序
             if (!string.IsNullOrWhiteSpace(param.sort))
             {
-                query = DataBase.OrderBy(query, param.sort, param.order);
+                query = Fast.QueryableTo.OrderBy(query, param.sort, param.order);
             }
 
             //分页

@@ -33,14 +33,17 @@
     z.button("see", function () {
         z.FormRequired('reset');
     });
-    //查看
-    z.button("see", function () {
-        z.FormRequired('reset');
-    });
 </script>
 
-<!--引入页面JS-->
-<script src='/js/@ViewContext.RouteData.Values["controller"].ToString().ToLower()/@(ViewContext.RouteData.Values["action"].ToString().ToLower()+".js")'></script>
+<!--引入页面JS，当脚本存在时，且加上sha1值，解决缓存问题-->
+@{
+    var jssrc = $"/js/{ViewContext.RouteData.Values["controller"].ToString().ToLower()}/{ViewContext.RouteData.Values["action"].ToString().ToLower()}.js";
+    var jspath = Server.MapPath(jssrc);
+    if (System.IO.File.Exists(jspath))
+    {
+        <script src='@jssrc?v=@Netnr.Core.CalcTo.SHA128(Netnr.Core.FileTo.ReadText(jspath,"")).Replace("-","").ToLower()'></script>
+    }
+}
 
 <script>
     //绑定数据

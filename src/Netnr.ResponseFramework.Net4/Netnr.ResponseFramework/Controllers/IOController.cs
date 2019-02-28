@@ -120,7 +120,7 @@ namespace Netnr.ResponseFramework.Controllers
                 }
 
                 filename += DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
-                if (Core.NPOITo.DataTableToExcel(dt, path + filename))
+                if (Fast.NpoiTo.DataTableToExcel(dt, path + filename))
                 {
                     Core.DownTo.Stream(path, filename);
                 }

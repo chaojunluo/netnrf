@@ -43,7 +43,7 @@ namespace Netnr.ResponseFramework.Controllers
                 string filename = "导出表格";
 
                 //生成excel的临时文件目录
-                string path = GlobalVar.WebRootPath + "/temp/";
+                string path = GlobalTo.WebRootPath + "/temp/";
 
                 //存放导出的数据
                 var dt = new DataTable();
@@ -123,7 +123,7 @@ namespace Netnr.ResponseFramework.Controllers
                 }
 
                 filename += DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
-                if (Core.NPOITo.DataTableToExcel(dt, path + filename))
+                if (Fast.NpoiTo.DataTableToExcel(dt, path + filename))
                 {
                     new Core.DownTo(Response).Stream(path, filename);
                 }

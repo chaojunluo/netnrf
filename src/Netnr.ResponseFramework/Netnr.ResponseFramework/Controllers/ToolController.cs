@@ -30,7 +30,7 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 ext = ".pdm";
             }
-            var sql = Core.FileTo.ReadText(GlobalVar.WebRootPath + $"/scripts/table-{cmd}/", typedb.ToLower() + ext);
+            var sql = Core.FileTo.ReadText(Core.MapPathTo.Map($"/scripts/table-{cmd}/", GlobalTo.HostingEnvironment), typedb.ToLower() + ext);
             return sql;
         }
 
@@ -315,9 +315,9 @@ namespace Netnr.ResponseFramework.Controllers
                     }
                 }
 
-                var path = GlobalVar.WebRootPath + "/upload/temp/";
-                var filename = "表设计_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
-                Core.NPOITo.DataTableToExcel(dt, path + filename);
+                var path = GlobalTo.WebRootPath + "/upload/temp/";
+                var filename = "表设计_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                Fast.NpoiTo.DataTableToExcel(dt, path + filename);
                 new Core.DownTo(Response).Stream(path, filename);
             }
         }

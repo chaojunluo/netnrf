@@ -95,6 +95,7 @@
         frozenColumns: [[]],/*冻结列*/
         loadMsg: "加载中...",/*加载提示*/
         queryParams: {},/*请求参数*/
+        queryMark: true, /*启用查询标记*/
         autosize: "xy",/*调整大小，请参考z.GridAuto方法*/
         autosizePid: "#myBody",/*自适应父容器#ID*/
         onBeforeBind: function (ops) { },/*绑定前回调，return false阻止绑定*/
@@ -170,6 +171,11 @@
                         z.GridAuto(that);
                     }
                 }
+            }
+
+            //查询标记
+            if (that.queryMark) {
+                z.GridQueryMark(that);
             }
 
             //执行完成事件
@@ -255,7 +261,9 @@
                                 sortable: this.ColSort == 1 ? true : false,
                                 FormType: this.FormType,
                                 FormUrl: this.FormUrl,
-                                formatter: function (value, row, index) { return z.GridFormat(value, row, v) }
+                                FormPlaceholder: this.FormPlaceholder || "",
+                                ColQuery: this.ColQuery == null ? 0 : this.ColQuery,
+                                formatter: function (value, row) { return z.GridFormat(value, row, v) }
                             }
                             if (this.ColFrozen == 1) { frozens.push(column); }
                             else { columns.push(column); }
@@ -362,7 +370,7 @@
         //不显示滚动条
         document.documentElement.style.overflowY = "hidden";
 
-        var h = $(window).height() - $(gd.id).parent()[0].getBoundingClientRect().top;
+        var h = $(window).height() - $(gd.id).parents('.datagrid')[0].getBoundingClientRect().top;
         h < 150 && (h = 150);
         var ro = { width: null, height: null };
         switch (gd.autosize) {
@@ -471,6 +479,7 @@
                                             break;
                                         case "combotree":
                                             //该类型，暂未找到默认打开下拉面板和选中文本框的方法
+                                            that[ec.FormType]('showPanel');
                                             break;
                                         default:
                                     }
@@ -725,7 +734,7 @@
                     var mo = new z.Modal();
 
                     mo.src = url;
-                    mo.size = 3;
+                    mo.size = 4;
                     mo.title = '<i class="fa fa-search blue"></i><span>选择<span>';
                     mo.cancelText = '<i class="fa fa-close"></i> 取消';
                     mo.cancelClick = function () { this.hide() }
@@ -1130,7 +1139,8 @@
             var that = this, size = 'modal-dialog', htm = [];
             switch (this.size) {
                 case 1: size += " modal-sm"; break;
-                case 3: size += " modal-lg modal-full";
+                case 3: size += " modal-lg"; break;
+                case 4: size += " modal-full"; break;
             }
             htm.push('<div class="' + size + '"><div class="modal-content"><div class="modal-header">');
             if (that.showClose) {
@@ -1332,54 +1342,38 @@ if ($.fn.datagrid) {
     };
 
     //公共部分
-    var bodt = function () {
+    var dtobj = function (key) {
+        var ftm = z.FormTypeMap[key];
         return {
+            init: function (container, options) {
+                var input = $('<input class="datagrid-editable-input" />').appendTo(container);
+                input[ftm]();
+                try {
+                    //为日期面板添加鼠标点击阻止冒泡（因与点击空白结束编辑冲突）
+                    input.data('combo').panel.mousedown(function (e) {
+                        z.stopEvent(e)
+                    });
+                } catch (e) { }
+                return input;
+            },
             resize: function (target, width) { target.css('width', width) },
-            getValue: function (target) { return target.val() },
-            setValue: function (target, value) { target.val(value) }
+            getValue: function (target) { return target[ftm]('getValue') },
+            setValue: function (target, value) { target[ftm]('setValue', value) }
         }
     }
 
     //datetime 日期时间
-    ge.datetime = {
-        init: function (container, options) {
-            var input = $('<input class="datagrid-editable-input" />').appendTo(container);
-            input.datetimebox();
-            return input;
-        },
-        resize: function (target, width) { target.css('width', width) },
-        getValue: function (target) { return target.datetimebox('getValue') },
-        setValue: function (target, value) { target.datetimebox('setValue', value) }
-    };
+    ge.datetime = dtobj("datetime");
 
     //date 日期
-    ge.date = {
-        init: function (container, options) {
-            var input = $('<input class="datagrid-editable-input" />').appendTo(container);
-            input.datebox();
-            return input;
-        },
-        resize: function (target, width) { target.css('width', width) },
-        getValue: function (target) { return target.datebox('getValue') },
-        setValue: function (target, value) { target.datebox('setValue', value) }
-    };
+    ge.date = dtobj("date");
 
     //time 时间
-    ge.time = {
-        init: function (container, options) {
-            var input = $('<input class="datagrid-editable-input" />').appendTo(container);
-            input.timespinner();
-            return input;
-        },
-        resize: function (target, width) { target.css('width', width) },
-        getValue: function (target) { return target.timespinner('getValue') },
-        setValue: function (target, value) { target.timespinner('setValue', value) }
-    };
+    ge.time = dtobj("time");
 
     //modal 模态框
     ge.modal = {
         init: function (container, options) {
-            console.log(arguments)
             var input = $('<div class="dimodal"><input type="text" class="datagrid-editable-input"><i class="fa fa-search form-control-feedback"></i></div>').appendTo(container);
             var mo = new z.Modal(), url = options.url.toLowerCase();
 
@@ -1387,7 +1381,7 @@ if ($.fn.datagrid) {
                 mo = z.DC[url].obj;
             } else {
                 mo.src = options.url;
-                mo.size = 3;
+                mo.size = 4;
                 mo.title = '<i class="fa fa-search blue"></i><span>选择<span>';
                 mo.cancelText = '<i class="fa fa-close"></i> 取消';
                 mo.cancelClick = function () { this.hide() }

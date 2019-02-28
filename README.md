@@ -8,6 +8,9 @@
 ## [更新日志](CHANGELOG.md)
 
 ----------
+## [文档说明](DOCUMENT.md)
+
+----------
 ## 项目结构
 - Netnr.Core 类库
 - Netnr.Data 数据访问、仓储

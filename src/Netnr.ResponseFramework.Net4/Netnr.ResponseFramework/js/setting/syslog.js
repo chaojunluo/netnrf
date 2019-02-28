@@ -3,21 +3,17 @@ var gd1 = z.Grid();
 gd1.url = "/Setting/QuerySysLog?tableName=" + z.TableName;
 gd1.sortName = "LogCreateTime";
 gd1.sortOrder = "desc";
-gd1.onBeforeLoad = function (row, param) {
-    var sq = QueryWhereGet();
-    param.wheres = sq.stringify();
-}
 gd1.load();
+
+//查询
+z.button('query', function () {
+    gd1.QueryOpen();
+});
 
 //刷新
 z.button('reload', function () {
     gd1.load();
 });
-//查询回调
-function QueryWhereCallBack() {
-    gd1.pageNumber = 1;
-    gd1.load();
-}
 
 //查看
 z.button('see', function () {

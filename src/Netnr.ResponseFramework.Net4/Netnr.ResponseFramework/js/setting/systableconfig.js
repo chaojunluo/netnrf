@@ -157,10 +157,13 @@ gd1.onDblClickRow = function (index, row) {
     //双击行模拟点编辑
     z.buttonClick('edit');
 }
-gd1.onBeforeLoad = function (row, param) {
-    var sq = QueryWhereGet();
-    param.wheres = sq.stringify();
-}
+//设置查询条件项,指定（虚拟）表名，由于没有加载表格的情况下需要发起一次请求得到查询条件项
+gd1.queryData = z.TableName;
+
+//查询
+z.button('query', function () {
+    gd1.QueryOpen();
+});
 
 //方式一：默认载入
 //gd1.load();
@@ -169,12 +172,6 @@ gd1.onBeforeLoad = function (row, param) {
 //屏蔽 gd1.load();
 //模拟点击查询按钮
 z.buttonClick('query');
-
-//查询回调
-function QueryWhereCallBack() {
-    gd1.pageNumber = 1;
-    gd1.load();
-}
 
 //刷新
 z.button('reload', function () {

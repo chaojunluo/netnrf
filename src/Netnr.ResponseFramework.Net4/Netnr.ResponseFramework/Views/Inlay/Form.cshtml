@@ -3,29 +3,8 @@
 }
 @model List<IGrouping<int, Netnr.Domain.SysTableConfig>>
 
-<input type="hidden" value="@TempData["tablename"]" id="hidtablename" />
-<input type="hidden" value="@TempData["index"]" id="hidtableindex" />
-
-<!--模态 查询-->
-<div class="modal fade modalautoheight" id="fq_modal_@TempData["index"]" role="dialog">
-    <div class='modal-dialog modal-lg'>
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="fq_title_@TempData["index"]">
-                    <i class="fa fa-search blue"></i><span>查询条件</span>
-                </h4>
-            </div>
-            <div class="modal-body" id="PGridQuery_@TempData["index"]">
-                <div id="GridQuery_@TempData["index"]" class="loadingimg"></div>
-            </div>
-            <div class="modal-footer">
-                <button id="fq_clear_@TempData["index"]" type="button" class="btn btn-warning pull-left"><span class="fa fa-remove"></span>&nbsp;清空</button>
-                <button id="fq_ok_@TempData["index"]" type="button" class="btn btn-primary"><span class="fa fa-search"></span>&nbsp;确定</button>
-            </div>
-        </div>
-    </div>
-</div>
+<input type="hidden" name="hidtablename" value="@TempData["tablename"]" />
+<input type="hidden" name="hidtableindex" value="@TempData["index"]" />
 
 <!--模态 表单-->
 <div class="modal fade modalautoheight" id="fv_modal_@TempData["index"]" role="dialog" data-backdrop="static">

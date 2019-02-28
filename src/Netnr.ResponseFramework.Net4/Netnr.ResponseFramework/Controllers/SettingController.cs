@@ -26,7 +26,7 @@ namespace Netnr.ResponseFramework.Controllers
             using (var db = new ContextBase())
             {
                 var list = db.SysButton.OrderBy(x => x.SbBtnOrder).ToList();
-                var tree = Func.Common.ListToTree(list, "SbPid", "SbId", new List<string> { Guid.Empty.ToString() });
+                var tree = Core.TreeTo.ListToTree(list, "SbPid", "SbId", new List<string> { Guid.Empty.ToString() });
                 or.data = tree.ToJArray();
 
                 //列
@@ -95,7 +95,7 @@ namespace Netnr.ResponseFramework.Controllers
             using (var db = new ContextBase())
             {
                 var list = db.SysMenu.OrderBy(x => x.SmOrder).ToList();
-                var tree = Func.Common.ListToTree(list, "SmPid", "SmId", new List<string> { Guid.Empty.ToString() });
+                var tree = Core.TreeTo.ListToTree(list, "SmPid", "SmId", new List<string> { Guid.Empty.ToString() });
                 or.data = tree.ToJArray();
 
                 //列

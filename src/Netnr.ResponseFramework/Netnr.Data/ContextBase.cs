@@ -59,20 +59,20 @@ namespace Netnr.Data
             switch (TDB)
             {
                 case TypeDB.MySQL:
-                    optionsBuilder.UseMySql(GlobalVar.GetValue("ConnectionStrings:MySQLConn"));
+                    optionsBuilder.UseMySql(GlobalTo.GetValue("ConnectionStrings:MySQLConn"));
                     break;
                 case TypeDB.SQLite:
-                    optionsBuilder.UseSqlite(GlobalVar.GetValue("ConnectionStrings:SQLiteConn"));
+                    optionsBuilder.UseSqlite(GlobalTo.GetValue("ConnectionStrings:SQLiteConn"));
                     break;
                 case TypeDB.SQLServer:
-                    optionsBuilder.UseSqlServer(GlobalVar.GetValue("ConnectionStrings:SQLServerConn"), options =>
+                    optionsBuilder.UseSqlServer(GlobalTo.GetValue("ConnectionStrings:SQLServerConn"), options =>
                     {
                         //启用 row_number 分页 （兼容2005、2008）
                         //options.UseRowNumberForPaging();
                     });
                     break;
                 case TypeDB.PostgreSQL:
-                    optionsBuilder.UseNpgsql(GlobalVar.GetValue("ConnectionStrings:PostgreSQL"));
+                    optionsBuilder.UseNpgsql(GlobalTo.GetValue("ConnectionStrings:PostgreSQL"));
                     break;
             }
 

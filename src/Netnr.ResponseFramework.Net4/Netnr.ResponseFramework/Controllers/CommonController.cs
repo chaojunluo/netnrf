@@ -15,7 +15,7 @@ namespace Netnr.ResponseFramework.Controllers
         public string QueryMenu(string type)
         {
             string result = string.Empty;
-            var listMenu = Func.Common.QuerySysMenuList(x => x.SmStatus == 1);
+            var listMenu = Func.Common.QuerySysMenuList(x => x.SmStatus == 1, false);
             if (type != "all")
             {
                 #region 根据登录用户查询角色配置的菜单
@@ -45,7 +45,7 @@ namespace Netnr.ResponseFramework.Controllers
             }
             #endregion
 
-            result = Func.Common.ListToTree(listNode, "pid", "id", new List<string> { Guid.Empty.ToString() });
+            result = Core.TreeTo.ListToTree(listNode, "pid", "id", new List<string> { Guid.Empty.ToString() });
 
             if (string.IsNullOrWhiteSpace(result))
             {
@@ -77,7 +77,7 @@ namespace Netnr.ResponseFramework.Controllers
             }
             #endregion
 
-            result = Func.Common.ListToTree(listNode, "pid", "id", new List<string> { Guid.Empty.ToString() });
+            result = Core.TreeTo.ListToTree(listNode, "pid", "id", new List<string> { Guid.Empty.ToString() });
 
             if (string.IsNullOrWhiteSpace(result))
             {

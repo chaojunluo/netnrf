@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link href="favicon.svg" rel="Shortcut Icon" type="image/svg" />
+
+    <title>netnrf响应式框架</title>
+
+    <meta name="keywords" content="netnrf,netnrf响应式框架,响应式框架,Bootstrap后台框架" />
+    <meta name="description" content="netnrf响应式框架,基于Ace Admin框架菜单导航,Bootstrap布局,fontAwesome图标,内嵌Iframe用EasyUI做数据绑定,动态配置列表,动态配置表单。" />
+
+    <link href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://lib.baomitu.com/highlight.js/9.15.6/styles/github.min.css" rel="stylesheet">
+
+    <style>
+        /*footer*/
+        .footer {
+            width: 100%;
+            display: block;
+            margin-top: 70px;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-4">
+                <h3>z.Grid()</h3>
+                <blockquote>
+                    <p>方法、属性与官方的文档基本一致</p>
+                </blockquote>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> gd1 = <span class="hljs-keyword">new</span> z.Grid();
+
+gd1.isinit  <span class="hljs-comment">//第一次为 true ,绑定完成后始终为 false</span>
+gd1.id  <span class="hljs-comment">//表格容器#ID，默认 #Grid1</span>
+gd1.type    <span class="hljs-comment">//表格类型，默认 datagrid ，支持：datagrid、treegrid、propertygrid、datalist</span>
+gd1.autosize    <span class="hljs-comment">//自动调整大小，默认 xy ，支持：xy(宽满高沉底)、x、y、p(填充父容器)</span>
+gd1.autosizePid <span class="hljs-comment">//父容器#ID，默认 #myBody，为实现自动调整大小所需要</span>
+gd1.columnsExists   <span class="hljs-comment">//是否查询列配置，第一次查询列配置后赋值为 true ，为true 则后面不在查询列配置</span>
+gd1.dataCache   <span class="hljs-comment">//异步请求得到的数据</span>
+
+gd1.onComplete(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">obj</span>)</span>{ })    <span class="hljs-comment">//完成回调，可多次调用，注意：完成里面再次调用绑定会造成死循环，需标记跳出</span>
+
+gd1.bind()  <span class="hljs-comment">//本地绑定方法</span>
+gd1.load()  <span class="hljs-comment">//加载方法，载入后会自动调用 bind 方法</span>
+
+gd1.func()  <span class="hljs-comment">//方法调用，与官方提供的方法一致，例子：</span>
+gd1.func(<span class="hljs-string">'getSelected'</span>) <span class="hljs-comment">//获取选中行</span>
+gd1.func(<span class="hljs-string">'updateRow'</span>, {<span class="hljs-attr">index</span>:<span class="hljs-number">1</span>, <span class="hljs-attr">row</span>:{}}) <span class="hljs-comment">//更新行</span>
+
+<span class="hljs-comment">//查询面板组件拓展</span>
+gd1.queryMark   <span class="hljs-comment">//创建查询标记，默认 true</span>
+gd1.queryData   <span class="hljs-comment">//查询条件项，默认提取标题列，可自定义（array类型）；也可以设置（虚拟）表名（string类型），即先输入查询条件再查询数据的情况，配置表名会同步请求表配置得到查询条件项</span>
+gd1.QueryBuild()    <span class="hljs-comment">//创建查询面板（含初始化查询面板，并赋值 gd1.query ，只有 gd1.query 对象为空时才会创建 ）</span>
+gd1.QueryOpen(field)    <span class="hljs-comment">//打开查询面板（自动调用 gd1.QueryBuild 方法）; field，可选，指向查询条件字段名，定位行和启用编辑</span>
+gd1.QueryWhere()    <span class="hljs-comment">//获取查询面板的条件</span>
+gd1.QueryOk = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ }   <span class="hljs-comment">//点击查询面板确定的回调，可选，自定义确定事件，不写该事件则默认获取查询面板条件请求第一页</span>
+gd1.query   <span class="hljs-comment">//query对象为查询面板对象；需调用 gd1.QueryBuild() 或 gd1.QueryOpen()方法后才会有值</span>
+z.queryin   <span class="hljs-comment">//指向打开的查询面板,调用 gd1.QueryOpen() 方法时，z.queryin = gd1.query，打开其他的查询面板会对应的指向</span>
+gd1.query.grid  <span class="hljs-comment">//查询面板表格，与 gd1 同类型对象</span>
+gd1.query.id    <span class="hljs-comment">//指向查询面板表格的容器ID</span>
+gd1.query.md    <span class="hljs-comment">//查询面板模态框对象，new z.Modal() 返回的对象</span>
+</code></pre>
+                <p>查询面板组件拓展</p>
+                <h3>z.GridQueryMark(gd)</h3>
+                <blockquote>
+                    <p>创建查询标记</p>
+                </blockquote>
+                <h3>z.GridQueryBuild(gd)</h3>
+                <blockquote>
+                    <p>创建查询面板</p>
+                </blockquote>
+                <h3>z.GridQueryOpen(gd, field)</h3>
+                <blockquote>
+                    <p>打开查询面板，自动调用 GridQueryBuild 创建方法，参数：field 指定某个查询列字段，可选</p>
+                </blockquote>
+                <h3>z.GridQueryWhere(gd)</h3>
+                <blockquote>
+                    <p>得到查询面板的查询条件，组建 z.SqlQuery 对象</p>
+                </blockquote>
+                <h3>z.GridFormat()</h3>
+                <blockquote>
+                    <p>公用的格式化方法，如性别、日期、状态、金额等</p>
+                </blockquote>
+                <h3>z.GridAuto(gd)</h3>
+                <blockquote>
+                    <p>Grid调整大小的方法</p>
+                </blockquote>
+                <h3>z.GridLoading(gd)</h3>
+                <blockquote>
+                    <p>第一次加载表格时，显示加载图标，以后的加载提示由 DataGrid 组件提供</p>
+                </blockquote>
+                <h3>z.GridEditor(gd, index, field, row)</h3>
+                <blockquote>
+                    <p>Grid编辑配置，参数 row 可选，具体看脚本注释</p>
+                </blockquote>
+                <h3>z.GridEditorBlank(gd)</h3>
+                <blockquote>
+                    <p>点空白结束Grid编辑</p>
+                </blockquote>
+                <h3>z.Combo()</h3>
+                <blockquote>
+                    <p>方法、属性与官方的文档基本一致，与 z.Grid 一样的形式</p>
+                </blockquote>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> cb1 = <span class="hljs-keyword">new</span> z.Combo();
+
+cb1.type    <span class="hljs-comment">//类型，默认 combobox ，支持：combobox、combotree tree</span>
+
+cb1.onComplete(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">obj</span>)</span>{ })    <span class="hljs-comment">//完成回调，可多次调用，注意：完成里面再次调用绑定会造成死循环，需标记跳出</span>
+
+cb1.bind()  <span class="hljs-comment">//本地绑定方法</span>
+cb1.load()  <span class="hljs-comment">//加载方法，载入后会自动调用 bind 方法</span>
+
+cb1.func()  <span class="hljs-comment">//方法调用，与官方提供的方法一致，例子：</span>
+cb1.func(<span class="hljs-string">'getValue'</span>) <span class="hljs-comment">//取值</span>
+cb1.func(<span class="hljs-string">'setValue'</span>, <span class="hljs-number">1</span>) <span class="hljs-comment">//赋值</span>
+</code></pre>
+                <h3>z.TreeVagueCheck(cb, values)</h3>
+                <blockquote>
+                    <p>Tree模糊选中，用于一个节点的子节点有部分选中，赋值后子节点被全部选中，用此方法处理，示例参考角色权限设置</p>
+                </blockquote>
+                <h3>z.FormAttrAjax()</h3>
+                <blockquote>
+                    <p>formui表单 请求返回数据源&amp;回调，用于初始化异步请求绑定的数据来源，与 z.FormAttrBind 方法配合使用</p>
+                </blockquote>
+                <h3>z.FormAttrBind(target)</h3>
+                <blockquote>
+                    <p>formui表单 类型源绑定，用于初始化根据不同的类型调用对应的组件方法 与 z.FormAttrAjax 方法配合使用</p>
+                </blockquote>
+                <h3>z.FormRequired(color, FormId, dialog)</h3>
+                <blockquote>
+                    <p>表单必填验证，用于保存时</p>
+                </blockquote>
+                <h3>z.FindTreeNode(data, value, key)</h3>
+                <blockquote>
+                    <p>查找树节点</p>
+                </blockquote>
+                <h3>z.FormEdit(rowData)</h3>
+                <blockquote>
+                    <p>回填表单，用于选中表格的一行，直接赋值表单编辑</p>
+                </blockquote>
+                <h3>z.FormToJson(FormId)</h3>
+                <blockquote>
+                    <p>表单转为 JSON , 用于编辑保存后，不用刷新加载，直接获取表单值更新表格的一行数据</p>
+                </blockquote>
+                <h3>z.FormClear(FormId)</h3>
+                <blockquote>
+                    <p>清空表单，用于新增</p>
+                </blockquote>
+                <h3>z.FormDisabled(dd, FormId)</h3>
+                <blockquote>
+                    <p>禁用表单，用于查看</p>
+                </blockquote>
+                <h3>z.FormAutoHeight()</h3>
+                <blockquote>
+                    <p>模态框表单调整高度，用于模态框高度自适应</p>
+                </blockquote>
+                <h3>z.FormTitle(ops)</h3>
+                <blockquote>
+                    <p>表单标题设置 ops示例：{id:"#id", title:"新增", required:true}</p>
+                </blockquote>
+                <ul>
+                    <li>icon 标题图标</li>
+                    <li>title 标题</li>
+                    <li>id 标题容器ID或对象</li>
+                    <li>required 是否显示必填的提示文字，默认 true</li>
+                </ul>
+                <h3>z.Modal()</h3>
+                <blockquote>
+                    <p>创建模态框</p>
+                </blockquote>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> md1 = <span class="hljs-keyword">new</span> z.Modal();
+
+md1.okText  <span class="hljs-comment">//ok按钮文本        </span>
+md1.cancelText  <span class="hljs-comment">//cancel按钮文本        </span>
+md1.okClick <span class="hljs-comment">//Ok点击回调</span>
+        
+md1.cancelClick <span class="hljs-comment">//Cancel点击回调</span>
+md1.title   <span class="hljs-comment">//标题内容</span>
+md1.content <span class="hljs-comment">//主体内容</span>
+md1.src <span class="hljs-comment">//iframe地址，覆盖content属性</span>
+md1.heightIframe    <span class="hljs-comment">//iframe高度</span>
+md1.complete    <span class="hljs-comment">//iframe加载完成回调</span>
+md1.size    <span class="hljs-comment">//模态大小 默认2 可选：1|2|3|4 ;分别对应（sm、md、lg、full）</span>
+md1.showClose   <span class="hljs-comment">//显示右上角关闭按钮</span>
+md1.showFooter  <span class="hljs-comment">//显示页脚</span>
+md1.showCancel  <span class="hljs-comment">//显示Cancel按钮</span>
+
+md1.okClick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{}   <span class="hljs-comment">//确定事件</span>
+md1.cancelClick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{}   <span class="hljs-comment">//取消</span>
+
+md1.append()    <span class="hljs-comment">//追加到 body 上，改方法在最后属性赋值后调用</span>
+md1.show()  <span class="hljs-comment">//显示</span>
+md1.hide()  <span class="hljs-comment">//隐藏</span>
+md1.remove()    <span class="hljs-comment">//移除</span>
+
+md1.modal   <span class="hljs-comment">//指向模态框的jQuery对象，如：md1.modal.find('div.modal-body') 找到模态框内容主体</span>
+</code></pre>
+                <h3>z.SqlQuery()</h3>
+                <blockquote>
+                    <p>用于表示SQL查询条件的对象</p>
+                </blockquote>
+<pre><code>// id1=<span class="hljs-string">'1'</span> AND id2 IN(<span class="hljs-string">'1'</span>,<span class="hljs-string">'2'</span>) AND id2 LIKE <span class="hljs-string">'%5%'</span> AND id3&gt;=<span class="hljs-string">'5'</span> AND id3&lt;=<span class="hljs-string">'10'</span>
+[
+    {
+        field: <span class="hljs-string">"id1"</span>,
+        relation: <span class="hljs-string">"Equal"</span>,
+        value: 1
+    },
+    {
+        field: <span class="hljs-string">"id2"</span>,
+        relation: <span class="hljs-string">"In"</span>,
+        value: [1, 2]
+    },
+    {
+        field: <span class="hljs-string">"id2"</span>,
+        relation: <span class="hljs-string">"Contains"</span>,
+        value: <span class="hljs-string">"5"</span>
+    },
+    {
+        field: <span class="hljs-string">"id3"</span>,
+        relation: <span class="hljs-string">"BetweenAnd"</span>,
+        value: [5, 10]
+    }
+]
+
+// relation 关系符说明
+{
+    Equal: <span class="hljs-string">'{0} = {1}'</span>,
+    NotEqual: <span class="hljs-string">'{0} != {1}'</span>,
+    LessThan: <span class="hljs-string">'{0} &lt; {1}'</span>,
+    GreaterThan: <span class="hljs-string">'{0} &gt; {1}'</span>,
+    LessThanOrEqual: <span class="hljs-string">'{0} &lt;= {1}'</span>,
+    GreaterThanOrEqual: <span class="hljs-string">'{0} &gt;= {1}'</span>,
+    BetweenAnd: <span class="hljs-string">'{0} &gt;= {1} AND {0} &lt;= {2}'</span>,
+    Contains: <span class="hljs-string">'%{0}%'</span>,
+    StartsWith: <span class="hljs-string">'{0}%'</span>,
+    EndsWith: <span class="hljs-string">'%{0}'</span>,
+    In: <span class="hljs-string">'IN'</span>,
+    NotIn: <span class="hljs-string">'NOT IN'</span>
+}
+</code></pre>
+                <h3>z.DC</h3>
+                <blockquote>
+                    <p>页面数据缓存，包括组件、数据源等，所有的东西都在里面</p>
+                </blockquote>
+                <ul>
+                    <li>下拉列表，根据请求url的地址小写作为键，存储下拉列表组件的信息</li>
+                </ul>
+                <h3>z.btnTrigger</h3>
+                <blockquote>
+                    <p>按钮触发标识，点击对应的功能按钮，赋值对应按钮的ID</p>
+                </blockquote>
+                <h3>z.button(type, fn)</h3>
+                <blockquote>
+                    <p>点击按钮事件（如需要禁用某些功能按钮，为按钮添加 disabled 样式即可生效，而不是设置按钮禁用属性），不适用二级按钮（弹出的下拉菜单按钮）</p>
+                </blockquote>
+<pre><code class="language-js">z.button(<span class="hljs-string">'add'</span>,functin(){ <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'新增事件'</span>) })
+</code></pre>
+                <h3>z.buttonClick(type)</h3>
+                <blockquote>
+                    <p>模拟操作按钮点击，如：z.buttonClick('add') 模拟点击新增</p>
+                </blockquote>
+                <h3>art(content, fnOk, fnCacle)</h3>
+                <blockquote>
+                    <p>消息提示、询问提示，依赖于 z.Modal</p>
+                </blockquote>
+<pre><code class="language-js">art(<span class="hljs-string">'保存成功'</span>);    <span class="hljs-comment">//类似于alert方法</span>
+<span class="hljs-comment">//有几个关键词做了转换：fail、error、success、select</span>
+art(<span class="hljs-string">'fail'</span>) <span class="hljs-comment">//操作失败，一般用于返回的结果是失败</span>
+art(<span class="hljs-string">'error'</span>)    <span class="hljs-comment">//网络错误，一般用于异步请求error事件</span>
+art(<span class="hljs-string">'success'</span>)  <span class="hljs-comment">//操作成功，一般用于保存成功</span>
+<span class="hljs-comment">//为所有提示保持风格统一，避免一些：操作有误、操作失败、 系统错误等各种提示</span>
+
+art(<span class="hljs-string">'确定删除吗？'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-comment">//确定，发起删除请求</span>
+})
+art(<span class="hljs-string">'是否覆盖？'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-comment">//覆盖</span>
+},<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-comment">//不覆盖</span>
+})
+</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!--页脚-->
+    <footer class="footer">
+        &copy; <a href="https://www.netnr.com">netnr</a>
+    </footer>
+
+</body>
+</html>

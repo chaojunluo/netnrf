@@ -5,7 +5,7 @@ SELECT CONVERT(VARCHAR(36), NEWID()) AS Id,
        c.[name] AS ColField,
        ISNULL(CONVERT(NVARCHAR(200), ep.[value]), c.name) AS DvTitle,
        ISNULL(CONVERT(NVARCHAR(200), ep.[value]), c.name) AS ColTitle,
-       100 AS ColWidth,
+       120 AS ColWidth,
        1 AS ColAlign,
        (CASE ep.class
             WHEN 1 THEN

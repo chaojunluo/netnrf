@@ -26,18 +26,7 @@ namespace Netnr.ResponseFramework
             {
                 base.OnException(filterContext);
 
-                string msg = $"==========日志记录时间：{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}{Environment.NewLine}"
-                       + $"消息内容：{filterContext.Exception.Message}{Environment.NewLine}"
-                       + $"引发异常的方法：{filterContext.Exception.StackTrace.Replace(Environment.NewLine, "^").Split('^')[0]}"
-                       + Environment.NewLine + Environment.NewLine;
-                try
-                {
-                    var date = DateTime.Now;
-                    string path = "/logs/" + date.ToString("yyyyMM") + "/";
-                    path = HttpContext.Current.Server.MapPath(path);
-                    Core.FileTo.WriteText(msg, path, date.ToString("yyyyMMdd") + ".log");
-                }
-                catch (Exception) { }
+                Core.ConsoleTo.Log(filterContext.Exception);
             }
         }
 

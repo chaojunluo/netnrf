@@ -6,16 +6,13 @@ gd1.onDblClickRow = function (index, row) {
     //双击行模拟点编辑
     z.buttonClick('edit');
 }
-gd1.onBeforeLoad = function (row, param) {
-    var sq = QueryWhereGet();
-    param.wheres = sq.stringify();
-}
+
 gd1.load();
-//查询回调
-function QueryWhereCallBack() {
-    gd1.pageNumber = 1;
-    gd1.load();
-}
+
+//查询
+z.button('query', function () {
+    gd1.QueryOpen();
+});
 
 //角色格式化
 function col_custom_srid(value, row, v) {

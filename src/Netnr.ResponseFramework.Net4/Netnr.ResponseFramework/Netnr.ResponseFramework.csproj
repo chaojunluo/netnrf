@@ -51,10 +51,16 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Netnr.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Netnr.Core.1.0.0\lib\net40\Netnr.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Netnr.Login, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Netnr.Login.2.0.0\lib\net40\Netnr.Login.dll</HintPath>
     </Reference>
@@ -275,7 +281,8 @@
     <Content Include="scripts\table-name\sqlserver.sql" />
     <Content Include="scripts\table-reset\mysql.sql" />
     <Content Include="scripts\table-reset\sqlserver.sql" />
-    <Content Include="upload\temp\临时文件夹.txt" />
+    <Content Include="logs\README.md" />
+    <None Include="upload\temp\README.md" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -292,7 +299,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="logs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
@@ -326,10 +332,6 @@
     <Content Include="Views\Inlay\Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Netnr.Core\Netnr.Core.csproj">
-      <Project>{3fd973c8-dd60-4b3e-8ba1-32621465765f}</Project>
-      <Name>Netnr.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Netnr.Data\Netnr.Data.csproj">
       <Project>{f404e231-bbd9-4a94-9ec1-0cb36976b919}</Project>
       <Name>Netnr.Data</Name>
@@ -337,6 +339,10 @@
     <ProjectReference Include="..\Netnr.Domain\Netnr.Domain.csproj">
       <Project>{bcbfe8c4-3496-494c-b54b-d7758dccd424}</Project>
       <Name>Netnr.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Netnr.Fast\Netnr.Fast.csproj">
+      <Project>{3c54e74e-9658-41f7-b8f2-75705b63d563}</Project>
+      <Name>Netnr.Fast</Name>
     </ProjectReference>
     <ProjectReference Include="..\Netnr.Func\Netnr.Func.csproj">
       <Project>{c38eb304-9cad-45b6-a60d-73065a792e22}</Project>
