@@ -1,80 +1,80 @@
-# ������־
+# 更新日志
 
 ## [v2.2.1] - 2019-02-28
-- ���� ���� Excel�� `NPOITo` �֧࣬�� `.xls`��`.xlsx`����
-- ���� �����ѯ�������ģʽ�����ڱ������������ɣ�֧�ֶ�����ѯ���
-- �Ƴ� ��ݼ� `Ctrl + Q` �򿪲�ѯ��壨����ڶ����ѯ��壩
-- ���� �����б����ݴ򿪶�λ������ѯ���
-- ���� �״�������Ŀ���Զ��������ݿ⡢���������ݿ⣨`scripts/table-reset` Ŀ¼���ж�Ӧ�����ݿ�ű���
-- �޸� datetime����ʱ���������Ͳ�ѯ��帳ֵ���ڵ����⣨û��ֹð�ݣ��Ƚ����༭�ٸ�ֵ��ɸ�ֵʧ�ܣ�
-- ���� `Netnr.Core` �����Ŀ��NuGet���룬���� `Netnr.Fast` ��Ŀ�����忴 https://github.com/netnr/Netnr.ClassLibrary
-- ���� ֧�ֶ�������ɣ�ҳ��ı�������������Ĭ�ϵ�һ�����ݲ�֧�ֶ�������������ã�
+- 调整 导出 Excel的 `NPOITo` 类，支持 `.xls`、`.xlsx`导出
+- 调整 表格查询面板生成模式，基于表格列配置生成，支持多表格查询面板
+- 移除 快捷键 `Ctrl + Q` 打开查询面板（因存在多个查询面板）
+- 添加 表格列标题快捷打开定位条件查询面板
+- 调整 首次运行项目，自动创建数据库、调重置数据库（`scripts/table-reset` 目录需有对应的数据库脚本）
+- 修复 datetime日期时间输入类型查询面板赋值存在的问题（没阻止冒泡，先结束编辑再赋值造成赋值失败）
+- 调整 `Netnr.Core` 类库项目从NuGet引入，新增 `Netnr.Fast` 项目，具体看 https://github.com/netnr/Netnr.ClassLibrary
+- 调整 支持多表单生成（页面的表单、表格配置默认第一个，暂不支持多表单、表格配置）
 
 ## [v2.2.0] - 2019-01-17
-- ���� Grid������ѡ�б�,��ѡ200��
-- �޸� ���Grid�����и��ŵ�����,�޸���ʽΪ����� `queryparams` ����
-- ���� ȥ������ʱ���� `bootstrap-datetimepicker`  ��Ϊ `EasyUI` �ṩԻ��ʱ�������������������
-- ���� Modal���������� `autorefresh` ���ԣ�ÿ�δ� `iframe` �Զ�ˢ��
-- ���� Moda1������Ĭ��Ϊȫ������
-- ���� ������������ʾ��Ϊ����
-- ���� �������԰�
-- �޸� ҳ��Ƕ�״������������ʽ��һ��������,�޸���ʽΪ�� `parent` ����ĳ� `top`
-- ���� `init.css` ��ʽ��Ƕ�� `z.css`
-- ���� `easel-custom.css` ��������ʽǶ�� `z.css` ,ҳ��ֱ������ԭ�а� `easyul.css`
-- ���� ��������������ϵͳ������
-- ���� Grid�кſ�������Ӧ
-- �޸� �л��û��˵��쳣�����⣬�˵��������⣬ȥ���˲˵�����
-- ���� ���������� `Excel` 
-- ���� ���ݿ���ֶ����������ٹ�����ѯ�����ظ��е�һЩ����
-- ���� ��ʾ��Ŀ���ݿ�� `MySQL` Ǩ�Ƶ� `SQLServer`,������ԭ����Ҫ���Լ�����˳��Щ
-- ���� ��ѯ���Ĭ�Ϲ�ϵ��Ϊ �����ڡ���֧�ֿ�ݼ� `Ctrl + Q` �򿪲�ѯ��塢 `Enter` ȷ������
+- 调整 Grid行数可选列表,可选200行
+- 修复 多个Grid传参有干扰的问题,修复方式为先清空 `queryparams` 对象
+- 调整 去除日期时间插件 `bootstrap-datetimepicker`  改为 `EasyUI` 提供曰期时间组件，减少两次请求
+- 添加 Modal弹出窗设置 `autorefresh` 属性，每次打开 `iframe` 自动刷新
+- 调整 Moda1弹出窗默认为全屏弹窗
+- 调整 表单必填项提示改为红星
+- 添加 中文语言包
+- 修复 页面嵌套大于两层出现样式不一样的问题,修复方式为把 `parent` 对象改成 `top`
+- 调整 `init.css` 样式包嵌入 `z.css`
+- 调整 `easel-custom.css` 调整的样式嵌入 `z.css` ,页面直接引入原有包 `easyul.css`
+- 调整 表配置隐藏添加系统级隐藏
+- 调整 Grid行号宽度自适应
+- 修复 切换用户菜单异常的问题，菜单缓存问题，去除了菜单缓存
+- 添加 表管理导出 `Excel` 
+- 调整 数据库表字段命名，减少关联查询出现重复列的一些问题
+- 调整 演示项目数据库从 `MySQL` 迁移到 `SQLServer`,无其他原因，主要是自己用着顺手些
+- 调整 查询面板默认关系符为 “等于”，支持快捷键 `Ctrl + Q` 打开查询面板、 `Enter` 确认搜索
 
 ## [v2.1.2] - 2018-11-09
-- ���� `.NET Framework 4.5`���Դ���룬ͬ������Core�汾
+- 增加 `.NET Framework 4.5`框架源代码，同步更新Core版本
 
 ## [v2.1.2] - 2018-11-01
-- �޸� `DataGrid`ִ��`updateRow`�����з�ҳʱ�к������⣨û����pageNumber��ԭ��
-- ���� ������ѯ��һЩ����
+- 修复 `DataGrid`执行`updateRow`更新有翻页时行号有问题（没设置pageNumber的原因）
+- 调整 公共查询的一些操作
 
 ## [v2.1.2] - 2018-10-27
-- ���� `��ť����`����
-- ���� `�˵�����`����
-- ���� `��Ȩ����`���ܣ�֧�ֵ�������¼��
-- ���� `z.Combo`�����������ֵ��ť֧��
-- ���� `PostgreSQL`���ݿ�֧��
-- ���� `Linq`��ѯ���ɲ��������У���Ĭ������
-- ���� ѡ��Ҳ��Ϊˢ�°�ť
+- 添加 `按钮管理`功能
+- 添加 `菜单管理`功能
+- 添加 `授权关联`功能（支持第三方登录）
+- 添加 `z.Combo`方法添加清除值按钮支持
+- 添加 `PostgreSQL`数据库支持
+- 调整 `Linq`查询，可不传排序列，即默认排序
+- 调整 选项卡右侧仅为刷新按钮
 
 ## [v2.1.1] - 2018-10-13
-- �޸� ����`z.FindTreeNode`���ڵ�����
-- �޸� ����`z.FormEdit`���ڵ�����
-- �޸� `Linq`��ѯ�ȷ�ҳ�����������
-- �޸� ϵͳ������־��`IP`��ȡʼ��Ϊ`127.0.0.1`�����⣬ԭ����`nginx`��������Ҫ�жϴ�������
+- 修复 方法`z.FindTreeNode`存在的问题
+- 修复 方法`z.FormEdit`存在的问题
+- 修复 `Linq`查询先分页后排序的问题
+- 修复 系统操作日志，`IP`获取始终为`127.0.0.1`的问题，原因是`nginx`代理，需要判断代理环境
 
-## [v2.1.0]��2018-10
-- ���� ��ƽ̨�����ݿ�֧�֣�<https://github.com/aspnet/EntityFrameworkCore> ���Ѳ���`SQLite`��`MySql`��`SQLServer`
-- ����ʵ��������`Scaffold-DbContext`���� <https://www.netnr.com/gist/code/5283651389582691979>
-- ���� ������ѯ��SQL����ΪLinq
-- �޸� `z.js`��������
-- ���� ���������ߣ����ɱ����á����ֵ�
-- ���� ��ʾ��Ŀ��������`SQLServer`��Ϊ`MySql`��������Ǩ�ƹ�����߹���Centos7��Nginx��MySql��CN2��·��
+## [v2.1.0]　2018-10
+- 添加 跨平台跨数据库支持，<https://github.com/aspnet/EntityFrameworkCore> ，已测试`SQLite`、`MySql`、`SQLServer`
+- 生成实体依赖于`Scaffold-DbContext`命令 <https://www.netnr.com/gist/code/5283651389582691979>
+- 调整 公共查询从SQL语句改为Linq
+- 修复 `z.js`若干问题
+- 添加 表管理工具，生成表配置、表字典
+- 调整 演示项目调整，从`SQLServer`改为`MySql`，服务器迁移国外搬瓦工（Centos7、Nginx、MySql、CN2线路）
 ---
-- ˳��˵һ�����ʱ�����ᣬһֱ��`Windows`���������Ӵ�`Linux`����Ϊ`Linux`����������ͦ�õģ��Ѵ���ȫ��Ǩ����`Linux`��������
-  -  `Linux`���������ˣ���Զ���
-  - �����`VPS`��������������ٶȣ�����1G�Ĵ�����ÿ��1T������������Ȼ��·Ҳ��Ҫ����Ȼ�ӳٵ�������
-  - ���ñ��������Դ����ӷ�ǽ
-  - `Linux`����ռ��`100`MB���ң��ܸ�`dotnet`����Ҳ��`300`MB����
-  - `.net framework`����ĿҲ����Ŷ��`mono` ��[jexus](https://www.jexus.org/)
-  - `SQLServer`���ݿ��Ѿ���`Linux`�汾����ȻҲ���Ը�Ϊ`MySql`
-  - ����`Linux`��������һ���±ƣ�ʲô����֪����֪�Ӻ����֣���ô�죬��˵��ô�죬���裬�����д�ѵĽ̳̣�Ū��һ����һ���������ṩһЩ���õ��Ķ�����
-    - ssh�������ӷ�����
-    - ��װ������`dotnet`��`nginx`��`ftp`��`mysql`��`frp`��΢�ſ�������`shadowsocks`����ǽ��
-    - ѧϰ`vi`�༭����ѧϰ`dotnet`���ѧϰ`nginx`����
-    - ���һЩ�ɻ� <https://www.netnr.com/gist/user/1>
+- 顺便说一下这段时间的体会，一直用`Windows`服务器，接触`Linux`后，认为`Linux`做服务器是挺好的，已打算全部迁移至`Linux`服务器。
+  -  `Linux`服务器便宜，相对而言
+  - 国外的`VPS`大多限流量不限速度（比如1G的带宽，每月1T的流量），当然线路也重要，不然延迟掉包严重
+  - 不用备案、可以搭梯子翻墙
+  - `Linux`开机占用`100`MB左右，跑个`dotnet`进程也才`300`MB左右
+  - `.net framework`的项目也能跑哦，`mono` 、[jexus](https://www.jexus.org/)
+  - `SQLServer`数据库已经有`Linux`版本，当然也可以改为`MySql`
+  - 上手`Linux`服务器，一脸懵逼，什么都不知道不知从何下手，怎么办，你说怎么办，凉拌，网上有大把的教程，弄懂一个算一个；这里提供一些我用到的东西：
+    - ssh命令连接服务器
+    - 安装环境：`dotnet`、`nginx`、`ftp`、`mysql`、`frp`（微信开发）、`shadowsocks`（翻墙）
+    - 学习`vi`编辑器，学习`dotnet`命令，学习`nginx`配置
+    - 存的一些干货 <https://www.netnr.com/gist/user/1>
 
 ## [v2.0.0] - 2018-07
-- ǰ�˲��� jQuery + Bootstrap + EasyUI + AceAdmin
-- ��˲��� Asp.Net Core + EF + SQLServer
-- ȫ����д `z.js` �ű�������EasyUI�ṩ��API�߶ȱ���һ�£���������
-- ��дiframeѡ�
-- ����ace����
+- 前端采用 jQuery + Bootstrap + EasyUI + AceAdmin
+- 后端采用 Asp.Net Core + EF + SQLServer
+- 全新重写 `z.js` 脚本包，与EasyUI提供的API高度保持一致（最大调整）
+- 重写iframe选项卡
+- 精简ace导航
