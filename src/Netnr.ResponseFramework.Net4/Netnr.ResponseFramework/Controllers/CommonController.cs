@@ -27,6 +27,10 @@ namespace Netnr.ResponseFramework.Controllers
 
                     listMenu = listMenu.Where(x => menuArray.Contains(x.SmId)).ToList();
                 }
+                else
+                {
+                    listMenu = new List<Domain.SysMenu>();
+                }
                 #endregion
             }
 
