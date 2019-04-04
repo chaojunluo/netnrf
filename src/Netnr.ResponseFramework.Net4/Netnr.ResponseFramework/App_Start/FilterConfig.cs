@@ -57,7 +57,10 @@ namespace Netnr.ResponseFramework
                                     remark = desc.ConstructorArguments.FirstOrDefault().Value.ToString();
                                 }
                                 var action = (conll.Name.Replace("Controller", "/") + item.Name).ToLower();
-                                dic.Add(action, remark);
+                                if (!dic.ContainsKey(action))
+                                {
+                                    dic.Add(action, remark);
+                                }
                             }
                         }
                     }
