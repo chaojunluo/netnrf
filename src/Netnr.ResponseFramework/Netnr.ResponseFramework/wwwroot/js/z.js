@@ -174,7 +174,7 @@
             }
 
             //查询标记
-            if (that.queryMark) {
+            if (that.queryMark && z.GridQueryMark) {
                 z.GridQueryMark(that);
             }
 
