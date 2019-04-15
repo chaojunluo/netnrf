@@ -10,9 +10,11 @@ namespace Netnr.ResponseFramework
             CreateWebHostBuilder(args).Build().Run();
         }
 
+        //dotnet Netnr.ResponseFramework.dll "http://*:59"
+
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseUrls("http://localhost:59")
+            .UseUrls(args)
             .UseStartup<Startup>();
     }
 }
