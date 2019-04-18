@@ -110,11 +110,46 @@ namespace Netnr.ResponseFramework.Filters
                     };
                     mo.LogContent = DicDescription[mo.LogAction.ToLower()];
 
-                    using (var db = new Data.ContextBase())
+                    #region 分批写入日志
+
+                    //分批写入满足的条件：缓存的日志数量
+                    int cacheLogCount = 2000;
+                    //分批写入满足的条件：缓存的时长，单位秒
+                    int cacheLogTime = 60;
+
+                    //日志记录
+                    var cacheLogsKey = "Global_Logs";
+                    //上次写入的时间
+                    var cacheLogWriteKey = "Global_Logs_Write";
+
+                    if (!(Core.CacheTo.Get(cacheLogsKey) is List<Domain.SysLog> cacheLogs))
                     {
-                        db.SysLog.Add(mo);
-                        db.SaveChanges();
+                        cacheLogs = new List<Domain.SysLog>();
                     }
+                    cacheLogs.Add(mo);
+
+                    var cacheLogWrite = Core.CacheTo.Get(cacheLogWriteKey) as DateTime?;
+                    if (!cacheLogWrite.HasValue)
+                    {
+                        cacheLogWrite = DateTime.Now;
+                    }
+
+                    if (cacheLogs?.Count > cacheLogCount || DateTime.Now.ToTimestamp() - cacheLogWrite.Value.ToTimestamp() > cacheLogTime)
+                    {
+                        using (var db = new Data.ContextBase())
+                        {
+                            db.SysLog.AddRange(cacheLogs);
+                            db.SaveChanges();
+                        }
+
+                        cacheLogs = null;
+                        cacheLogWrite = DateTime.Now;
+                    }
+
+                    Core.CacheTo.Set(cacheLogsKey, cacheLogs, 3600 * 24 * 30);
+                    Core.CacheTo.Set(cacheLogWriteKey, cacheLogWrite, 3600 * 24 * 30);
+
+                    #endregion
                 }
                 catch (Exception)
                 {
