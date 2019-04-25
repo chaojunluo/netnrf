@@ -275,46 +275,54 @@ $('#mtab').click(function (e) {
             left = parseFloat(mm.css('left')) - (vw / 2);
         mm.css('left', Math.max(min, left));
     } else {
-        var item = rf.contains($('#mtab-menu').children(), target);
+        var item = rf.contains($('#mtab-menu').find('[data-cmd]'), target);
         if (item) {
-            //菜单项
-            var cn = $(item).find('i')[0].className;
-            if (cn.indexOf("fa-refresh") >= 0) {
+            switch (item.getAttribute('data-cmd')) {
                 //刷新
-                var currt = $('#mtabox').children('div.active').children();
-                if (currt.length) {
-                    currt[0].src = currt[0].src;
-                    currt[0].focus();
-                }
-            } else if (cn.indexOf("fa-close") >= 0) {
-                //关闭其他
-                var mmc = $('#mtab-main').children();
-                mmc.each(function (i) {
-                    if (i && this.className.indexOf("active") == -1) {
-                        $(this.hash).remove();
-                        $(this).remove();
-                    }
-                }).end().css('left', 0);
-            } else if (cn.indexOf("fa-power-off") >= 0) {
-                //关闭全部
-                var mmc = $('#mtab-main').children();
-                if (mmc.length) {
-                    mmc.each(function (i) {
-                        if (i) {
-                            $(this.hash).remove();
-                            $(this).remove();
+                case "reload":
+                    {
+                        var currt = $('#mtabox').children('div.active').children();
+                        if (currt.length) {
+                            currt[0].src = currt[0].src;
+                            currt[0].focus();
                         }
-                    }).first().addClass('active');
-                    $(mmc.first()[0].hash).addClass('active');
-                    mmc.end().css('left', 0);
-                }
+                    }
+                    break;
+                //关闭其他
+                case "closeother":
+                    {
+                        var mmc = $('#mtab-main').children();
+                        mmc.each(function (i) {
+                            if (i && this.className.indexOf("active") == -1) {
+                                $(this.hash).remove();
+                                $(this).remove();
+                            }
+                        }).end().css('left', 0);
+                    }
+                    break;
+                //关闭全部
+                case "closeall":
+                    {
+                        var mmc = $('#mtab-main').children();
+                        if (mmc.length) {
+                            mmc.each(function (i) {
+                                if (i) {
+                                    $(this.hash).remove();
+                                    $(this).remove();
+                                }
+                            }).first().addClass('active');
+                            $(mmc.first()[0].hash).addClass('active');
+                            mmc.end().css('left', 0);
+                        }
+                    }
+                    break
             }
         } else {
+            //点击标签
             var mmc = $('#mtab-main').children();
             item = rf.contains(mmc, target);
             if (item) {
                 if (item.className.indexOf('active') == -1) {
-                    //选项卡标签
                     mmc.removeClass('active');
                     $(item).addClass("active");
                     $('#mtabox').children().removeClass('active');

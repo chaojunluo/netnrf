@@ -18,7 +18,7 @@
                 })
             })
         } else {
-            var h = 780, w = 750, sh = (window.screen.availHeight - h) / 2, sw = (window.screen.availWidth - w) / 2;
+            var h = 580, w = 780, sh = (window.screen.availHeight - h) / 2, sw = (window.screen.availWidth - w) / 2;
             window.open("/account/auth/" + vtype, 'newwindow', 'height=' + h + ', width=' + w + ', top=' + sh + ', left=' + sw + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
         }
     }

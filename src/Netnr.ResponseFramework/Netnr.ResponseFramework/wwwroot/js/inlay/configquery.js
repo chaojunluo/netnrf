@@ -441,6 +441,7 @@ z.GridQueryOpen = function (gd, field) {
     }
 
     gd.query.md.show();
+    document.activeElement.blur();
     //指向当前查询面板
     z.queryin = gd.query;
 }

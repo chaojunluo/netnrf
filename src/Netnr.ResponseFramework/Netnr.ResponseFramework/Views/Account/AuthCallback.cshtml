@@ -22,14 +22,14 @@
     }
     else
     {
-        <h4 style="text-align:center"><b id="second">9</b> 秒跳转 <a href="/">登录页面</a></h4>
+        <h4 style="text-align:center"><b id="second">9</b> 秒自动关闭 <a href="javascript:window.close()">关闭页面</a></h4>
         <script>
             var deep = 9;
             setInterval(function () {
                 deep -= 1;
                 document.getElementById("second").innerHTML = deep;
                 if (!deep) {
-                    location.href = "/";
+                    window.close();
                 }
             }, 1000)
         </script>

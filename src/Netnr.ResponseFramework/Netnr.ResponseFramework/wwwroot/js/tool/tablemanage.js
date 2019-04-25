@@ -88,9 +88,9 @@ gd2.columns = [[
 
     { field: "字段名", title: "字段名", width: 150, halign: "center" },
     { field: "类型", title: "类型", width: 100, halign: "center" },
-    { field: "主键", title: "主键", width: 80, halign: "center", align: "center" },
-    { field: "不为空", title: "不为空", width: 80, halign: "center", align: "center" },
-    { field: "默认值", title: "默认值", width: 100, halign: "center" },
+    { field: "主键", title: "主键", width: 60, halign: "center", align: "center" },
+    { field: "不为空", title: "不为空", width: 60, halign: "center", align: "center" },
+    { field: "默认值", title: "默认值", width: 80, halign: "center", align: "center" },
     { field: "注释", title: "注释", width: 150, halign: "center" }
 ]];
 gd2.onBeforeLoad = function (row, param) {

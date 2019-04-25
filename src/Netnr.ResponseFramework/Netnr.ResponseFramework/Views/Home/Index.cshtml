@@ -141,6 +141,8 @@
                         </a>
                         <!--个人菜单-->
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret" id="usermenu">
+                            <li><a><i class="fa fa-user-circle-o text-primary"></i>@user.UserName</a></li>
+                            <li class="divider"></li>
                             <li><a href="#"><i class="fa fa-flag blue"></i>系统初始化向导</a></li>
                             <li><a href="#"><i class="fa fa-cogs blue"></i>首页配置</a></li>
                             <li class="divider"></li>
@@ -215,15 +217,21 @@
             <!--选项卡·标签-->
             <div class="hidden-xs mtab" id="mtab">
                 <!--左滑-->
-                <a href="javascript:void(0);" class="mtab-btn"><i class="fa fa-backward"></i></a>
+                <a href="javascript:void(0);" class="mtab-btn" title="左滑"><i class="fa fa-backward"></i></a>
                 <!--标签主体-->
                 <div class="mtab-body"><div class="mtab-main" id="mtab-main"></div></div>
                 <!--下拉菜单-->
-                <div class="pull-right" id="mtab-menu">
-                    <a href="javascript:void(0);" class="mtab-btn" title="刷新"><i class="fa fa-refresh"></i></a>
+                <div class="pull-right btn-group" id="mtab-menu">
+                    <button class="mtab-btn" data-cmd="reload" title="刷新"><i class="fa fa-refresh"></i></button>
+                    <button class="mtab-btn" data-toggle="dropdown" title="更多"><i class="fa fa-caret-down"></i></button>
+                    <ul class="dropdown-menu dropdown-yellow dropdown-menu-right">
+                        <li data-cmd="closeother"><a>关闭其他标签页</a></li>
+                        <li class="divider"></li>
+                        <li data-cmd="closeall"><a>关闭全部</a></li>
+                    </ul>
                 </div>
                 <!--右滑-->
-                <a href="javascript:void(0);" class="pull-right mtab-btn"><i class="fa fa-forward"></i></a>
+                <a href="javascript:void(0);" class="pull-right mtab-btn" title="右滑"><i class="fa fa-forward"></i></a>
             </div>
             <!--选项卡·内容-->
             <div class="tab-content" id="mtabox"></div>
