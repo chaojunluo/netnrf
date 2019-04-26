@@ -16,6 +16,10 @@
 
 .cc {
     margin-top: 10%;
+    -webkit-transition: margin-top .5s;
+    -moz-transition: margin-top .5s;
+    -o-transition: margin-top .5s;
+    transition: margin-top .5s;
     padding: 0 50px;
     max-width: 480px;
     position: relative;

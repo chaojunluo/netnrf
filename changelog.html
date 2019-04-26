@@ -24,11 +24,20 @@
         <div class="row">
             <div class="col-12 my-4 markdown-body">
                 <h1>更新日志</h1>
-                <h2>[v2.2.2] - 2019-04-18</h2>
+                <h3>[v2.2.3] - 2019-04-26</h3>
+                <ul>
+                    <li>调整 标签页添加控制菜单</li>
+                    <li>调整 圆角调整为<code>1px</code></li>
+                    <li>调整 <code>EasyUI</code>默认引用<code>metro</code>主题</li>
+                    <li>调整 静态资源引入由局部视图统一维护</li>
+                    <li>添加 日志表添加IP所属的城市，离线查询IP地址，基于免费的<code>ipip.ipdb</code></li>
+                    <li><strong>据群发起投票结果，今后仅更新 <code>.NET Core</code> 版本，<code>.NET4</code> 停更</strong></li>
+                </ul>
+                <h3>[v2.2.2] - 2019-04-18</h3>
                 <ul>
                     <li>调整 日志分批写入</li>
                 </ul>
-                <h2>[v2.2.1] - 2019-02-28</h2>
+                <h3>[v2.2.1] - 2019-02-28</h3>
                 <ul>
                     <li>调整 导出 Excel的 <code>NPOITo</code> 类，支持 <code>.xls</code>、<code>.xlsx</code>导出</li>
                     <li>调整 表格查询面板生成模式，基于表格列配置生成，支持多表格查询面板</li>
@@ -39,7 +48,7 @@
                     <li>调整 <code>Netnr.Core</code> 类库项目从NuGet引入，新增 <code>Netnr.Fast</code> 项目，具体看 <a href="https://github.com/netnr/Netnr.ClassLibrary">https://github.com/netnr/Netnr.ClassLibrary</a></li>
                     <li>调整 支持多表单生成（页面的表单、表格配置默认第一个，暂不支持多表单、表格配置）</li>
                 </ul>
-                <h2>[v2.2.0] - 2019-01-17</h2>
+                <h3>[v2.2.0] - 2019-01-17</h3>
                 <ul>
                     <li>调整 Grid行数可选列表,可选200行</li>
                     <li>修复 多个Grid传参有干扰的问题,修复方式为先清空 <code>queryparams</code> 对象</li>
@@ -59,16 +68,16 @@
                     <li>调整 演示项目数据库从 <code>MySQL</code> 迁移到 <code>SQLServer</code>,无其他原因，主要是自己用着顺手些</li>
                     <li>调整 查询面板默认关系符为 “等于”，支持快捷键 <code>Ctrl + Q</code> 打开查询面板、 <code>Enter</code> 确认搜索</li>
                 </ul>
-                <h2>[v2.1.2] - 2018-11-09</h2>
+                <h3>[v2.1.2] - 2018-11-09</h3>
                 <ul>
                     <li>增加 <code>.NET Framework 4.5</code>框架源代码，同步更新Core版本</li>
                 </ul>
-                <h2>[v2.1.2] - 2018-11-01</h2>
+                <h3>[v2.1.2] - 2018-11-01</h3>
                 <ul>
                     <li>修复 <code>DataGrid</code>执行<code>updateRow</code>更新有翻页时行号有问题（没设置pageNumber的原因）</li>
                     <li>调整 公共查询的一些操作</li>
                 </ul>
-                <h2>[v2.1.2] - 2018-10-27</h2>
+                <h3>[v2.1.2] - 2018-10-27</h3>
                 <ul>
                     <li>添加 <code>按钮管理</code>功能</li>
                     <li>添加 <code>菜单管理</code>功能</li>
@@ -78,14 +87,14 @@
                     <li>调整 <code>Linq</code>查询，可不传排序列，即默认排序</li>
                     <li>调整 选项卡右侧仅为刷新按钮</li>
                 </ul>
-                <h2>[v2.1.1] - 2018-10-13</h2>
+                <h3>[v2.1.1] - 2018-10-13</h3>
                 <ul>
                     <li>修复 方法<code>z.FindTreeNode</code>存在的问题</li>
                     <li>修复 方法<code>z.FormEdit</code>存在的问题</li>
                     <li>修复 <code>Linq</code>查询先分页后排序的问题</li>
                     <li>修复 系统操作日志，<code>IP</code>获取始终为<code>127.0.0.1</code>的问题，原因是<code>nginx</code>代理，需要判断代理环境</li>
                 </ul>
-                <h2>[v2.1.0]　2018-10</h2>
+                <h3>[v2.1.0]　2018-10</h3>
                 <ul>
                     <li>添加 跨平台跨数据库支持，<a href="https://github.com/aspnet/EntityFrameworkCore">https://github.com/aspnet/EntityFrameworkCore</a> ，已测试<code>SQLite</code>、<code>MySql</code>、<code>SQLServer</code></li>
                     <li>生成实体依赖于<code>Scaffold-DbContext</code>命令 <a href="https://www.netnr.com/gist/code/5283651389582691979">https://www.netnr.com/gist/code/5283651389582691979</a></li>
@@ -117,7 +126,7 @@
                         </ul>
                     </li>
                 </ul>
-                <h2>[v2.0.0] - 2018-07</h2>
+                <h3>[v2.0.0] - 2018-07</h3>
                 <ul>
                     <li>前端采用 jQuery + Bootstrap + EasyUI + AceAdmin</li>
                     <li>后端采用 Asp.Net Core + EF + SQLServer</li>

@@ -11,6 +11,7 @@ namespace Netnr.Domain
         public string LogContent { get; set; }
         public string LogUrl { get; set; }
         public string LogIp { get; set; }
+        public string LogCity { get; set; }
         public DateTime? LogCreateTime { get; set; }
         public string LogBrowserName { get; set; }
         public string LogSystemName { get; set; }

@@ -3,8 +3,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 public class GlobalTo
@@ -101,6 +104,36 @@ public class GlobalTo
             result = jo?.ToString() ?? "";
         }
     output: return result;
+    }
+
+    public static T GetValue<T>(string path)
+    {
+        return (T)ConvertValue(typeof(T), GetValue(path));
+    }
+
+    public static object ConvertValue(Type type, string value)
+    {
+        if (type == typeof(object))
+        {
+            return value;
+        }
+
+        if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+            return ConvertValue(Nullable.GetUnderlyingType(type), value);
+        }
+
+        var converter = TypeDescriptor.GetConverter(type);
+        if (converter.CanConvertFrom(typeof(string)))
+        {
+            return converter.ConvertFromInvariantString(value);
+        }
+
+        return null;
     }
 }
 #endif

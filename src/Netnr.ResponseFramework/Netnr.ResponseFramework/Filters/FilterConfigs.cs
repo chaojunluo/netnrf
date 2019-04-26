@@ -78,7 +78,7 @@ namespace Netnr.ResponseFramework.Filters
         /// </summary>
         public class LogActionAttribute : ActionFilterAttribute
         {
-            public override void OnResultExecuted(ResultExecutedContext context)
+            public override void OnActionExecuting(ActionExecutingContext context)
             {
                 var hc = context.HttpContext;
 
@@ -108,14 +108,33 @@ namespace Netnr.ResponseFramework.Filters
                         LogSystemName = ct.SystemName,
                         LogGroup = 1
                     };
+
+                    //IP城市
+                    var city = new ipdb.City(GlobalTo.GetValue("logs:ipdb").Replace("~", GlobalTo.ContentRootPath));
+                    try
+                    {
+                        var ips = mo.LogIp.Split(',');
+                        var ipc = string.Empty;
+                        foreach (var ip in ips)
+                        {
+                            var listCity = city.find(ip.Trim().Replace("::1", "127.0.0.1"), "CN").Distinct();
+                            ipc += string.Join(",", listCity).TrimEnd(',') + ";";
+                        }
+                        mo.LogCity = ipc.TrimEnd(';');
+                    }
+                    catch (Exception)
+                    {
+                        mo.LogCity = "fail";
+                    }
+
                     mo.LogContent = DicDescription[mo.LogAction.ToLower()];
 
                     #region 分批写入日志
 
                     //分批写入满足的条件：缓存的日志数量
-                    int cacheLogCount = 2000;
+                    int cacheLogCount = GlobalTo.GetValue<int>("logs:batchwritecount");
                     //分批写入满足的条件：缓存的时长，单位秒
-                    int cacheLogTime = 60;
+                    int cacheLogTime = GlobalTo.GetValue<int>("logs:batchwritetime");
 
                     //日志记录
                     var cacheLogsKey = "Global_Logs";
@@ -156,7 +175,7 @@ namespace Netnr.ResponseFramework.Filters
                     //throw new System.Exception("写入操作日志失败");
                 }
 
-                base.OnResultExecuted(context);
+                base.OnActionExecuting(context);
             }
         }
     }

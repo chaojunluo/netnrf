@@ -92,6 +92,7 @@
         rownumbers: true,/*显示行号*/
         rownumberWidth: 30,/*行号宽度*/
         singleSelect: true,/*单选*/
+        autoRowHeight: false,/*自动行高*/
         frozenColumns: [[]],/*冻结列*/
         loadMsg: "加载中...",/*加载提示*/
         queryParams: {},/*请求参数*/

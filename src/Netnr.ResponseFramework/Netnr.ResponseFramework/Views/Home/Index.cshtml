@@ -1,6 +1,6 @@
-﻿@{
+﻿@model Netnr.Func.ViewModel.LoginUserVM
+@{
     Layout = null;
-    var user = ViewData["user"] as Netnr.Func.ViewModel.LoginUserVM;
 }
 
 <!DOCTYPE html>
@@ -17,14 +17,7 @@
     <!--遮罩层-->
     <partial name="_LoadingPartial" />
 
-    <link href="https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-    <!--ace、皮肤-->
-    <link href="/lib/acenav/ace.min.css" rel="stylesheet" asp-append-version="true" />
-    <link href="/lib/acenav/ace-skins.min.css" rel="stylesheet" asp-append-version="true" async />
-
-    <link href="/css/z.css" rel="stylesheet" asp-append-version="true" />
+    @await Html.PartialAsync("_QuotePartial", "bootstrap.css,fa.css,ace.css,z.css")
 
     <!--顶部-->
     <div id="navbar" class="navbar navbar-default navbar-fixed-top">
@@ -39,7 +32,7 @@
             <!--Logo-->
             <div class="navbar-header pull-left hidden-xs">
                 <a href="javascript:void(0);" class="navbar-brand">
-                    netnrf 响应式框架 <sup>v 2.2.2</sup>
+                    NETNRF <sup>V 2.2.3</sup>
                 </a>
             </div>
             <!--右侧-->
@@ -136,12 +129,12 @@
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <img class="nav-user-photo" src="/images/bird.jpg" alt="头像" />
-                            <span class="user-info">@user.Nickname</span>
+                            <span class="user-info">@Model.Nickname</span>
                             <i class="ace-icon fa fa-caret-down"></i>
                         </a>
                         <!--个人菜单-->
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret" id="usermenu">
-                            <li><a><i class="fa fa-user-circle-o text-primary"></i>@user.UserName</a></li>
+                            <li><a><i class="fa fa-user-circle-o text-primary"></i>@Model.UserName</a></li>
                             <li class="divider"></li>
                             <li><a href="#"><i class="fa fa-flag blue"></i>系统初始化向导</a></li>
                             <li><a href="#"><i class="fa fa-cogs blue"></i>首页配置</a></li>
@@ -238,12 +231,7 @@
         </div>
     </div>
 
-    <script src="https://lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <script src="/lib/acenav/ace.min.js" asp-append-version="true"></script>
-    <!--框架首页初始化-->
-    <script src="/js/init.js" asp-append-version="true"></script>
+    @await Html.PartialAsync("_QuotePartial", "jquery.js,bootstrap.js,ace.js,init.js")
 
 </body>
 </html>

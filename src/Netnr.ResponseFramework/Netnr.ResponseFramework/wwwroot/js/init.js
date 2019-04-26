@@ -288,6 +288,20 @@ $('#mtab').click(function (e) {
                         }
                     }
                     break;
+                //关闭
+                case "close":
+                    {
+                        var mmc = $('#mtab-main').children();
+                        var ca = mmc.filter('.active');
+                        if (mmc.first()[0] != ca[0]) {
+                            ca.prev().addClass('active');
+                            $(ca[0].hash).prev().addClass('active');
+                            $(ca[0].hash).remove();
+                            ca.remove();
+                            rf.PositionTab();
+                        }
+                    }
+                    break;
                 //关闭其他
                 case "closeother":
                     {

@@ -13,6 +13,14 @@ body {
     font-size: inherit;
 }
 
+.btn {
+    border-radius: 1px;
+}
+
+.nav-tabs > li > a {
+    border-radius: 1px 1px 0 0;
+}
+
 .mc {
     color: #00796a;
 }
@@ -66,7 +74,7 @@ body {
             text-decoration: none;
             outline: none !important;
             padding: 10px 12px 8px !important;
-            border-radius: 3px 3px 0 0 !important;
+            border-radius: 2px 2px 0 0 !important;
         }
 
             .mtab .mtab-main a.active {
@@ -245,7 +253,7 @@ body {
 
 /*modal*/
 .modal-content {
-    border-radius: 3px;
+    border-radius: 1px;
 }
 
 .modal-header {
@@ -507,7 +515,7 @@ button.close {
     font-size: 16px;
     line-height: 34px;
     text-align: center;
-    background-color: #ecf4ff;
+    background-color: #f6f7f9;
 }
 
     .formui .form-group > div i.form-control-feedback:hover {
@@ -606,7 +614,7 @@ button.close {
 
 .tree-collapsed, .tree-expanded, .tree-folder, .tree-folder-open, .tree-file, .tree-checkbox0, .tree-checkbox1, .tree-checkbox2 {
     height: 22px;
-    margin: 0 3px;
+    margin: 7px 3px 0;
     text-align: center;
     vertical-align: middle;
     display: inline-block;

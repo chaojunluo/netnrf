@@ -10,8 +10,8 @@ namespace Netnr.ResponseFramework.Controllers
         [Description("首页")]
         public IActionResult Index()
         {
-            ViewData["user"] = Func.Common.GetLoginUserInfo(HttpContext);
-            return View();
+            var vm = Func.Common.GetLoginUserInfo(HttpContext);
+            return View(vm);
         }
 
         [Description("桌面")]

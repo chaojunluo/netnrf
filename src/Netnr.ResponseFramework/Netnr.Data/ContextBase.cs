@@ -209,6 +209,10 @@ namespace Netnr.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.LogCity)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.LogRemark).HasMaxLength(200);
 
                 entity.Property(e => e.LogSystemName).HasMaxLength(50);

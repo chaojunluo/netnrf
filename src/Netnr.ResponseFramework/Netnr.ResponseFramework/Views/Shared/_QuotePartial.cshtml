@@ -1,0 +1,52 @@
+﻿@model string
+@{
+    var listQuote = Model.Split(',').ToList();
+}
+@foreach (var item in listQuote)
+{
+    switch (item)
+    {
+        case "fa.css":
+            <link href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+            break;
+
+        case "jquery.js":
+            <script src="https://lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script>
+            break;
+
+        case "bootstrap.css":
+            <link href="https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+            break;
+
+        case "bootstrap.js":
+            <script src="https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            break;
+
+        case "easyui":
+            <link href="/lib/jquery-easyui/themes/metro/easyui.css" rel="stylesheet" asp-append-version="true" />
+            <script src="/lib/jquery-easyui/jquery.easyui.min.min.js" asp-append-version="true"></script>
+            break;
+
+        case "ace.css":
+            <link href="/lib/acenav/ace.min.css" rel="stylesheet" asp-append-version="true" />
+            <link href="/lib/acenav/ace-skins.min.css" rel="stylesheet" asp-append-version="true" async />
+            break;
+
+        case "ace.js":
+            <script src="/lib/acenav/ace.min.js" asp-append-version="true"></script>
+            break;
+
+        case "z.css":
+            <link href="/css/z.css" rel="stylesheet" asp-append-version="true" />
+            break;
+
+        case "z.js":
+            <script src="/js/z.js" asp-append-version="true"></script>
+            break;
+
+        case "init.js":
+            <script src="/js/init.js" asp-append-version="true"></script>
+            break;
+
+    }
+}
