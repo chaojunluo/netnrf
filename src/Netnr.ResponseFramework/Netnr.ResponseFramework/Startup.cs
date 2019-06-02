@@ -70,10 +70,9 @@ namespace Netnr.ResponseFramework
 
             services.AddMvc(options =>
             {
-                //注册全局过滤器
+                //注册过滤器
                 options.Filters.Add(new Filters.FilterConfigs.ErrorActionFilter());
-
-                options.Filters.Add(new Filters.FilterConfigs.LogActionAttribute());
+                options.Filters.Add(new Filters.FilterConfigs.GlobalActionAttribute());
             });
 
             //授权访问信息
@@ -120,9 +119,6 @@ namespace Netnr.ResponseFramework
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache memoryCache)
         {
-            //缓存
-            Core.CacheTo.memoryCache = memoryCache;
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -141,6 +137,9 @@ namespace Netnr.ResponseFramework
 
             //session
             app.UseSession();
+
+            //缓存
+            Core.CacheTo.memoryCache = memoryCache;
 
             app.UseMvc(routes =>
             {

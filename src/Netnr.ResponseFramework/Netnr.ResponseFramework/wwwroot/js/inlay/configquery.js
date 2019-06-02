@@ -1,4 +1,9 @@
 ﻿/**
+ * 默认查询关系符
+ */
+z.defaultQueryRelation = "Contains";
+
+/**
  * 关系符
  */
 z.DC["dataurl_cq_relation"] = {
@@ -30,7 +35,8 @@ z.DC["dataurl_cq_relation"] = {
             if (record.value == "Clear") {
                 setTimeout(function () {
                     var rowData = z.queryin.grid.func('getSelected');
-                    rowData.relation = "Equal";
+                    var qrObj = z.GridQueryRelationFilter(rowData);
+                    rowData.relation = qrObj.dqr;
                     rowData.value1 = null;
                     rowData.value2 = null;
                     z.queryin.grid.func('updateRow', { index: ei, row: rowData });
@@ -56,16 +62,39 @@ z.GridQueryDataConvert = function (data) {
     var arrdata = [];
     $.each(data, function () {
         if (this.ColQuery == 1) {
+            var qrObj = z.GridQueryRelationFilter(this);
             arrdata.push({
                 FormType: this.FormType || "text",
                 FormUrl: this.FormUrl,
                 field: this.field || this.ColField,
-                relation: "Equal",
+                relation: qrObj.dqr,
                 title: this.title || this.ColTitle
             });
         }
     });
     return arrdata;
+}
+
+/**
+ * 根据类型判断关系符
+ * @param {any} dataitem 数据一列
+ */
+z.GridQueryRelationFilter = function (dataitem) {
+    var qrArr = [], dqr;
+    if ("combobox combotree checkbox datetime".indexOf(dataitem.FormType) >= 0) {
+        qrArr.push("Equal");
+    } else {
+        $.each(z.DC["dataurl_cq_relation"].data, function () {
+            qrArr.push(this.value);
+            if (this.value == z.defaultQueryRelation) {
+                dqr = this.value;
+            }
+        })
+    }
+    return {
+        qr: qrArr,
+        dqr: dqr || qrArr[0]
+    }
 }
 
 /**
@@ -314,7 +343,8 @@ z.GridQueryBuild = function (gd) {
         //重置
         $('#' + gqm.clearid).click(function () {
             $(gq.data).each(function (i) {
-                this.relation = "Equal";
+                var qrObj = z.GridQueryRelationFilter(this);
+                this.relation = qrObj.dqr;
                 this.value1 = null;
                 this.value2 = null;
             });
@@ -462,7 +492,7 @@ $(document).keydown(function (e) {
         case 13:
             {
                 //查询面板 回车搜索
-                if (z.queryin.md.modal.hasClass('in')) {
+                if (z.queryin && z.queryin.md.modal.hasClass('in')) {
                     //结束编辑
                     if (z.queryin.grid.ei != null) {
                         z.queryin.grid.func('endEdit', z.queryin.grid.ei);

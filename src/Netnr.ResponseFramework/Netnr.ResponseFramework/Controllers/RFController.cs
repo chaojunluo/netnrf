@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
-using Netnr.Domain;
 using Netnr.Func.ViewModel;
 
 namespace Netnr.ResponseFramework.Controllers
 {
+    /// <summary>
+    /// 示例，请删除
+    /// </summary>
     public class RFController : Controller
     {
         #region 表配置示例

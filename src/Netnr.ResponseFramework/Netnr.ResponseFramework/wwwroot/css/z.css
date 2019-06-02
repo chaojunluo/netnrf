@@ -563,6 +563,8 @@ button.close {
 /*grid字体大小*/
 .datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber {
     font-size: inherit;
+    height: inherit;
+    line-height: inherit;
 }
 
 .datagrid-header .datagrid-cell span {
@@ -614,7 +616,7 @@ button.close {
 
 .tree-collapsed, .tree-expanded, .tree-folder, .tree-folder-open, .tree-file, .tree-checkbox0, .tree-checkbox1, .tree-checkbox2 {
     height: 22px;
-    margin: 7px 3px 0;
+    margin: 3px 3px 0;
     text-align: center;
     vertical-align: middle;
     display: inline-block;

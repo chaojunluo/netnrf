@@ -15,6 +15,9 @@ using Netnr.Login;
 
 namespace Netnr.ResponseFramework.Controllers
 {
+    /// <summary>
+    /// 账号
+    /// </summary>
     public class AccountController : Controller
     {
         #region 登录

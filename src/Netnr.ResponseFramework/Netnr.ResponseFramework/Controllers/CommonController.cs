@@ -9,6 +9,9 @@ using Netnr.Func.ViewModel;
 
 namespace Netnr.ResponseFramework.Controllers
 {
+    /// <summary>
+    /// 公共、常用查询
+    /// </summary>
     [Authorize]
     public class CommonController : Controller
     {

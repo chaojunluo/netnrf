@@ -174,7 +174,7 @@
             type: 'post',
             dataType: 'json',
             success: function (data) {
-                $('#ulnav').data('nav', data);
+                top.navtreedata = data;
                 $('#ulnav').append(rf.TreeEach(data));
             },
             error: function (xhr) {

@@ -177,7 +177,6 @@ cbnav.onComplete(function () {
 });
 
 
-
 //功能按钮
 var cbtn = z.Combo();
 cbtn.id = "#btnTree";
@@ -266,3 +265,63 @@ $('#btnSaveAuth').click(function () {
         }
     });
 });
+
+//复制权限
+z.button('cauth', function () {
+    var rowData = gd1.func("getSelected");
+    if (rowData) {
+        $('#myModalCAuth').modal();
+
+        var htm = [];
+        $.each(gd1.data, function () {
+            if (rowData.SrId != this.SrId) {
+                htm.push('<option value="' + this.SrId + '">' + this.SrName + '</option>')
+            }
+        });
+
+        $('#seRole').html(htm.join(''));
+
+    } else {
+        art('select');
+    }
+});
+
+//保存复制的权限
+$('#btnSaveCAuth').click(function () {
+    var sr = $('#seRole').val();
+    if (sr == null) {
+        art('请选择要复制的角色')
+    } else if (sr.length > 1) {
+        art('请选择一个角色')
+    } else {
+        $('#btnSaveCAuth')[0].disabled = true;
+
+        var rowData = gd1.func("getSelected");
+        $.ajax({
+            url: "/Setting/CopySysRoleAuth",
+            data: {
+                SrId: rowData.SrId,
+                copyid: sr[0]
+            },
+            success: function (data) {
+                art(data)
+                if (data == "success") {
+                    $('#myModalCAuth').modal('hide');
+                    gd1.load();
+                }
+            },
+            error: function () {
+                art('error')
+            },
+            complete: function () {
+                $('#btnSaveCAuth')[0].disabled = false;
+            }
+        })
+    }
+});
+
+//导出回调
+function ExportCallBack(data) {
+    var sq = gd1.QueryWhere();
+    data.wheres = sq.stringify();
+}

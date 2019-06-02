@@ -12,5 +12,6 @@
         public int? SbStatus { get; set; }
         public string SbDescribe { get; set; }
         public int? SbBtnGroup { get; set; }
+        public int? SbBtnHide { get; set; }
     }
 }

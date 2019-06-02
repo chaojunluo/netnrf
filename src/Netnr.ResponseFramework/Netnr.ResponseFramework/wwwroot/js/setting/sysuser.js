@@ -140,3 +140,9 @@ z.button('del', function () {
         })
     });
 });
+
+//导出回调
+function ExportCallBack(data) {
+    var sq = gd1.QueryWhere();
+    data.wheres = sq.stringify();
+}

@@ -43,3 +43,9 @@ $('#fv_modal_1').on('hidden.bs.modal', function () {
         z.FormDisabled(false);
     }
 });
+
+//导出回调
+function ExportCallBack(data) {
+    var sq = gd1.QueryWhere();
+    data.wheres = sq.stringify();
+}

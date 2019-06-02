@@ -74,105 +74,110 @@ namespace Netnr.ResponseFramework.Filters
         }
 
         /// <summary>
-        /// 全局日志记录
+        /// 全局访问过滤器
         /// </summary>
-        public class LogActionAttribute : ActionFilterAttribute
+        public class GlobalActionAttribute : ActionFilterAttribute
         {
             public override void OnActionExecuting(ActionExecutingContext context)
             {
                 var hc = context.HttpContext;
 
-                string controller = context.RouteData.Values["controller"].ToString().ToLower();
-                string action = context.RouteData.Values["action"].ToString().ToLower();
-                string url = hc.Request.Path.ToString() + hc.Request.QueryString.Value;
-
-                try
+                //日志记录，设置“__nolog”参数可忽略日志记录，为压力测试等环境考虑（即一些不需要记录请求日志的需求）
+                if (!string.IsNullOrWhiteSpace(hc.Request.Query["__nolog"].ToString()))
                 {
-                    //客户端信息
-                    var ct = new Core.ClientTo(hc);
+                    string controller = context.RouteData.Values["controller"].ToString().ToLower();
+                    string action = context.RouteData.Values["action"].ToString().ToLower();
+                    string url = hc.Request.Path.ToString() + hc.Request.QueryString.Value;
 
-                    //用户信息
-                    var userinfo = Func.Common.GetLoginUserInfo(hc);
-
-                    //日志保存
-                    var mo = new Domain.SysLog()
-                    {
-                        LogId = Guid.NewGuid().ToString(),
-                        SuName = userinfo.UserName,
-                        SuNickname = userinfo.Nickname,
-                        LogAction = controller + "/" + action,
-                        LogUrl = url,
-                        LogIp = ct.IPv4,
-                        LogCreateTime = DateTime.Now,
-                        LogBrowserName = ct.BrowserName,
-                        LogSystemName = ct.SystemName,
-                        LogGroup = 1
-                    };
-
-                    //IP城市
-                    var city = new ipdb.City(GlobalTo.GetValue("logs:ipdb").Replace("~", GlobalTo.ContentRootPath));
                     try
                     {
-                        var ips = mo.LogIp.Split(',');
-                        var ipc = string.Empty;
-                        foreach (var ip in ips)
+                        //客户端信息
+                        var ct = new Core.ClientTo(hc);
+
+                        //用户信息
+                        var userinfo = Func.Common.GetLoginUserInfo(hc);
+
+                        //日志保存
+                        var mo = new Domain.SysLog()
                         {
-                            var listCity = city.find(ip.Trim().Replace("::1", "127.0.0.1"), "CN").Distinct();
-                            ipc += string.Join(",", listCity).TrimEnd(',') + ";";
+                            LogId = Guid.NewGuid().ToString(),
+                            SuName = userinfo.UserName,
+                            SuNickname = userinfo.Nickname,
+                            LogAction = controller + "/" + action,
+                            LogUrl = url,
+                            LogIp = ct.IPv4,
+                            LogCreateTime = DateTime.Now,
+                            LogBrowserName = ct.BrowserName,
+                            LogSystemName = ct.SystemName,
+                            LogGroup = 1
+                        };
+
+                        try
+                        {
+                            //IP城市
+                            var city = new ipdb.City(GlobalTo.GetValue("logs:ipdb").Replace("~", GlobalTo.ContentRootPath));
+
+                            var ips = mo.LogIp.Split(',');
+                            var ipc = string.Empty;
+                            foreach (var ip in ips)
+                            {
+                                var listCity = city.find(ip.Trim().Replace("::1", "127.0.0.1"), "CN").Distinct();
+                                ipc += string.Join(",", listCity).TrimEnd(',') + ";";
+                            }
+                            mo.LogCity = ipc.TrimEnd(';');
                         }
-                        mo.LogCity = ipc.TrimEnd(';');
+                        catch (Exception)
+                        {
+                            mo.LogCity = "fail";
+                        }
+
+                        mo.LogContent = DicDescription[mo.LogAction.ToLower()];
+
+                        #region 分批写入日志
+
+                        //分批写入满足的条件：缓存的日志数量
+                        int cacheLogCount = GlobalTo.GetValue<int>("logs:batchwritecount");
+                        //分批写入满足的条件：缓存的时长，单位秒
+                        int cacheLogTime = GlobalTo.GetValue<int>("logs:batchwritetime");
+
+                        //日志记录
+                        var cacheLogsKey = "Global_Logs";
+                        //上次写入的时间
+                        var cacheLogWriteKey = "Global_Logs_Write";
+
+                        if (!(Core.CacheTo.Get(cacheLogsKey) is List<Domain.SysLog> cacheLogs))
+                        {
+                            cacheLogs = new List<Domain.SysLog>();
+                        }
+                        cacheLogs.Add(mo);
+
+                        var cacheLogWrite = Core.CacheTo.Get(cacheLogWriteKey) as DateTime?;
+                        if (!cacheLogWrite.HasValue)
+                        {
+                            cacheLogWrite = DateTime.Now;
+                        }
+
+                        if (cacheLogs?.Count > cacheLogCount || DateTime.Now.ToTimestamp() - cacheLogWrite.Value.ToTimestamp() > cacheLogTime)
+                        {
+                            using (var db = new Data.ContextBase())
+                            {
+                                db.SysLog.AddRange(cacheLogs);
+                                db.SaveChanges();
+                            }
+
+                            cacheLogs = null;
+                            cacheLogWrite = DateTime.Now;
+                        }
+
+                        Core.CacheTo.Set(cacheLogsKey, cacheLogs, 3600 * 24 * 30);
+                        Core.CacheTo.Set(cacheLogWriteKey, cacheLogWrite, 3600 * 24 * 30);
+
+                        #endregion
                     }
                     catch (Exception)
                     {
-                        mo.LogCity = "fail";
+                        //throw new System.Exception("写入操作日志失败");
                     }
-
-                    mo.LogContent = DicDescription[mo.LogAction.ToLower()];
-
-                    #region 分批写入日志
-
-                    //分批写入满足的条件：缓存的日志数量
-                    int cacheLogCount = GlobalTo.GetValue<int>("logs:batchwritecount");
-                    //分批写入满足的条件：缓存的时长，单位秒
-                    int cacheLogTime = GlobalTo.GetValue<int>("logs:batchwritetime");
-
-                    //日志记录
-                    var cacheLogsKey = "Global_Logs";
-                    //上次写入的时间
-                    var cacheLogWriteKey = "Global_Logs_Write";
-
-                    if (!(Core.CacheTo.Get(cacheLogsKey) is List<Domain.SysLog> cacheLogs))
-                    {
-                        cacheLogs = new List<Domain.SysLog>();
-                    }
-                    cacheLogs.Add(mo);
-
-                    var cacheLogWrite = Core.CacheTo.Get(cacheLogWriteKey) as DateTime?;
-                    if (!cacheLogWrite.HasValue)
-                    {
-                        cacheLogWrite = DateTime.Now;
-                    }
-
-                    if (cacheLogs?.Count > cacheLogCount || DateTime.Now.ToTimestamp() - cacheLogWrite.Value.ToTimestamp() > cacheLogTime)
-                    {
-                        using (var db = new Data.ContextBase())
-                        {
-                            db.SysLog.AddRange(cacheLogs);
-                            db.SaveChanges();
-                        }
-
-                        cacheLogs = null;
-                        cacheLogWrite = DateTime.Now;
-                    }
-
-                    Core.CacheTo.Set(cacheLogsKey, cacheLogs, 3600 * 24 * 30);
-                    Core.CacheTo.Set(cacheLogWriteKey, cacheLogWrite, 3600 * 24 * 30);
-
-                    #endregion
-                }
-                catch (Exception)
-                {
-                    //throw new System.Exception("写入操作日志失败");
                 }
 
                 base.OnActionExecuting(context);

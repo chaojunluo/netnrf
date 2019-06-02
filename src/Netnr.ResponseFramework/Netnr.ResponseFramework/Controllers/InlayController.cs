@@ -9,6 +9,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Netnr.ResponseFramework.Controllers
 {
+    /// <summary>
+    /// 公共组件、视图
+    /// </summary>
     [Authorize]
     public class InlayController : Controller
     {

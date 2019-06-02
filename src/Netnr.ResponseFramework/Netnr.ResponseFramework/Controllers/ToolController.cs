@@ -17,9 +17,12 @@ namespace Netnr.ResponseFramework.Controllers
     /// </summary>
     public class ToolController : Controller
     {
-        public IActionResult Index()
+        #region 表管理
+
+        [Description("表管理")]
+        public IActionResult TableManage()
         {
-            return Content("Tool");
+            return View();
         }
 
         [Description("获取scripts")]
@@ -32,35 +35,6 @@ namespace Netnr.ResponseFramework.Controllers
             }
             var sql = Core.FileTo.ReadText(Core.MapPathTo.Map($"/scripts/table-{cmd}/", GlobalTo.HostingEnvironment), typedb.ToLower() + ext);
             return sql;
-        }
-
-        [Description("重置数据库")]
-        public string ResetDataBase()
-        {
-            var list = new List<string>();
-            var startTime = DateTime.Now;
-            using (var db = new ContextBase())
-            {
-                string sql = QueryScripts(db.TDB.ToString(), "reset");
-                using (var conn = db.Database.GetDbConnection())
-                {
-                    conn.Open();
-                    var cmd = conn.CreateCommand();
-                    cmd.CommandText = sql;
-                    int num = cmd.ExecuteNonQuery();
-                    list.Add("受影响行数：" + num);
-                }
-            }
-            list.Add("已重置成功！！！");
-            list.Add("共耗时：" + (DateTime.Now - startTime).Seconds.ToString());
-            return string.Join(Environment.NewLine + Environment.NewLine, list);
-        }
-
-        #region 表管理
-        [Description("表管理")]
-        public IActionResult TableManage()
-        {
-            return View();
         }
 
         [Description("查询数据库表与表配置信息")]
@@ -321,6 +295,29 @@ namespace Netnr.ResponseFramework.Controllers
                 new Core.DownTo(Response).Stream(path, filename);
             }
         }
+
+        [Description("重置数据库")]
+        public string ResetDataBase()
+        {
+            var list = new List<string>();
+            var startTime = DateTime.Now;
+            using (var db = new ContextBase())
+            {
+                string sql = QueryScripts(db.TDB.ToString(), "reset");
+                using (var conn = db.Database.GetDbConnection())
+                {
+                    conn.Open();
+                    var cmd = conn.CreateCommand();
+                    cmd.CommandText = sql;
+                    int num = cmd.ExecuteNonQuery();
+                    list.Add("受影响行数：" + num);
+                }
+            }
+            list.Add("已重置成功！！！");
+            list.Add("共耗时：" + (DateTime.Now - startTime).Seconds.ToString());
+            return string.Join(Environment.NewLine + Environment.NewLine, list);
+        }
+
         #endregion
     }
 }

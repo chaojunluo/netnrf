@@ -11,10 +11,14 @@ using Netnr.Func.ViewModel;
 
 namespace Netnr.ResponseFramework.Controllers
 {
+    /// <summary>
+    /// 系统设置
+    /// </summary>
     [Authorize]
     public class SettingController : Controller
     {
         #region 系统按钮
+
         [Description("系统按钮页面")]
         public IActionResult SysButton()
         {
@@ -81,9 +85,11 @@ namespace Netnr.ResponseFramework.Controllers
             }
             return num > 0 ? "success" : "fail";
         }
+
         #endregion
 
         #region 系统菜单
+
         [Description("系统菜单页面")]
         public IActionResult SysMenu()
         {
@@ -149,9 +155,11 @@ namespace Netnr.ResponseFramework.Controllers
             }
             return num > 0 ? "success" : "fail";
         }
+
         #endregion
 
         #region 系统角色
+
         [Description("系统角色页面")]
         public IActionResult SysRole()
         {
@@ -191,6 +199,26 @@ namespace Netnr.ResponseFramework.Controllers
             return num > 0 ? "success" : "fail";
         }
 
+        [Description("复制角色权限")]
+        public string CopySysRoleAuth(SysRole mo, string copyid)
+        {
+            int num = 0;
+            using (var db = new ContextBase())
+            {
+                var list = db.SysRole.Where(x => x.SrId == mo.SrId || x.SrId == copyid).ToList();
+                var copymo = list.Find(x => x.SrId == copyid);
+                foreach (var item in list)
+                {
+                    item.SrMenus = copymo.SrMenus;
+                    item.SrButtons = copymo.SrButtons;
+                }
+                db.SysRole.UpdateRange(list);
+                num = db.SaveChanges();
+            }
+
+            return num > 0 ? "success" : "fail";
+        }
+
         [Description("删除系统角色")]
         public string DelSysRole(string id)
         {
@@ -210,9 +238,11 @@ namespace Netnr.ResponseFramework.Controllers
             }
             return num > 0 ? "success" : "fail";
         }
+
         #endregion
 
         #region 系统用户
+
         [Description("系统用户页面")]
         public IActionResult SysUser()
         {
@@ -292,9 +322,11 @@ namespace Netnr.ResponseFramework.Controllers
             }
             return num > 0 ? "success" : "fail";
         }
+
         #endregion
 
         #region 系统日志
+
         [Description("系统日志页面")]
         public IActionResult SysLog()
         {
@@ -312,9 +344,11 @@ namespace Netnr.ResponseFramework.Controllers
             }
             return or.ToJson();
         }
+
         #endregion
 
         #region 表配置
+
         [Description("系统表配置页面")]
         public IActionResult SysTableConfig()
         {
@@ -365,14 +399,17 @@ namespace Netnr.ResponseFramework.Controllers
             }
             return num > 0 ? "success" : "fail";
         }
+
         #endregion
 
         #region 样式配置
+
         [Description("样式配置页面")]
         public IActionResult SysStyle()
         {
             return View();
         }
+
         #endregion
     }
 }

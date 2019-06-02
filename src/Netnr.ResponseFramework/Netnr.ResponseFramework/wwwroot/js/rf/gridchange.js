@@ -37,6 +37,7 @@ gd2.onBeforeLoad = function (row, param) {
 gd2.QueryOk = function () {
     gd2.pageNumber = 1;
     gd2.load();
+
     //模态框隐藏
     gd2.query.md.modal.modal('hide');
 

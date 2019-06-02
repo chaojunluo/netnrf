@@ -13,6 +13,9 @@ using System.Security.Claims;
 
 namespace Netnr.Func
 {
+    /// <summary>
+    /// 公共、常用方法
+    /// </summary>
     public class Common
     {
         #region 字典  
