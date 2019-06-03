@@ -53,6 +53,10 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 mo.SbPid = Guid.Empty.ToString();
             }
+            if (mo.SbBtnHide == null)
+            {
+                mo.SbBtnHide = -1;
+            }
             using (var db = new ContextBase())
             {
                 if (savetype == "add")
