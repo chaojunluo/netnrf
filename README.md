@@ -17,30 +17,33 @@
 
 ### 项目结构
 - Netnr.Core 类库（引用NuGet，源码地址：https://github.com/netnr/Netnr.ClassLibrary）
-- Netnr.Data 数据访问、仓储
-- Netnr.Domain 实体
+- Netnr.Data 数据访问、仓储（Scaffold-DbContext 命令自动生成）
+- Netnr.Domain 实体（Scaffold-DbContext 命令自动生成）
 - Netnr.Fast 常用方法
 - Netnr.Func 应用
 - Netnr.ResponseFramework Web站点
 
 ### 数据表
-- 系统用户（SysUser）
-- 系统角色、角色权限（SysRole）
-- 系统菜单（SysMenu）
-- 系统按钮（SysButton）
-- 系统日志（SysLog）
+- 用户（SysUser）
+- 角色、角色权限（SysRole）
+- 菜单（SysMenu）
+- 按钮（SysButton）
+- 日志（SysLog）
+- 字典（SysDictionary）
 - 表配置（SysTableConfig）
 
 ### 功能
-- 登录：系统账号登录，第三方账号登录（QQ、微博等）
+- 登录：系统账号登录，第三方账号登录（QQ、微信、微博、GitHub、Microsoft 等）
 - 权限：角色权限，控制菜单及页面按钮
 - 表格：动态配置标题、宽度、排序、对齐方式、格式化、冻结、点击排序等
 - 表单：动态生成表单，自定义标题、排序、跨列、类型、必填等，支持多表单生成
 - 查询：动态生成查询面板，自定义字段查询，以JSON格式表达查询条件
 - 日志：访问日志记录
+- 字典：通用的字典表
 - 工具：数据库表信息展示，一键导出数据库表结构为Excel
-- 任务：定时清理临时目录、重置演示数据库
+- 任务：定时执行任务，清理临时目录、重置演示数据库
 - 导出：公共导出Excel表，自定义查询主体，支持条件查询、列格式化，支持追加操作等
+- 上传：通用的上传接口
 
 ### 使用说明
 1. 创建表、写字段注释（方便生成表配置）

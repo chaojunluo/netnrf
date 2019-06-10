@@ -83,6 +83,10 @@ namespace Netnr.ResponseFramework.Filters
                 var hc = context.HttpContext;
 
                 //日志记录，设置“__nolog”参数可忽略日志记录，为压力测试等环境考虑（即一些不需要记录请求日志的需求）
+
+                //如果需要记录更详细的日志，可提取请求的参数、表单信息写入日志
+                //可能信息量较大，需要考虑分开存储，推荐方案：使用sqlite-net-pcl包按月或按天拆分写入SQLite数据库文件
+
                 if (string.IsNullOrWhiteSpace(hc.Request.Query["__nolog"].ToString()))
                 {
                     string controller = context.RouteData.Values["controller"].ToString().ToLower();

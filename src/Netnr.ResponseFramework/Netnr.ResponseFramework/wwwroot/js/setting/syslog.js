@@ -25,7 +25,7 @@ z.button('see', function () {
         //表单标题
         z.FormTitle({
             icon: 2,
-            title: '查看操作日志',
+            title: '查看日志',
             required: false
         });
         //禁用
