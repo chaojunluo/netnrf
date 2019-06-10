@@ -31,7 +31,7 @@ namespace Netnr.ResponseFramework.Controllers
 
             //文件路径
             string path = "/upload/temp/";
-            var vpath = GlobalTo.WebRootPath + path.Replace("/", "\\");
+            var vpath = (GlobalTo.WebRootPath + path).Replace("\\", "/");
             if (!Directory.Exists(vpath))
             {
                 Directory.CreateDirectory(vpath);
@@ -106,8 +106,12 @@ namespace Netnr.ResponseFramework.Controllers
                     //生成
                     if (Fast.NpoiTo.DataTableToExcel(dtReport, vpath + filename))
                     {
-                        vm.Set(FRTag.success);
                         vm.data = path + filename;
+
+                        //生成的Excel继续操作
+                        ExportAid.ExcelDraw(vpath + filename, param.uri?.ToLower());
+
+                        vm.Set(FRTag.success);
                     }
                     else
                     {

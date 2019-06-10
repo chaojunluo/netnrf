@@ -10,12 +10,13 @@
 ### v2.x
 - 前端采用 jQuery + Bootstrap + EasyUI + AceAdmin + fontAwesome
 - 后端采用 .NET Core + EF + SQL（SQLServer、MySQL、PostgreSQL、SQLite）
+    - 数据库脚本放置于 `wwwroot/scripts/`目录下
     - 数据库转换使用的工具：http://www.szmesoft.com/DB2DB
-- 数据库脚本放置于 `wwwroot/scripts/`目录下
-- Visual Studio 2017+ 运行项目，跨数据库、跨平台支持
+    - 全部采用 LINQ，跨数据库、避免SQL注入
+- Visual Studio 2017+ 运行项目
 
 ### 项目结构
-- Netnr.Core 类库（引用NuGet）
+- Netnr.Core 类库（引用NuGet，源码地址：https://github.com/netnr/Netnr.ClassLibrary）
 - Netnr.Data 数据访问、仓储
 - Netnr.Domain 实体
 - Netnr.Fast 常用方法
@@ -34,10 +35,12 @@
 - 登录：系统账号登录，第三方账号登录（QQ、微博等）
 - 权限：角色权限，控制菜单及页面按钮
 - 表格：动态配置标题、宽度、排序、对齐方式、格式化、冻结、点击排序等
-- 表单：动态生成表单，自定义标题、排序、跨列、类型、必填等，支持多表单生成。
-- 查询：动态生成查询面板，自定义哪些字段支持查询
+- 表单：动态生成表单，自定义标题、排序、跨列、类型、必填等，支持多表单生成
+- 查询：动态生成查询面板，自定义字段查询，以JSON格式表达查询条件
 - 日志：访问日志记录
-- 工具：数据库表信息展示，一键导出表结构为Excel
+- 工具：数据库表信息展示，一键导出数据库表结构为Excel
+- 任务：定时清理临时目录、重置演示数据库
+- 导出：公共导出Excel表，自定义查询主体，支持条件查询、列格式化，支持追加操作等
 
 ### 使用说明
 1. 创建表、写字段注释（方便生成表配置）
@@ -58,23 +61,23 @@
 
 #### 列表 
 
-![列表](https://netnr.gitee.io/gs/2018/05/18/403ce7d002.png)
+![列表](https://gs.zme.ink/2018/05/18/403ce7d002.png)
 
 #### 新增、编辑、查看
 
-![表单](https://netnr.gitee.io/gs/2018/05/18/8d25d345b2.png)
+![表单](https://gs.zme.ink/2018/05/18/8d25d345b2.png)
 
 #### 列表配置
 
-![列表配置](https://netnr.gitee.io/gs/2018/05/18/13da6572a3.png)
+![列表配置](https://gs.zme.ink/2018/05/18/13da6572a3.png)
 
 #### 表单配置
 
-![表单配置](https://netnr.gitee.io/gs/2018/05/18/0c98ee578c.png)
+![表单配置](https://gs.zme.ink/2018/05/18/0c98ee578c.png)
 
 #### 角色权限配置（树）
 
-![角色权限配置](https://netnr.gitee.io/gs/2018/08/16/31a55cac78.png)
+![角色权限配置](https://gs.zme.ink/2018/08/16/31a55cac78.png)
 
 ### 第三方文档API
 - [EasyUI文档](https://ad.netnr.com/#EasyUI-1.5.2)

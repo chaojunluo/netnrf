@@ -1,4 +1,17 @@
-﻿//格式化
+﻿//关系符
+z.DC["dataurl_colrelation"] = {
+    data: [
+        { value: "Contains", text: "包含" },
+        { value: "Equal", text: "等于" },
+        { value: "GreaterThanOrEqual", text: "大于等于" },
+        { value: "LessThanOrEqual", text: "小于等于" },
+        { value: "BetweenAnd", text: "两值之间" }
+    ],
+    init: function () {
+        this.multiple = true;
+    }
+}
+//格式化
 z.DC["dataurl_colformat"] = {
     data: [
         { value: "0", text: "无格式化" },
@@ -62,10 +75,7 @@ z.DC["dataurl_formspan"] = {
     data: [
         { value: 1, text: "半排", selected: true },
         { value: 2, text: "整排" }
-    ],
-    init: function () {
-        this.panelHeight = 100;
-    }
+    ]
 };
 //跨列格式化
 function col_custom_formspan(value) {
@@ -83,10 +93,7 @@ z.DC["dataurl_colalign"] = {
         { value: 1, text: "居左" },
         { value: 2, text: "居中" },
         { value: 3, text: "居右" }
-    ],
-    init: function () {
-        this.panelHeight = 100;
-    }
+    ]
 }
 //对齐方式格式化
 function col_custom_colalign(value) {
@@ -103,10 +110,7 @@ z.DC["dataurl_formarea"] = {
     data: [
         { value: 1, text: "表格配置" },
         { value: 2, text: "表单配置" }
-    ],
-    init: function () {
-        this.panelHeight = 100;
-    }
+    ]
 };
 //区域格式化
 function col_custom_formarea(value) {
@@ -125,11 +129,9 @@ var hideobj = function () {
         data: [
             { value: 0, text: "显示" },
             { value: 1, text: "隐藏" },
+            //页面配置不显示
             { value: 2, text: "系统级隐藏" }
-        ],
-        init: function () {
-            this.panelHeight = 100;
-        }
+        ]
     }
 };
 z.DC["dataurl_formhide"] = hideobj();

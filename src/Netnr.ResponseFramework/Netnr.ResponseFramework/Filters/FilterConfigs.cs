@@ -83,7 +83,7 @@ namespace Netnr.ResponseFramework.Filters
                 var hc = context.HttpContext;
 
                 //日志记录，设置“__nolog”参数可忽略日志记录，为压力测试等环境考虑（即一些不需要记录请求日志的需求）
-                if (!string.IsNullOrWhiteSpace(hc.Request.Query["__nolog"].ToString()))
+                if (string.IsNullOrWhiteSpace(hc.Request.Query["__nolog"].ToString()))
                 {
                     string controller = context.RouteData.Values["controller"].ToString().ToLower();
                     string action = context.RouteData.Values["action"].ToString().ToLower();

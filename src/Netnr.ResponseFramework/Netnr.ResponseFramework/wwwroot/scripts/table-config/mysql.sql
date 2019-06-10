@@ -24,6 +24,7 @@ SELECT UUID() AS Id,
        0 AS ColSort,
        1 AS ColExport,
        0 AS ColQuery,
+       '' AS ColRelation,
        '' AS FormUrl,
        'text' AS FormType,
        1 AS FormArea,
@@ -33,9 +34,28 @@ SELECT UUID() AS Id,
        0 AS FormRequired,
        '' AS FormPlaceholder,
        '' AS FormValue,
-       '' AS FormText
+       '' AS FormText,
+       CASE
+           WHEN LOCATE('(', COLUMN_TYPE) > 0 THEN
+               REPLACE(REPLACE(REPLACE(COLUMN_TYPE, DATA_TYPE, ''), '(', ''), ')', '')
+           WHEN LOCATE('(', COLUMN_TYPE) = 0
+                AND DATA_TYPE = 'date' THEN
+               10
+           WHEN LOCATE('(', COLUMN_TYPE) = 0
+                AND DATA_TYPE = 'time' THEN
+               9
+           WHEN LOCATE('(', COLUMN_TYPE) = 0
+                AND DATA_TYPE = 'datetime' THEN
+               23
+           WHEN LOCATE('(', COLUMN_TYPE) = 0
+                AND DATA_TYPE = 'timestamp' THEN
+               23
+           ELSE
+               '-1'
+       END AS FormMaxlength
 FROM INFORMATION_SCHEMA.TABLES t
     LEFT JOIN INFORMATION_SCHEMA.COLUMNS c
         ON c.TABLE_NAME = t.TABLE_NAME
-WHERE t.TABLE_SCHEMA = '@DataBaseName' AND c.TABLE_SCHEMA = '@DataBaseName'
+WHERE t.TABLE_SCHEMA = '@DataBaseName'
+      AND c.TABLE_SCHEMA = '@DataBaseName'
       AND t.TABLE_NAME = '@TableName';

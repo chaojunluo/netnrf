@@ -1,6 +1,4 @@
-﻿#if NET40
-#else
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System;
@@ -136,4 +134,3 @@ public class GlobalTo
         return null;
     }
 }
-#endif

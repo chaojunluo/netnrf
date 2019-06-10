@@ -1,4 +1,10 @@
-﻿top != self && (top.location = self.location);
+﻿//低版本跳转
+if (typeof document.createElement == "object" || !window.localStorage) {
+    top.location = "/home/updatebrowser";
+}
+
+//非嵌套显示
+top != self && (top.location = self.location);
 
 $(document).keydown(function (e) {
     if ((e.keyCode || e.which || e.charCode) == 13) {

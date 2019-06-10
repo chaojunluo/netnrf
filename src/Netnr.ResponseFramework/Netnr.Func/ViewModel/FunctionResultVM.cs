@@ -23,6 +23,27 @@ namespace Netnr.Func.ViewModel
         public object data { get; set; }
 
         /// <summary>
+        /// 开始时间
+        /// </summary>
+        public DateTime startTime { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        public DateTime? endTime { get; set; }
+
+        /// <summary>
+        /// 用时，毫秒
+        /// </summary>
+        public double useTime
+        {
+            get
+            {
+                return ((endTime ?? DateTime.Now) - startTime).TotalMilliseconds;
+            }
+        }
+
+        /// <summary>
         /// 设置快捷标签，赋值code、message
         /// </summary>
         /// <param name="tag">快捷标签枚举</param>
@@ -30,6 +51,8 @@ namespace Netnr.Func.ViewModel
         {
             code = Convert.ToInt32(tag);
             message = tag.ToString();
+
+            endTime = DateTime.Now;
         }
 
         /// <summary>
@@ -45,6 +68,8 @@ namespace Netnr.Func.ViewModel
             {
                 message += "，错误消息：" + ex.Message;
             }
+
+            endTime = DateTime.Now;
         }
     }
 

@@ -372,9 +372,10 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("保存表配置")]
-        public string SaveSysTableConfig(SysTableConfig mo, string savetype)
+        public string SaveSysTableConfig(SysTableConfig mo, List<string> ColRelation, string savetype)
         {
             int num = 0;
+            mo.ColRelation = string.Join(',', ColRelation);
             using (var db = new ContextBase())
             {
                 if (savetype == "add")

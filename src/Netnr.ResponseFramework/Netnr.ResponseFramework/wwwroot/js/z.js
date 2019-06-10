@@ -152,6 +152,8 @@
                     pageNumber: that.pageNumber,
                     pageSize: that.pageSize,
                     total: that.total,
+                    links: 7,
+                    layout: ['list', 'sep', 'first', 'prev', 'links', 'next', 'last', 'sep', 'refresh', 'info'],
                     onSelectPage: function (pageNumber, pageSize) {
                         that.pageNumber = pageNumber;
                         that.pageSize = pageSize;
@@ -264,6 +266,7 @@
                                 FormUrl: this.FormUrl,
                                 FormPlaceholder: this.FormPlaceholder || "",
                                 ColQuery: this.ColQuery == null ? 0 : this.ColQuery,
+                                ColRelation: this.ColRelation,
                                 formatter: function (value, row) { return z.GridFormat(value, row, v) }
                             }
                             if (this.ColFrozen == 1) { frozens.push(column); }
@@ -371,14 +374,14 @@
         //不显示滚动条
         document.documentElement.style.overflowY = "hidden";
 
-        var h = $(window).height() - $(gd.id).parents('.datagrid')[0].getBoundingClientRect().top;
+        var h = $(window).height() - $(gd.id).parents('.datagrid').offset().top - 10;
         h < 150 && (h = 150);
         var ro = { width: null, height: null };
         switch (gd.autosize) {
             /*宽度自适应，高度保持沉底*/
             case 'xy':
                 ro.width = $(gd.autosizePid).width();
-                ro.height = h - 5;
+                ro.height = h;
                 break;
             /*宽度自适应，高度不变*/
             case 'x':
@@ -388,7 +391,7 @@
             /*宽度不变，高度保持沉底*/
             case 'y':
                 ro.width = null;
-                ro.height = h - 5;
+                ro.height = h;
                 break;
             /*宽高自适应父容器*/
             case 'p':
@@ -399,6 +402,7 @@
                 ro = null;
         }
         $(gd.id).datagrid('resize', ro);
+
         //显示滚动条
         document.documentElement.style.overflowY = "";
 
@@ -465,8 +469,11 @@
                         } else {
                             var cb = z.Combo();
                             cb.data = z.DC[lowerUrl].data;
-                            cb.editable = false;
                             cb.height = 33;
+                            if (ec.FormType == "combobox") {
+                                cb.panelHeight = Math.min(7, cb.data.length) * cb.height + 5;
+                            }
+                            cb.editable = false;
                             cb.type = ec.FormType;
                             //不显示清除按钮
                             cb.icons = null;
@@ -709,15 +716,21 @@
                     var cb = z.Combo();
                     cb.id = target;
                     cb.data = z.DC[url].data;
+                    cb.height = 33;
+                    if (dtype == "combobox") {
+                        cb.panelHeight = Math.min(7, cb.data.length) * cb.height + 5;
+                    }
                     cb.editable = false;
-                    cb.height = 34;
                     cb.type = dtype;
                     if (typeof z.DC[url].init == "function") {
                         z.DC[url].init.call(cb, cb);
                     }
+                    cb.DCkey = url;
                     cb.bind();
                     z.DC[url].obj = cb;
                     cb.func('textbox').attr('placeholder', target.attr('placeholder'));
+                    //存储创建的对象
+                    target[0].zobj = cb;
                     target.attr('data-state', 'bind');
                 }
                 break;
@@ -879,7 +892,10 @@
                 case 'combobox':
                     if (rdi != null) {
                         if (t[dtype]("options").multiple) {
-                            var arr = $.trim(rdi).split(',') || [];
+                            var arr = [];
+                            if ($.trim(rdi) != "") {
+                                arr = $.trim(rdi).split(',');
+                            }
                             t[dtype]('setValues', arr);
                         } else {
                             t[dtype]('setValue', rdi.toString());
@@ -892,7 +908,10 @@
 
                     var oda = z.DC[durl.toLowerCase()].obj.data;
                     if (t[dtype]("options").multiple && rdi != null) {
-                        var arr = $.trim(rdi).split(',') || [];
+                        var arr = [];
+                        if ($.trim(rdi) != "") {
+                            arr = $.trim(rdi).split(',');
+                        }
                         var nodes = [];
                         for (var u = 0; u < arr.length; u++) {
                             var node = z.FindTreeNode(oda, arr[u], "id");
@@ -1270,6 +1289,50 @@
 
     z.SqlQuery.prototype.init.prototype = z.SqlQuery.prototype;
 
+    //全屏
+    z.FullScreen = {
+        //iframe全屏
+        iframe: function (ifs) {
+            z.ifs = !(z.ifs || false);
+            if (ifs != null) {
+                z.ifs = ifs;
+            }
+            if (z.ifs) {
+                this.open();
+            } else {
+                this.close();
+            }
+        },
+        //打开
+        open: function () {
+            var element = document.documentElement;
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            }
+        },
+        //关闭
+        close: function () {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        },
+        //是否打开
+        isopen: function () {
+            return document.isFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen
+        }
+    };
 
     //数据缓存，以 url 为键时是小写
     z.DC = {};
@@ -1441,7 +1504,7 @@ if ($.fn.datagrid) {
 if ($.fn.pagination) {
     $.fn.pagination.defaults.beforePageText = '第';
     $.fn.pagination.defaults.afterPageText = '共 {pages} 页';
-    $.fn.pagination.defaults.displayMsg = '显示 {from} 到 {to},共 {total} 记录';
+    $.fn.pagination.defaults.displayMsg = '显示 <b>{from}</b> 到 <b>{to}</b>，共 <b>{total}</b> 记录';
 }
 if ($.messager) {
     $.messager.defaults.ok = '确定';
@@ -1563,6 +1626,9 @@ setTimeout(function () {
             })
         }
     });
+
+    //透明
+    document.body.style.opacity = 1;
 }, 0);
 
 /**

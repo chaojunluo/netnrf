@@ -32,7 +32,7 @@
             <!--Logo-->
             <div class="navbar-header pull-left hidden-xs">
                 <a href="javascript:void(0);" class="navbar-brand">
-                    NETNRF <sup>V 2.2.4</sup>
+                    NETNRF <sup>V 2.2.5</sup>
                 </a>
             </div>
             <!--右侧-->
@@ -136,11 +136,10 @@
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret" id="usermenu">
                             <li><a><i class="fa fa-user-circle-o text-primary"></i>@Model.UserName</a></li>
                             <li class="divider"></li>
-                            <li><a href="#"><i class="fa fa-flag blue"></i>系统初始化向导</a></li>
-                            <li><a href="#"><i class="fa fa-cogs blue"></i>首页配置</a></li>
+                            <li><a href="/home/guide"><i class="fa fa-flag blue"></i>系统初始化向导</a></li>
                             <li class="divider"></li>
-                            <li><a href="#"><i class="fa fa-wechat green"></i>关注公众号</a></li>
-                            <li><a href="#"><i class="fa fa-apple"></i>App下载</a></li>
+                            <li><a href="#wechatp"><i class="fa fa-wechat green"></i>关注公众号</a></li>
+                            <li><a href="https://ss.netnr.com/contact" target="_blank"><i class="fa fa-envelope green"></i>联系打赏</a></li>
                             <li class="divider"></li>
                             <li><a href="#authbind"><i class="fa fa-user-plus orange"></i>授权关联</a></li>
                             <li><a href="#updatepassword"><i class="fa fa-edit orange"></i>修改密码</a></li>
@@ -231,7 +230,7 @@
         </div>
     </div>
 
-    @await Html.PartialAsync("_QuotePartial", "jquery.js,bootstrap.js,ace.js,init.js")
+    @await Html.PartialAsync("_QuotePartial", "jquery.js,bootstrap.js,ace.js,z.js,init.js")
 
 </body>
 </html>

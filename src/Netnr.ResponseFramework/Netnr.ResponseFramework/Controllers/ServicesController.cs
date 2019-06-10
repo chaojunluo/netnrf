@@ -46,13 +46,13 @@ namespace Netnr.ResponseFramework.Controllers
                     //清理临时目录
                     case "cleartemp":
                         {
-                            string directoryPath = GlobalTo.WebRootPath + "\\upload\\temp\\";
+                            string directoryPath = (GlobalTo.WebRootPath + "/upload/temp/").Replace("\\", "/");
 
                             //删除文件
                             var listFile = Directory.GetFiles(directoryPath).ToList();
                             foreach (var path in listFile)
                             {
-                                if (!path.Contains("README.md"))
+                                if (!path.Contains("README"))
                                 {
                                     System.IO.File.Delete(path);
                                 }
@@ -96,14 +96,14 @@ namespace Netnr.ResponseFramework.Controllers
                         var vm = new FunctionResultVM();
                         vm.code = -9;
 
-                        //每五天重置一次数据库
-                        if (DateTime.Now.Day % 5 == 0 && DateTime.Now.ToString("HHmm") == "0713")
+                        //重置一次数据库
+                        if (DateTime.Now.Day % 2 == 0 && DateTime.Now.ToString("HHmm") == "0404")
                         {
                             vm = sc.ExecTask("resetdatabase");
                         }
 
                         //清理临时目录
-                        if (DateTime.Now.Day % 10 == 0 && DateTime.Now.ToString("HHmm") == "0303")
+                        if (DateTime.Now.Day % 2 == 0 && DateTime.Now.ToString("HHmm") == "0303")
                         {
                             vm = sc.ExecTask("cleartemp");
                         }

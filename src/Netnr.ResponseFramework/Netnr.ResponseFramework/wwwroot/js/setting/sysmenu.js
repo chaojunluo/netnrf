@@ -23,6 +23,12 @@ z.button('add', function () {
         icon: 0,
         title: '新增系统用户'
     });
+
+    var rowData = gd1.func("getSelected");
+    if (rowData) {
+        $('#SmPid').combotree('setValue', rowData.SmId);
+    }
+
     $('#fv_modal_1').modal();
 });
 
@@ -86,6 +92,11 @@ $('#fv_save_1').click(function () {
             success: function (data) {
                 if (data == "success") {
                     gd1.load();
+
+                    var zobj = $('#SmPid')[0].zobj;
+                    zobj.url = zobj.DCkey;
+                    zobj.load();
+
                     $('#fv_modal_1').modal('hide');
                 } else {
                     art('fail');

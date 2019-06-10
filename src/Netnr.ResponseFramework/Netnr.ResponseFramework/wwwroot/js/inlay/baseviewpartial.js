@@ -46,7 +46,7 @@ z.batchButtonSwitch = function (isopen) {
                 that.addClass('hidden');
             }
         } else {
-            if ("m_Query m_Reload".indexOf(this.id) == -1) {
+            if ("m_Query m_Reload m_Full_Screen".indexOf(this.id) == -1) {
                 if (isopen) {
                     that.addClass('disabled')
                 } else {
@@ -62,6 +62,11 @@ z.batchButtonSwitch = function (isopen) {
     }
 }
 
+//全屏
+z.button("full_screen", function () {
+    z.FullScreen.iframe();
+})
+
 //导出
 z.button("export", function () {
     var da = {
@@ -76,7 +81,7 @@ z.button("export", function () {
     }
 
     var mod = z.Modal();
-    mod.title = "<i class='fa fa-file-excel-o green'></i><span>导出</span>";
+    mod.title = "<i class='fa fa-level-down green'></i><span>导出</span>";
 
     var htm = [];
     htm.push('<div class="text-center h2">')
@@ -100,7 +105,7 @@ z.button("export", function () {
             var mb = mod.modal.find('.modal-body');
             mod.modal.find('.modal-header').removeClass('hidden');
             if (data.code == 200) {
-                mb.html('<h4 class="text-center"><a href="' + data.data + '" ><i class="fa fa-file-excel-o"></i> 点击下载文件</a></h4>');
+                mb.html('<h2 class="text-center"><a class="btn btn-success btn-lg" href="' + data.data + '" ><i class="fa fa-download"></i> 点击下载文件</a></h2>');
             } else {
                 mb.html('<h4 class="text-center red">' + data.message + '</h4>');
             }

@@ -3,25 +3,49 @@
  */
 z.defaultQueryRelation = "Contains";
 
+//查询可选关系符
+z.QueryRelationData = function () {
+    return [
+        { value: "Contains", text: "包含" },
+        { value: "Equal", text: "等于" },
+        { value: "GreaterThanOrEqual", text: "大于等于" },
+        { value: "LessThanOrEqual", text: "小于等于" },
+        { value: "BetweenAnd", text: "两值之间" }
+    ]
+}
+
 /**
  * 关系符
  */
 z.DC["dataurl_cq_relation"] = {
-    data: [
-        { value: "Equal", text: "等于" },
-        { value: "Contains", text: "包含" },
-        { value: "LessThanOrEqual", text: "小于等于" },
-        { value: "GreaterThanOrEqual", text: "大于等于" },
-        { value: "BetweenAnd", text: "两值之间" },
-        { value: "Clear", text: "" }
-    ],
-    init: function () {
-        this.panelHeight = 220;
+    data: z.QueryRelationData(),
+    init: function (cb) {
         this.formatter = function (row) {
             if (row.value == "Clear") {
                 return "<span class='red'>重置条件</span>";
             }
             return row.text;
+        };
+        //显示时，展示可选查询关系符
+        this.onShowPanel = function () {
+            var rowData = z.queryin.grid.func('getSelected');
+            var cv = $(this).combobox('getValue');
+            var qrd = z.QueryRelationData();
+            cb.data = [];
+            $.each(rowData.relationList, function (i, v) {
+                $.each(qrd, function () {
+                    if (this.value == v) {
+                        cb.data.push(this);
+                    }
+                })
+            })
+            cb.data.push({ value: "Clear", text: "" });
+
+            var cbp = $(this).combobox('panel');
+            cbp.height(cbp.children().first().outerHeight() * cb.data.length);
+
+            $(this).combobox(cb);
+            $(this).combobox('setValue', cv);
         };
         this.onClick = function (record) {
             var ei = z.queryin.grid.ei;
@@ -35,8 +59,7 @@ z.DC["dataurl_cq_relation"] = {
             if (record.value == "Clear") {
                 setTimeout(function () {
                     var rowData = z.queryin.grid.func('getSelected');
-                    var qrObj = z.GridQueryRelationFilter(rowData);
-                    rowData.relation = qrObj.dqr;
+                    rowData.relation = rowData.relationList[0];
                     rowData.value1 = null;
                     rowData.value2 = null;
                     z.queryin.grid.func('updateRow', { index: ei, row: rowData });
@@ -62,12 +85,13 @@ z.GridQueryDataConvert = function (data) {
     var arrdata = [];
     $.each(data, function () {
         if (this.ColQuery == 1) {
-            var qrObj = z.GridQueryRelationFilter(this);
+            var rl = this.ColRelation.split(',');
             arrdata.push({
                 FormType: this.FormType || "text",
                 FormUrl: this.FormUrl,
                 field: this.field || this.ColField,
-                relation: qrObj.dqr,
+                relation: rl[0],
+                relationList: rl,
                 title: this.title || this.ColTitle
             });
         }
@@ -75,27 +99,6 @@ z.GridQueryDataConvert = function (data) {
     return arrdata;
 }
 
-/**
- * 根据类型判断关系符
- * @param {any} dataitem 数据一列
- */
-z.GridQueryRelationFilter = function (dataitem) {
-    var qrArr = [], dqr;
-    if ("combobox combotree checkbox datetime".indexOf(dataitem.FormType) >= 0) {
-        qrArr.push("Equal");
-    } else {
-        $.each(z.DC["dataurl_cq_relation"].data, function () {
-            qrArr.push(this.value);
-            if (this.value == z.defaultQueryRelation) {
-                dqr = this.value;
-            }
-        })
-    }
-    return {
-        qr: qrArr,
-        dqr: dqr || qrArr[0]
-    }
-}
 
 /**
  * 创建查询标记
@@ -109,8 +112,10 @@ z.GridQueryMark = function (gd) {
     //构建查询列，默认列配置
     if (!gd.queryData) {
         //默认取列配置第一行
-        var cols = gd.frozenColumns[0].concat(gd.columns[0]);
-        gd.queryData = z.GridQueryDataConvert(cols);
+        if (gd.columns) {
+            var cols = gd.frozenColumns[0].concat(gd.columns[0]);
+            gd.queryData = z.GridQueryDataConvert(cols);
+        }
     }
 
     var hasqd = {};
@@ -237,7 +242,7 @@ z.GridQueryBuild = function (gd) {
 
         gqm.append();
         gqm.clearid = "fq_clear_" + z.index;
-        gqm.modal.find('div.modal-footer').append($('<button id="' + gqm.clearid + '" class="btn btn-warning pull-left"><span class="fa fa-remove"></span>&nbsp;清空</button>'))
+        $('<button id="' + gqm.clearid + '" class="btn btn-default red mr15"><span class="fa fa-remove"></span>&nbsp;清空条件</button>').insertBefore(gqm.modal.find('div.modal-footer').children().first());
 
         //构建查询表格
         var gq = z.Grid();
@@ -340,11 +345,10 @@ z.GridQueryBuild = function (gd) {
             AutoHeightGrid(gq);
         });
 
-        //重置
+        //清空条件
         $('#' + gqm.clearid).click(function () {
             $(gq.data).each(function (i) {
-                var qrObj = z.GridQueryRelationFilter(this);
-                this.relation = qrObj.dqr;
+                this.relation = this.relationList[0];
                 this.value1 = null;
                 this.value2 = null;
             });

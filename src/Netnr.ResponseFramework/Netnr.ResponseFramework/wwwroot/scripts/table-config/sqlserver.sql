@@ -20,6 +20,7 @@ SELECT CONVERT(VARCHAR(36), NEWID()) AS Id,
        0 AS ColSort,
        1 AS ColExport,
        0 AS ColQuery,
+       '' AS ColRelation,
        '' AS FormUrl,
        'text' AS FormType,
        1 AS FormArea,
@@ -35,7 +36,8 @@ SELECT CONVERT(VARCHAR(36), NEWID()) AS Id,
        0 AS FormRequired,
        '' AS FormPlaceholder,
        '' AS FormValue,
-       '' AS FormText
+       '' AS FormText,
+       COLUMNPROPERTY(c.object_id, c.name, 'PRECISION') AS FormMaxlength
 FROM sys.tables AS t
     INNER JOIN sys.columns AS c
         ON t.object_id = c.object_id

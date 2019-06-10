@@ -109,7 +109,7 @@
         if (!isopen) {
             var pageid = "page_" + new Date().valueOf(), close = close == false ? '' : '<em class="fa fa-close"></em>';
             mmc.end().append('<a href="#' + pageid + '" class="active">' + title + close + '</a></li>');
-            mb.append('<div class="tab-pane active" id="' + pageid + '"><iframe frameborder="0" src="about:blank"></iframe></div>');
+            mb.append('<div class="tab-pane active" id="' + pageid + '"><iframe frameborder="0" scrolling="no" src="about:blank"></iframe></div>');
             var ifr = $('#' + pageid).find('iframe')[0];
             ifr.src = url;
             ifr.focus();
@@ -124,13 +124,18 @@
             var mt = $('#menu-toggler');
             mt.hasClass('display') && $('#menu-toggler')[0].click();
         }
+
+        //保持全屏
+        if (z && z.FullScreen) {
+            z.FullScreen.iframe(z.ifs || false);
+        }
     },
     //Iframe自适应、延迟响应
     IframeAuto: function () {
         clearTimeout(window.deferIA);
         window.deferIA = setTimeout(function () {
             var box = $('#mtabox'), sh = $(window).height() - box.offset().top;
-            box.children('div').css("height", sh);
+            box.children('.active').css("height", sh);
         }, 100);
     },
     //JSON生成导航菜单
@@ -181,7 +186,7 @@
                 if (xhr.status == 401) {
                     location.reload(true);
                 } else {
-                    alert("加载菜单出错，请重试；如一直存在请联系我们");
+                    art("加载菜单出错，请刷新重试 或 重新登录").modal.find('.alert-info').removeClass('alert-info').addClass('alert-danger');
                 }
             },
             complete: function () {
@@ -298,7 +303,9 @@ $('#mtab').click(function (e) {
                             $(ca[0].hash).prev().addClass('active');
                             $(ca[0].hash).remove();
                             ca.remove();
+
                             rf.PositionTab();
+                            rf.IframeAuto();
                         }
                     }
                     break;
@@ -327,6 +334,8 @@ $('#mtab').click(function (e) {
                             }).first().addClass('active');
                             $(mmc.first()[0].hash).addClass('active');
                             mmc.end().css('left', 0);
+
+                            rf.IframeAuto();
                         }
                     }
                     break
@@ -341,7 +350,9 @@ $('#mtab').click(function (e) {
                     $(item).addClass("active");
                     $('#mtabox').children().removeClass('active');
                     $(item.hash).addClass('active').find('iframe')[0].focus();
+
                     rf.PositionTab();
+                    rf.IframeAuto();
                 }
                 return false;
             }
@@ -375,6 +386,19 @@ $('#usermenu').click(function (e) {
     });
     if (ct && ct.hash) {
         switch (ct.hash) {
+            case "#wechatp":
+                {
+                    var ao = art('<div style="line-height:260px;text-align:center"><img src="/images/loading.gif" style="max-height:260px" /></div>');
+                    ao.modal.find('.modal-title').html('<i class="fa fa-wechat green"></i><span>关注公众号:<span><b class="green">netnrcom</b>');
+                    ao.modal.find('.modal-body').children().removeClass('alert alert-info');
+
+                    var img = new Image();
+                    img.src = "https://gs.zme.ink/static/wechat_netnrcom.jpg";
+                    img.onload = function () {
+                        ao.modal.find('img').attr('src', img.src);
+                    }
+                }
+                break;
             case "#authbind":
                 rf.OpenPage('/account/authbind', '<i class="fa fa-user-plus"></i> 授权关联');
                 break;

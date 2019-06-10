@@ -1,9 +1,14 @@
 ﻿using Netnr.Data;
 using Netnr.Domain;
 using Netnr.Func.ViewModel;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 
 namespace Netnr.Func
@@ -284,6 +289,117 @@ namespace Netnr.Func
                 }
                 return value;
             }
+        }
+
+        /// <summary>
+        /// 操作已经生成的Excel
+        /// </summary>
+        /// <param name="fullPath"></param>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public static bool ExcelDraw(string fullPath, string uri)
+        {
+            //需要绘制的记录
+            var needDraw = "DatabaseTableDesign,syslog".ToLower().Split(',');
+            if (!needDraw.Contains(uri.ToLower()))
+            {
+                return true;
+            }
+
+            string strExtName = Path.GetExtension(fullPath);
+
+            IWorkbook workbook = null;
+
+            using (FileStream file = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                if (strExtName.Equals(".xls"))
+                {
+                    workbook = new HSSFWorkbook(file);
+                }
+                if (strExtName.Equals(".xlsx"))
+                {
+                    workbook = new XSSFWorkbook(file);
+                }
+            }
+
+            //单元格样式
+            ICellStyle cellStyle = workbook.CreateCellStyle();
+
+            //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
+            cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
+            cellStyle.BorderBottom = BorderStyle.Thin;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
+
+            ISheet sheet = workbook.GetSheetAt(workbook.ActiveSheetIndex);
+
+            switch (uri.ToLower())
+            {
+                //数据库表设计
+                case "databasetabledesign":
+                    {
+                        //冻结首行首列
+                        sheet.CreateFreezePane(0, 1);
+
+                        var rows = sheet.GetRowEnumerator();
+
+                        while (rows.MoveNext())
+                        {
+                            IRow row;
+                            if (fullPath.Contains(".xlsx"))
+                            {
+                                row = (XSSFRow)rows.Current;
+                            }
+                            else
+                            {
+                                row = (HSSFRow)rows.Current;
+                            }
+
+                            var cc = row.GetCell(1);
+                            if (string.IsNullOrWhiteSpace(cc.StringCellValue))
+                            {
+                                //合并
+                                sheet.AddMergedRegion(new CellRangeAddress(row.RowNum, row.RowNum, 0, row.Cells.Count - 1));
+
+                                //单元格样式
+                                ICellStyle cStyle = workbook.CreateCellStyle();
+
+                                //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
+                                cStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
+                                cStyle.BorderBottom = BorderStyle.Thin;
+                                cStyle.BorderLeft = BorderStyle.Thin;
+                                cStyle.BorderRight = BorderStyle.Thin;
+                                cStyle.BorderTop = BorderStyle.Thin;
+                                cStyle.VerticalAlignment = VerticalAlignment.Center;
+                                cStyle.Alignment = HorizontalAlignment.Justify;
+                                row.Height = 20 * 25;
+
+                                //单元格字体
+                                IFont font = workbook.CreateFont();
+                                font.FontName = "宋体";
+                                font.FontHeightInPoints = 10;
+                                font.Color = 8;
+                                font.Boldweight = (short)FontBoldWeight.Bold;
+
+                                cStyle.SetFont(font);
+
+                                cc.CellStyle = cStyle;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            using (FileStream file = new FileStream(fullPath, FileMode.OpenOrCreate))
+            {
+                workbook.Write(file);
+                workbook.Close();
+            }
+            return false;
         }
 
         /// <summary>

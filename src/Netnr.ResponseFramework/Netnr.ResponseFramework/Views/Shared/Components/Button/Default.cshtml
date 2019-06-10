@@ -14,14 +14,14 @@
                     if (list_sub.Count == 0)
                     {
                         <button id="@item.SbBtnId" class="@item.SbBtnClass @(item.SbBtnHide==1?"hidden":"")">
-                            <i class="@item.SbBtnIcon"></i>@item.SbBtnText
+                            <i class="@item.SbBtnIcon"></i> @item.SbBtnText
                         </button>
                     }
                     else
                     {
                         <div class="btn-group @(item.SbBtnHide==1?"hidden":"")">
                             <button id="@item.SbBtnId" class="@item.SbBtnClass" data-toggle="dropdown">
-                                <i class="@item.SbBtnIcon"></i>@item.SbBtnText <i class="caret"></i>
+                                <i class="@item.SbBtnIcon"></i> @item.SbBtnText <i class="caret"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-yellow">
                                 @foreach (var item_sub in list_sub)
@@ -34,7 +34,7 @@
 
                                     <li class="@(item_sub.SbBtnHide==1?"hidden":"")">
                                         <a id="@item_sub.SbBtnId" href="javascript:void(0)">
-                                            <i class="@item_sub.SbBtnIcon"></i>@item_sub.SbBtnText
+                                            <i class="@item_sub.SbBtnIcon"></i> @item_sub.SbBtnText
                                         </a>
                                     </li>
                                 }

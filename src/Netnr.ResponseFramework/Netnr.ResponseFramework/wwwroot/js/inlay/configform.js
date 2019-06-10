@@ -155,8 +155,13 @@ $('#list_Config_Form').click(function () {
                                     }
                                 });
                             }
+
                             //交换节点
-                            ExchangeNode(z.ConfigForm.editcol[0], next_node);
+                            if ($(next_node).prev()[0] == z.ConfigForm.editcol[0]) {
+                                z.ConfigForm.editcol.insertAfter(next_node);
+                            } else {
+                                z.ConfigForm.editcol.insertBefore(next_node);
+                            }
 
                             //计算序号
                             CFalignNum();
@@ -283,7 +288,11 @@ $('#list_Config_Form').click(function () {
                             }
                         });
                         if (eNode && sNode[0] != eNode[0]) {
-                            ExchangeNode(sNode[0], eNode[0]);
+                            if (eNode.prev()[0] == sNode[0]) {
+                                sNode.insertAfter(eNode);
+                            } else {
+                                sNode.insertBefore(eNode);
+                            }
                             CFalignNum();
                         }
                         this.onmouseover = null;
@@ -340,17 +349,6 @@ $('#list_Config_Form').click(function () {
     //显示模态框
     z.ConfigForm.CF.modal();
 });
-
-//两个节点交换
-function ExchangeNode(node1, node2) {
-    try {
-        var parentN = node1.parentNode, nextN1 = node1.nextSibling, nextN2 = node2.nextSibling;
-        if (nextN1) { parentN.insertBefore(node2, nextN1); }
-        else { parentN.appendChild(node2); }
-        if (nextN2) { parentN.insertBefore(node1, nextN2); }
-        else { parentN.appendChild(node1); }
-    } catch (e) { }
-}
 
 //重新序号
 function CFalignNum() {

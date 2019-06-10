@@ -227,6 +227,10 @@ namespace Netnr.Data
 
                 entity.Property(e => e.ColQuery).HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.ColRelation)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ColSort).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.ColTitle).HasMaxLength(200);

@@ -22,5 +22,18 @@ namespace Netnr.ResponseFramework.Controllers
         {
             return View();
         }
+
+        [Description("请升级你的浏览器")]
+        [AllowAnonymous]
+        public IActionResult UpdateBrowser()
+        {
+            return View();
+        }
+
+        [Description("向导")]
+        public IActionResult Guide()
+        {
+            return View();
+        }
     }
 }

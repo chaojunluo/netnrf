@@ -1,10 +1,21 @@
-﻿html {
-    overflow-x: hidden;
+﻿/* 
+    由于 iframe 标签设置 scrolling="no" ，所以页面不会出现滚动条
+    如需要出现滚动条，在页面用div包装并设置该样式，即用容器滚动条代替body滚动条
+*/
+.bodyscroll {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 }
 
 body {
     font-family: -apple-system,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif;
     background-color: #fff;
+    opacity: 0;
+    transition: opacity .5s;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -95,6 +106,14 @@ body {
             font-size: 16px;
             margin-left: 5px;
         }
+
+/* iframe全屏 */
+.iframeFullScreen iframe {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    z-index: 3999;
+}
 
 /* 选项卡·内容 */
 .tab-content {
@@ -201,6 +220,10 @@ body {
 
 .mb15 {
     margin-bottom: 15px;
+}
+
+.mr15 {
+    margin-right: 15px;
 }
 
 .px-0 {

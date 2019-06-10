@@ -38,15 +38,16 @@
                     <li>
                         后端采用 .NET Core + EF + SQL（SQLServer、MySQL、PostgreSQL、SQLite）
                         <ul>
+                            <li>数据库脚本放置于 <code>wwwroot/scripts/</code>目录下</li>
                             <li>数据库转换使用的工具：<a href="http://www.szmesoft.com/DB2DB">http://www.szmesoft.com/DB2DB</a></li>
+                            <li>全部采用 LINQ，跨数据库、避免SQL注入</li>
                         </ul>
                     </li>
-                    <li>数据库脚本放置于 <code>wwwroot/scripts/</code>目录下</li>
-                    <li>Visual Studio 2017+ 运行项目，跨数据库、跨平台支持</li>
+                    <li>Visual Studio 2017+ 运行项目</li>
                 </ul>
                 <h3>项目结构</h3>
                 <ul>
-                    <li>Netnr.Core 类库（引用NuGet）</li>
+                    <li>Netnr.Core 类库（引用NuGet，源码地址：<a href="https://github.com/netnr/Netnr.ClassLibrary">https://github.com/netnr/Netnr.ClassLibrary</a>）</li>
                     <li>Netnr.Data 数据访问、仓储</li>
                     <li>Netnr.Domain 实体</li>
                     <li>Netnr.Fast 常用方法</li>
@@ -67,10 +68,12 @@
                     <li>登录：系统账号登录，第三方账号登录（QQ、微博等）</li>
                     <li>权限：角色权限，控制菜单及页面按钮</li>
                     <li>表格：动态配置标题、宽度、排序、对齐方式、格式化、冻结、点击排序等</li>
-                    <li>表单：动态生成表单，自定义标题、排序、跨列、类型、必填等，支持多表单生成。</li>
-                    <li>查询：动态生成查询面板，自定义哪些字段支持查询</li>
+                    <li>表单：动态生成表单，自定义标题、排序、跨列、类型、必填等，支持多表单生成</li>
+                    <li>查询：动态生成查询面板，自定义字段查询，以JSON格式表达查询条件</li>
                     <li>日志：访问日志记录</li>
-                    <li>工具：数据库表信息展示，一键导出表结构为Excel</li>
+                    <li>工具：数据库表信息展示，一键导出数据库表结构为Excel</li>
+                    <li>任务：定时清理临时目录、重置演示数据库</li>
+                    <li>导出：公共导出Excel表，自定义查询主体，支持条件查询、列格式化，支持追加操作等</li>
                 </ul>
                 <h3>使用说明</h3>
                 <ol>
@@ -90,15 +93,15 @@
                 <hr>
                 <h3>截图</h3>
                 <h4>列表</h4>
-                <p><img src="https://netnr.gitee.io/gs/2018/05/18/403ce7d002.png" alt="列表"></p>
+                <p><img src="https://gs.zme.ink/2018/05/18/403ce7d002.png" alt="列表"></p>
                 <h4>新增、编辑、查看</h4>
-                <p><img src="https://netnr.gitee.io/gs/2018/05/18/8d25d345b2.png" alt="表单"></p>
+                <p><img src="https://gs.zme.ink/2018/05/18/8d25d345b2.png" alt="表单"></p>
                 <h4>列表配置</h4>
-                <p><img src="https://netnr.gitee.io/gs/2018/05/18/13da6572a3.png" alt="列表配置"></p>
+                <p><img src="https://gs.zme.ink/2018/05/18/13da6572a3.png" alt="列表配置"></p>
                 <h4>表单配置</h4>
-                <p><img src="https://netnr.gitee.io/gs/2018/05/18/0c98ee578c.png" alt="表单配置"></p>
+                <p><img src="https://gs.zme.ink/2018/05/18/0c98ee578c.png" alt="表单配置"></p>
                 <h4>角色权限配置（树）</h4>
-                <p><img src="https://netnr.gitee.io/gs/2018/08/16/31a55cac78.png" alt="角色权限配置"></p>
+                <p><img src="https://gs.zme.ink/2018/08/16/31a55cac78.png" alt="角色权限配置"></p>
                 <h3>第三方文档API</h3>
                 <ul>
                     <li><a href="https://ad.netnr.com/#EasyUI-1.5.2">EasyUI文档</a></li>

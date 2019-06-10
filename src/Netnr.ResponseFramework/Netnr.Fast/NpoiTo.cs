@@ -9,106 +9,38 @@ using NPOI.XSSF.UserModel;
 
 namespace Netnr.Fast
 {
+    /// <summary>
+    /// NPOI操作Excel
+    /// </summary>
     public class NpoiTo
     {
         /// <summary>
         /// DataTable生成Excel
         /// </summary>
         /// <param name="dt">数据表</param>
-        /// <param name="strExcelFileName">物理路径 + 文件名称 + 格式</param>
+        /// <param name="fullPathName">物理路径 + 文件名称 + 格式</param>
         /// <returns>返回生成状态</returns>
-        public static bool DataTableToExcel(DataTable dt, string strExcelFileName)
+        public static bool DataTableToExcel(DataTable dt, string fullPathName)
         {
-            try
-            {
-                IWorkbook workbook = new HSSFWorkbook();
-                if (strExcelFileName.ToLower().IndexOf(".xlsx")>0)
-                    workbook = new XSSFWorkbook();
-                
-                ISheet sheet = workbook.CreateSheet("Sheet1");
-                //标题样式
-                ICellStyle HeadercellStyle = workbook.CreateCellStyle();
-                HeadercellStyle.BorderBottom = BorderStyle.Thin;
-                HeadercellStyle.BorderLeft = BorderStyle.Thin;
-                HeadercellStyle.BorderRight = BorderStyle.Thin;
-                HeadercellStyle.BorderTop = BorderStyle.Thin;
-                HeadercellStyle.Alignment = HorizontalAlignment.Center;
-                HeadercellStyle.VerticalAlignment = VerticalAlignment.Center;
-
-                ////用column name 作为列名
-                int icolIndex = 0;
-                IRow headerRow = sheet.CreateRow(0);
-                headerRow.Height = 20 * 22;
-                foreach (DataColumn item in dt.Columns)
-                {
-                    ICell cell = headerRow.CreateCell(icolIndex);
-                    cell.SetCellValue(item.ColumnName);
-                    cell.CellStyle = HeadercellStyle;
-                    icolIndex++;
-                }
-
-                //单元格样式
-                ICellStyle cellStyle = workbook.CreateCellStyle();
-
-                //创建CellStyle与DataFormat并加载格式样式
-                IDataFormat dataformat = workbook.CreateDataFormat();
-                //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
-                cellStyle.DataFormat = dataformat.GetFormat("@");
-                cellStyle.BorderBottom = BorderStyle.Thin;
-                cellStyle.BorderLeft = BorderStyle.Thin;
-                cellStyle.BorderRight = BorderStyle.Thin;
-                cellStyle.BorderTop = BorderStyle.Thin;
-                cellStyle.VerticalAlignment = VerticalAlignment.Center;
-                //建立内容行
-                int iRowIndex = 1;
-                int iCellIndex = 0;
-                foreach (DataRow Rowitem in dt.Rows)
-                {
-                    IRow DataRow = sheet.CreateRow(iRowIndex);
-                    DataRow.Height = 20 * 16;
-                    foreach (DataColumn Colitem in dt.Columns)
-                    {
-                        ICell cell = DataRow.CreateCell(iCellIndex);
-                        cell.SetCellValue(Rowitem[Colitem].ToString());
-                        cell.CellStyle = cellStyle;
-                        iCellIndex++;
-                    }
-                    iCellIndex = 0;
-                    iRowIndex++;
-                }
-
-                //自适应列宽度
-                for (int i = 0; i < icolIndex; i++)
-                {
-                    sheet.AutoSizeColumn(i);
-                }
-                //写Excel
-                using (FileStream file = new FileStream(strExcelFileName, FileMode.OpenOrCreate))
-                {
-                    workbook.Write(file);
-                }
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var dc = new Dictionary<string, DataTable>() { { "Sheet1", dt } };
+            return DataTableToExcel(dc, fullPathName);
         }
 
         /// <summary>
         /// 导出多个工作簿
         /// </summary>
         /// <param name="dicSheet">工作簿名：数据表</param>
-        /// <param name="strExcelFileName">物理路径 + 文件名称 + 格式</param>
+        /// <param name="fullPathName">物理路径 + 文件名称 + 格式</param>
         /// <returns></returns>
-        public static bool DataTableToExcel(Dictionary<string, DataTable> dicSheet, string strExcelFileName)
+        public static bool DataTableToExcel(Dictionary<string, DataTable> dicSheet, string fullPathName)
         {
             try
             {
                 IWorkbook workbook = new HSSFWorkbook();
-                if (strExcelFileName.ToLower().IndexOf(".xlsx") > 0)
+
+                if (fullPathName.ToLower().Contains(".xlsx"))
                     workbook = new XSSFWorkbook();
+
                 foreach (var sheetitem in dicSheet.Keys)
                 {
                     var dt = dicSheet[sheetitem];
@@ -116,31 +48,47 @@ namespace Netnr.Fast
                     ISheet sheet = workbook.CreateSheet(sheetitem);
 
                     //标题样式
-                    ICellStyle HeadercellStyle = workbook.CreateCellStyle();
-                    HeadercellStyle.BorderBottom = BorderStyle.Thin;
-                    HeadercellStyle.BorderLeft = BorderStyle.Thin;
-                    HeadercellStyle.BorderRight = BorderStyle.Thin;
-                    HeadercellStyle.BorderTop = BorderStyle.Thin;
-                    HeadercellStyle.Alignment = HorizontalAlignment.Center;
-                    HeadercellStyle.VerticalAlignment = VerticalAlignment.Center;
+                    ICellStyle hStyle = workbook.CreateCellStyle();
+                    hStyle.BorderBottom = BorderStyle.Thin;
+                    hStyle.BorderLeft = BorderStyle.Thin;
+                    hStyle.BorderRight = BorderStyle.Thin;
+                    hStyle.BorderTop = BorderStyle.Thin;
+                    //水平垂直居中
+                    hStyle.Alignment = HorizontalAlignment.Center;
+                    hStyle.VerticalAlignment = VerticalAlignment.Center;
+                    //背景颜色
+                    hStyle.FillForegroundColor = 9;
+                    hStyle.FillPattern = FillPattern.SolidForeground;
 
-                    //用column name 作为列名
+                    ////用column name 作为列名
                     int icolIndex = 0;
                     IRow headerRow = sheet.CreateRow(0);
-                    headerRow.Height = 20 * 22;
+                    headerRow.Height = 20 * 20;
                     foreach (DataColumn item in dt.Columns)
                     {
                         ICell cell = headerRow.CreateCell(icolIndex);
                         cell.SetCellValue(item.ColumnName);
-                        cell.CellStyle = HeadercellStyle;
+
+                        //单元格字体
+                        IFont font = workbook.CreateFont();
+                        font.FontName = "宋体";
+                        font.FontHeightInPoints = 10;
+                        font.Color = 8;
+                        font.Boldweight = (short)FontBoldWeight.Bold;
+
+                        hStyle.SetFont(font);
+
+                        cell.CellStyle = hStyle;
                         icolIndex++;
                     }
 
                     //单元格样式
                     ICellStyle cellStyle = workbook.CreateCellStyle();
 
+                    //创建CellStyle与DataFormat并加载格式样式
+                    IDataFormat dataformat = workbook.CreateDataFormat();
                     //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
-                    cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
+                    cellStyle.DataFormat = dataformat.GetFormat("@");
                     cellStyle.BorderBottom = BorderStyle.Thin;
                     cellStyle.BorderLeft = BorderStyle.Thin;
                     cellStyle.BorderRight = BorderStyle.Thin;
@@ -170,12 +118,19 @@ namespace Netnr.Fast
                     {
                         sheet.AutoSizeColumn(i);
                     }
+                    //写Excel
+                    using (FileStream file = new FileStream(fullPathName, FileMode.OpenOrCreate))
+                    {
+                        workbook.Write(file);
+                    }
                 }
+
                 //写Excel
-                using (FileStream file = new FileStream(strExcelFileName, FileMode.OpenOrCreate))
+                using (FileStream file = new FileStream(fullPathName, FileMode.OpenOrCreate))
                 {
                     workbook.Write(file);
                 }
+
                 return true;
             }
             catch (Exception)
@@ -184,14 +139,22 @@ namespace Netnr.Fast
             }
         }
 
-        public static DataTable ExcelToDataTable(IWorkbook workbook, int iSheetIndex, string extName)
+        /// <summary>
+        /// 读取Excel为DataTable
+        /// </summary>
+        /// <param name="workbook"></param>
+        /// <param name="iSheetIndex">工作薄索引</param>
+        /// <param name="extName">文件格式后缀</param>
+        /// <param name="skipRow">跳过指定行开始读取，默认0</param>
+        /// <returns></returns>
+        public static DataTable ExcelToDataTable(IWorkbook workbook, int iSheetIndex, string extName, int skipRow = 0)
         {
             DataTable dt = new DataTable();
 
             ISheet sheet = workbook.GetSheetAt(iSheetIndex);
 
             //列头
-            foreach (ICell item in sheet.GetRow(sheet.FirstRowNum).Cells)
+            foreach (ICell item in sheet.GetRow(sheet.FirstRowNum + skipRow).Cells)
             {
                 dt.Columns.Add(item.ToString(), typeof(string));
             }
@@ -209,7 +172,7 @@ namespace Netnr.Fast
                 {
                     row = (XSSFRow)rows.Current;
                 }
-                if (row.RowNum == sheet.FirstRowNum)
+                if (row.RowNum <= sheet.FirstRowNum + skipRow)
                 {
                     continue;
                 }
@@ -297,20 +260,18 @@ namespace Netnr.Fast
         }
 
         /// <summary>
-        /// Excel文件导成Datatable
+        /// 读取Excel为DataTable
         /// </summary>
-        /// <param name="strFilePath">Excel文件目录地址</param>
+        /// <param name="fullPathName">Excel文件目录地址</param>
         /// <param name="iSheetIndex">Excel sheet index</param>
+        /// <param name="skipRow">跳过指定行开始读取，默认0</param>
         /// <returns></returns>
-        public static DataTable ExcelToDataTable(string strFilePath, int iSheetIndex)
+        public static DataTable ExcelToDataTable(string fullPathName, int iSheetIndex, int skipRow = 0)
         {
-            string strExtName = Path.GetExtension(strFilePath);
-
-            DataTable dt = new DataTable();
-
             IWorkbook workbook = null;
 
-            using (FileStream file = new FileStream(strFilePath, FileMode.Open, FileAccess.Read))
+            string strExtName = Path.GetExtension(fullPathName);
+            using (FileStream file = new FileStream(fullPathName, FileMode.Open, FileAccess.Read))
             {
                 if (strExtName.Equals(".xls"))
                 {
@@ -322,15 +283,21 @@ namespace Netnr.Fast
                 }
             }
 
-            dt = ExcelToDataTable(workbook, iSheetIndex, strExtName);
-
-            return dt;
+            return ExcelToDataTable(workbook, iSheetIndex, strExtName, skipRow);
         }
 
-        public static DataTable ExcelToDataTable(Stream s, int iSheetIndex, string extName)
+        /// <summary>
+        /// 读取Excel为DataTable
+        /// </summary>
+        /// <param name="s">流</param>
+        /// <param name="iSheetIndex">工作薄索引</param>
+        /// <param name="extName">文件格式后缀</param>
+        /// <param name="skipRow">跳过指定行开始读取，默认0</param>
+        /// <returns></returns>
+        public static DataTable ExcelToDataTable(Stream s, int iSheetIndex, string extName, int skipRow = 0)
         {
-            DataTable dt = new DataTable();
             IWorkbook workbook = null;
+
             if (extName.Equals(".xls"))
             {
                 workbook = new HSSFWorkbook(s);
@@ -339,8 +306,8 @@ namespace Netnr.Fast
             {
                 workbook = new XSSFWorkbook(s);
             }
-            dt = ExcelToDataTable(workbook, iSheetIndex, extName);
-            return dt;
+
+            return ExcelToDataTable(workbook, iSheetIndex, extName, skipRow);
         }
     }
 }
