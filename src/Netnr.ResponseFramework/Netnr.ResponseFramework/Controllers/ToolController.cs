@@ -352,7 +352,7 @@ namespace Netnr.ResponseFramework.Controllers
                 dt.Columns.RemoveAt(0);
                 dt.Columns.RemoveAt(0);
 
-                var path = GlobalTo.WebRootPath + "/upload/temp/";
+                var path = (GlobalTo.WebRootPath + "/upload/temp/").Replace("\\", "/");
                 var filename = "数据库表设计_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
                 Fast.NpoiTo.DataTableToExcel(dt, path + filename);
 
