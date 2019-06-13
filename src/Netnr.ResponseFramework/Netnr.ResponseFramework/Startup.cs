@@ -73,6 +73,12 @@ namespace Netnr.ResponseFramework
                 //注册过滤器
                 options.Filters.Add(new Filters.FilterConfigs.ErrorActionFilter());
                 options.Filters.Add(new Filters.FilterConfigs.GlobalActionAttribute());
+            }).AddJsonOptions(options =>
+            {
+                //Action原样输出JSON
+                options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+                //日期格式化
+                options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             });
 
             //授权访问信息

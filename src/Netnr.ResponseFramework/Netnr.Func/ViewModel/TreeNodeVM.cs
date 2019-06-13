@@ -1,11 +1,11 @@
 ﻿namespace Netnr.Func.ViewModel
 {
     /// <summary>
-    /// JSON节点
+    /// Tree JSON 节点
     /// 推荐所有的JSON输出用此实体，保证一致性，即页面接收的JSON全是这种格式，方便维护。
     /// 如果不够用，自己灵活追加。
     /// </summary>
-    public class JSONodeVM
+    public class TreeNodeVM
     {
         public string id { get; set; }
         public string pid { get; set; }

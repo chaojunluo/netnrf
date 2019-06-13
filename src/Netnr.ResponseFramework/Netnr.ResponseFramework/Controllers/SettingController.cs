@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
 using Netnr.Domain;
 using Netnr.Func.ViewModel;
+using Newtonsoft.Json.Linq;
 
 namespace Netnr.ResponseFramework.Controllers
 {
@@ -26,28 +29,28 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询系统按钮")]
-        public string QuerySysButton(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysButton(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var list = db.SysButton.OrderBy(x => x.SbBtnOrder).ToList();
                 var tree = Core.TreeTo.ListToTree(list, "SbPid", "SbId", new List<string> { Guid.Empty.ToString() });
-                or.data = tree.ToJArray();
+                ovm.data = tree.ToJArray();
 
                 //列
-                if (param.columnsExists != 1)
+                if (ivm.columnsExists != 1)
                 {
-                    or.columns = db.SysTableConfig.Where(x => x.TableName == param.tableName).OrderBy(x => x.ColOrder).ToList();
+                    ovm.columns = db.SysTableConfig.Where(x => x.TableName == ivm.tableName).OrderBy(x => x.ColOrder).ToList();
                 }
             }
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("保存系统按钮")]
-        public string SaveSysButton(SysButton mo, string savetype)
+        public ActionResultVM SaveSysButton(SysButton mo, string savetype)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
 
             if (string.IsNullOrWhiteSpace(mo.SbPid))
             {
@@ -68,26 +71,33 @@ namespace Netnr.ResponseFramework.Controllers
                 {
                     db.SysButton.Update(mo);
                 }
-                num = db.SaveChanges();
+
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
 
             //清理缓存
             Core.CacheTo.Remove(Func.Common.GlobalCacheKey.SysButton);
 
-            return num > 0 ? "success" : "fail";
+            return vm;
         }
 
         [Description("删除系统按钮")]
-        public string DelSysButton(string id)
+        public ActionResultVM DelSysButton(string id)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 var mo = db.SysButton.Find(id);
                 db.SysButton.Remove(mo);
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         #endregion
@@ -101,28 +111,29 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询系统菜单")]
-        public string QuerySysMenu(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysMenu(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var list = db.SysMenu.OrderBy(x => x.SmOrder).ToList();
                 var tree = Core.TreeTo.ListToTree(list, "SmPid", "SmId", new List<string> { Guid.Empty.ToString() });
-                or.data = tree.ToJArray();
+                ovm.data = tree.ToJArray();
 
                 //列
-                if (param.columnsExists != 1)
+                if (ivm.columnsExists != 1)
                 {
-                    or.columns = db.SysTableConfig.Where(x => x.TableName == param.tableName).OrderBy(x => x.ColOrder).ToList();
+                    ovm.columns = db.SysTableConfig.Where(x => x.TableName == ivm.tableName).OrderBy(x => x.ColOrder).ToList();
                 }
             }
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("保存系统菜单")]
-        public string SaveSysMenu(SysMenu mo, string savetype)
+        public ActionResultVM SaveSysMenu(SysMenu mo, string savetype)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             if (string.IsNullOrWhiteSpace(mo.SmPid))
             {
                 mo.SmPid = Guid.Empty.ToString();
@@ -138,26 +149,33 @@ namespace Netnr.ResponseFramework.Controllers
                 {
                     db.SysMenu.Update(mo);
                 }
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
 
             //清理缓存
             Core.CacheTo.Remove(Func.Common.GlobalCacheKey.SysMenu);
 
-            return num > 0 ? "success" : "fail";
+            return vm;
         }
 
         [Description("删除系统菜单")]
-        public string DelSysMenu(string id)
+        public ActionResultVM DelSysMenu(string id)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 var mo = db.SysMenu.Find(id);
                 db.SysMenu.Remove(mo);
-                num = db.SaveChanges();
+
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         #endregion
@@ -171,21 +189,22 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询系统角色")]
-        public string QuerySysRole(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysRole(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.SysRole;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("保存系统角色")]
-        public string SaveSysRole(SysRole mo, string savetype)
+        public ActionResultVM SaveSysRole(SysRole mo, string savetype)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 if (savetype == "add")
@@ -198,15 +217,19 @@ namespace Netnr.ResponseFramework.Controllers
                 {
                     db.SysRole.Update(mo);
                 }
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         [Description("复制角色权限")]
-        public string CopySysRoleAuth(SysRole mo, string copyid)
+        public ActionResultVM CopySysRoleAuth(SysRole mo, string copyid)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 var list = db.SysRole.Where(x => x.SrId == mo.SrId || x.SrId == copyid).ToList();
@@ -217,30 +240,36 @@ namespace Netnr.ResponseFramework.Controllers
                     item.SrButtons = copymo.SrButtons;
                 }
                 db.SysRole.UpdateRange(list);
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
 
-            return num > 0 ? "success" : "fail";
+            return vm;
         }
 
         [Description("删除系统角色")]
-        public string DelSysRole(string id)
+        public ActionResultVM DelSysRole(string id)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 if (db.SysUser.Where(x => x.SrId == id).Count() > 0)
                 {
-                    return "exists";
+                    vm.Set(ARTag.exist);
                 }
                 else
                 {
                     var mo = db.SysRole.Find(id);
                     db.SysRole.Remove(mo);
-                    num = db.SaveChanges();
+                    int num = db.SaveChanges();
+
+                    vm.Set(num > 0);
                 }
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         #endregion
@@ -254,9 +283,9 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询系统用户")]
-        public string QuerySysUser(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysUser(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = from a in db.SysUser
@@ -275,56 +304,69 @@ namespace Netnr.ResponseFramework.Controllers
                                 OldUserPwd = a.SuPwd,
                                 b.SrName
                             };
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("保存系统用户")]
-        public string SaveSysUser(SysUser mo, string savetype, string OldUserPwd)
+        public ActionResultVM SaveSysUser(SysUser mo, string savetype, string OldUserPwd)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 if (savetype == "add")
                 {
                     if (db.SysUser.Where(x => x.SuName == mo.SuName).Count() > 0)
                     {
-                        return "exists";
+                        vm.Set(ARTag.exist);
                     }
-                    mo.SuId = Guid.NewGuid().ToString();
-                    mo.SuCreateTime = DateTime.Now;
-                    mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
-                    db.SysUser.Add(mo);
+                    else
+                    {
+                        mo.SuId = Guid.NewGuid().ToString();
+                        mo.SuCreateTime = DateTime.Now;
+                        mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
+                        db.SysUser.Add(mo);
+                    }
                 }
                 else
                 {
                     if (db.SysUser.Where(x => x.SuName == mo.SuName && x.SuId != mo.SuId).Count() > 0)
                     {
-                        return "exists";
+                        vm.Set(ARTag.exist);
                     }
-                    if (mo.SuPwd != OldUserPwd)
+                    else
                     {
-                        mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
+                        if (mo.SuPwd != OldUserPwd)
+                        {
+                            mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
+                        }
+                        db.SysUser.Update(mo);
                     }
-                    db.SysUser.Update(mo);
                 }
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         [Description("删除系统用户")]
-        public string DelSysUser(string id)
+        public ActionResultVM DelSysUser(string id)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 var mo = db.SysUser.Find(id);
                 db.SysUser.Remove(mo);
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+                vm.Set(num > 0);
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         #endregion
@@ -338,15 +380,15 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询系统日志")]
-        public string QuerySysLog(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysLog(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.SysLog;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
 
         #endregion
@@ -360,21 +402,22 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询表配置")]
-        public string QuerySysTableConfig(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysTableConfig(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.SysTableConfig;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("保存表配置")]
-        public string SaveSysTableConfig(SysTableConfig mo, List<string> ColRelation, string savetype)
+        public ActionResultVM SaveSysTableConfig(SysTableConfig mo, List<string> ColRelation, string savetype)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             mo.ColRelation = string.Join(',', ColRelation);
             using (var db = new ContextBase())
             {
@@ -387,22 +430,29 @@ namespace Netnr.ResponseFramework.Controllers
                 {
                     db.SysTableConfig.Update(mo);
                 }
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         [Description("删除表配置")]
-        public string DelSysTableConfig(string id)
+        public ActionResultVM DelSysTableConfig(string id)
         {
-            int num = 0;
+            var vm = new ActionResultVM();
+
             using (var db = new ContextBase())
             {
                 var mo = db.SysTableConfig.Find(id);
                 db.SysTableConfig.Remove(mo);
-                num = db.SaveChanges();
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
             }
-            return num > 0 ? "success" : "fail";
+
+            return vm;
         }
 
         #endregion

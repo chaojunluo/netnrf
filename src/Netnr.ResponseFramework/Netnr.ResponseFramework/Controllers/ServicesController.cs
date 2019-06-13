@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -18,28 +19,28 @@ namespace Netnr.ResponseFramework.Controllers
         #region 定时任务
 
         [Description("执行任务")]
-        public FunctionResultVM ExecTask(string id)
+        public ActionResultVM ExecTask(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 id = RouteData.Values["id"]?.ToString();
             }
 
-            var vm = new FunctionResultVM();
+            var vm = new ActionResultVM();
 
             try
             {
                 switch (id)
                 {
                     default:
-                        vm.Set(FRTag.invalid);
+                        vm.Set(ARTag.invalid);
                         break;
 
                     //重置数据库
                     case "resetdatabase":
                         {
                             vm.data = new ToolController().ResetDataBase();
-                            vm.Set(FRTag.success);
+                            vm.Set(ARTag.success);
                         }
                         break;
 
@@ -48,13 +49,22 @@ namespace Netnr.ResponseFramework.Controllers
                         {
                             string directoryPath = (GlobalTo.WebRootPath + "/upload/temp/").Replace("\\", "/");
 
+                            var listLog = new List<string>();
+
                             //删除文件
                             var listFile = Directory.GetFiles(directoryPath).ToList();
                             foreach (var path in listFile)
                             {
                                 if (!path.Contains("README"))
                                 {
-                                    System.IO.File.Delete(path);
+                                    try
+                                    {
+                                        System.IO.File.Delete(path);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        listLog.Add("删除文件异常：" + ex.Message);
+                                    }
                                 }
                             }
 
@@ -62,11 +72,20 @@ namespace Netnr.ResponseFramework.Controllers
                             var listFolder = Directory.GetDirectories(directoryPath).ToList();
                             foreach (var path in listFolder)
                             {
-                                Directory.Delete(path, true);
+                                try
+                                {
+                                    Directory.Delete(path, true);
+                                }
+                                catch (Exception ex)
+                                {
+                                    listLog.Add("删除文件夹异常：" + ex.Message);
+                                }
                             }
 
-                            vm.data = $"删除文件{listFile.Count}个，删除{listFolder.Count}个文件夹";
-                            vm.Set(FRTag.success);
+                            listLog.Insert(0, $"删除文件{listFile.Count}个，删除{listFolder.Count}个文件夹");
+
+                            vm.data = listLog;
+                            vm.Set(ARTag.success);
                         }
                         break;
                 }
@@ -93,7 +112,7 @@ namespace Netnr.ResponseFramework.Controllers
                         var sc = new ServicesController();
 
                         //执行结果
-                        var vm = new FunctionResultVM();
+                        var vm = new ActionResultVM();
                         vm.code = -9;
 
                         //重置一次数据库
@@ -125,6 +144,7 @@ namespace Netnr.ResponseFramework.Controllers
                 }
             }
         }
+
         #endregion
     }
 }

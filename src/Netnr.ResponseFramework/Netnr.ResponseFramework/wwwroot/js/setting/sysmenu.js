@@ -1,6 +1,6 @@
 ﻿//载入
 var gd1 = z.Grid();
-gd1.url = "/Setting/QuerySysMenu?tableName=sysmenu";
+gd1.url = "/Setting/QuerySysMenu?tableName=" + z.TableName;
 gd1.type = "treegrid";
 gd1.idField = "SmId";
 gd1.treeField = "SmName";
@@ -89,8 +89,9 @@ $('#fv_save_1').click(function () {
             url: "/Setting/SaveSysMenu?savetype=" + z.btnTrigger,
             type: "post",
             data: $("#fv_form_1").serialize(),
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     gd1.load();
 
                     var zobj = $('#SmPid')[0].zobj;
@@ -99,7 +100,7 @@ $('#fv_save_1').click(function () {
 
                     $('#fv_modal_1').modal('hide');
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             },
             error: function () {
@@ -122,11 +123,12 @@ z.button('del', function () {
         $.ajax({
             url: "/Setting/DelSysMenu?id=" + rowData.SmId,
             type: "post",
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     gd1.load();
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             }
         })

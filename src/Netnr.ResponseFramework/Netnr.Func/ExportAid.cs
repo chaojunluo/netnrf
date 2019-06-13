@@ -19,41 +19,12 @@ namespace Netnr.Func
     public class ExportAid
     {
         /// <summary>
-        /// 查询拼接
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="query"></param>
-        /// <param name="param"></param>
-        /// <param name="db"></param>
-        /// <param name="listColumn">表配置</param>
-        /// <returns></returns>
-        public static List<T> QueryJoin<T>(IQueryable<T> query, QueryDataVM.GetParams param, ContextBase db, out List<SysTableConfig> listColumn)
-        {
-            //条件
-            query = Common.QueryWhere(query, param);
-
-            //排序
-            if (!string.IsNullOrWhiteSpace(param.sort))
-            {
-                query = Fast.QueryableTo.OrderBy(query, param.sort, param.order);
-            }
-
-            //数据
-            List<T> list = query.ToList();
-
-            //列
-            listColumn = db.SysTableConfig.Where(x => x.TableName == param.uri).OrderBy(x => x.ColOrder).ToList();
-
-            return list;
-        }
-
-        /// <summary>
         /// 数据实体映射
         /// </summary>
-        public static DataTable ModelsMapping<T>(string tableName, List<T> listModels, List<SysTableConfig> listColumn)
+        public static DataTable ModelsMapping(QueryDataInputVM ivm, QueryDataOutputVM ovm)
         {
             //转表（类型为字符串）
-            DataTable dt = ToDataTableForString(listModels);
+            DataTable dt = ovm.table;
 
             //更改列长度
             foreach (DataColumn col in dt.Columns)
@@ -61,8 +32,10 @@ namespace Netnr.Func
                 col.MaxLength = short.MaxValue * 9;
             }
 
+            var listColumns = ovm.columns as List<SysTableConfig>;
+
             //调整列排序
-            var colorder = listColumn.Where(x => dt.Columns.Contains(x.ColField)).OrderBy(x => x.ColOrder).ToList();
+            var colorder = listColumns.Where(x => dt.Columns.Contains(x.ColField)).OrderBy(x => x.ColOrder).ToList();
             for (int i = 0; i < colorder.Count; i++)
             {
                 var ci = colorder[i];
@@ -78,13 +51,13 @@ namespace Netnr.Func
                 for (int i = 0; i < dt.Columns.Count; i++)
                 {
                     string field = dt.Columns[i].ColumnName;
-                    dr[i] = CellFormat(tableName, field, dr[i].ToString(), dr);
+                    dr[i] = CellFormat(ivm.tableName, field, dr[i].ToString(), dr);
                 }
             }
             #endregion
 
             //剔除不导出的列
-            List<SysTableConfig> removeCol = listColumn.Where(x => x.ColExport != 1).ToList();
+            List<SysTableConfig> removeCol = listColumns.Where(x => x.ColExport != 1).ToList();
             foreach (SysTableConfig col in removeCol)
             {
                 if (dt.Columns.Contains(col.ColField))
@@ -96,7 +69,7 @@ namespace Netnr.Func
             List<string> removeColNotExists = new List<string>();
             foreach (DataColumn dc in dt.Columns)
             {
-                if (listColumn.Where(x => x.ColField == dc.ColumnName).Count() == 0)
+                if (listColumns.Where(x => x.ColField == dc.ColumnName).Count() == 0)
                 {
                     removeColNotExists.Add(dc.ColumnName);
                 }
@@ -107,7 +80,7 @@ namespace Netnr.Func
             }
 
             //更改列名为中文（重复的列，后面追加4位随机数）
-            foreach (SysTableConfig col in listColumn)
+            foreach (SysTableConfig col in listColumns)
             {
                 if (dt.Columns.Contains(col.ColField))
                 {
@@ -295,13 +268,13 @@ namespace Netnr.Func
         /// 操作已经生成的Excel
         /// </summary>
         /// <param name="fullPath"></param>
-        /// <param name="uri"></param>
+        /// <param name="ivm"></param>
         /// <returns></returns>
-        public static bool ExcelDraw(string fullPath, string uri)
+        public static bool ExcelDraw(string fullPath, QueryDataInputVM ivm)
         {
             //需要绘制的记录
             var needDraw = "DatabaseTableDesign,syslog".ToLower().Split(',');
-            if (!needDraw.Contains(uri.ToLower()))
+            if (!needDraw.Contains(ivm.tableName?.ToLower()))
             {
                 return true;
             }
@@ -322,20 +295,9 @@ namespace Netnr.Func
                 }
             }
 
-            //单元格样式
-            ICellStyle cellStyle = workbook.CreateCellStyle();
-
-            //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
-            cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
-            cellStyle.BorderBottom = BorderStyle.Thin;
-            cellStyle.BorderLeft = BorderStyle.Thin;
-            cellStyle.BorderRight = BorderStyle.Thin;
-            cellStyle.BorderTop = BorderStyle.Thin;
-            cellStyle.VerticalAlignment = VerticalAlignment.Center;
-
             ISheet sheet = workbook.GetSheetAt(workbook.ActiveSheetIndex);
 
-            switch (uri.ToLower())
+            switch (ivm.tableName?.ToLower())
             {
                 //数据库表设计
                 case "databasetabledesign":
@@ -344,6 +306,8 @@ namespace Netnr.Func
                         sheet.CreateFreezePane(0, 1);
 
                         var rows = sheet.GetRowEnumerator();
+
+                        var styleH = CreateCellStyle(workbook, StyleType.head);
 
                         while (rows.MoveNext())
                         {
@@ -363,29 +327,7 @@ namespace Netnr.Func
                                 //合并
                                 sheet.AddMergedRegion(new CellRangeAddress(row.RowNum, row.RowNum, 0, row.Cells.Count - 1));
 
-                                //单元格样式
-                                ICellStyle cStyle = workbook.CreateCellStyle();
-
-                                //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
-                                cStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
-                                cStyle.BorderBottom = BorderStyle.Thin;
-                                cStyle.BorderLeft = BorderStyle.Thin;
-                                cStyle.BorderRight = BorderStyle.Thin;
-                                cStyle.BorderTop = BorderStyle.Thin;
-                                cStyle.VerticalAlignment = VerticalAlignment.Center;
-                                cStyle.Alignment = HorizontalAlignment.Justify;
-                                row.Height = 20 * 25;
-
-                                //单元格字体
-                                IFont font = workbook.CreateFont();
-                                font.FontName = "宋体";
-                                font.FontHeightInPoints = 10;
-                                font.Color = 8;
-                                font.Boldweight = (short)FontBoldWeight.Bold;
-
-                                cStyle.SetFont(font);
-
-                                cc.CellStyle = cStyle;
+                                cc.CellStyle = styleH;
                             }
                         }
                     }
@@ -403,23 +345,117 @@ namespace Netnr.Func
         }
 
         /// <summary>
-        /// 实体转表，类型为字符串
+        /// 单元格公共样式枚举
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public static DataTable ToDataTableForString<T>(List<T> list)
+        public enum StyleType
         {
-            Type elementType = typeof(T);
-            var t = new DataTable();
-            elementType.GetProperties().ToList().ForEach(propInfo => t.Columns.Add(propInfo.Name, typeof(string)));
-            foreach (T item in list)
+            /// <summary>
+            /// 正常，默认
+            /// </summary>
+            normal,
+            /// <summary>
+            /// 头部
+            /// </summary>
+            head,
+            /// <summary>
+            /// 白色字体，绿色背景
+            /// </summary>
+            whiteGreen,
+            /// <summary>
+            /// 白色字体，橙色背景
+            /// </summary>
+            whiteOrange,
+            /// <summary>
+            /// 蓝色字体
+            /// </summary>
+            blue,
+            /// <summary>
+            /// 绿色字体
+            /// </summary>
+            green,
+            /// <summary>
+            /// 黑色字体，灰色背景
+            /// </summary>
+            blankGray,
+            /// <summary>
+            /// 加粗
+            /// </summary>
+            bold,
+            /// <summary>
+            /// 头部无边框
+            /// </summary>
+            headNoBorder,
+        }
+
+        /// <summary>
+        /// 定义单元格常用到样式
+        /// </summary>
+        /// <param name="wb"></param>
+        /// <param name="st"></param>
+        /// <returns></returns>
+        static ICellStyle CreateCellStyle(IWorkbook wb, StyleType st = StyleType.normal)
+        {
+            ICellStyle cellStyle = wb.CreateCellStyle();
+
+            //为避免日期格式被Excel自动替换，所以设定 format 为 『@』 表示一率当成text來看
+            cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("@");
+            cellStyle.BorderBottom = BorderStyle.Thin;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
+            //水平垂直居中
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
+            //背景颜色
+            cellStyle.FillForegroundColor = 9;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+
+            //默认
+            IFont font = wb.CreateFont();
+            font.FontHeightInPoints = 10;
+            font.Color = 8;
+
+            switch (st)
             {
-                var row = t.NewRow();
-                elementType.GetProperties().ToList().ForEach(propInfo => row[propInfo.Name] = propInfo.GetValue(item, null) ?? DBNull.Value);
-                t.Rows.Add(row);
+                case StyleType.normal:
+                    break;
+                case StyleType.head:
+                    font.FontHeightInPoints = 12;
+                    font.Boldweight = 700;
+                    break;
+                case StyleType.whiteGreen:
+                    font.Color = 9;
+                    cellStyle.FillForegroundColor = 17;
+                    cellStyle.FillPattern = FillPattern.SolidForeground;
+                    break;
+                case StyleType.whiteOrange:
+                    font.Color = 9;
+                    cellStyle.FillForegroundColor = 51;
+                    cellStyle.FillPattern = FillPattern.SolidForeground;
+                    break;
+                case StyleType.blue:
+                    font.Color = 12;
+                    break;
+                case StyleType.green:
+                    font.Color = 17;
+                    break;
+                case StyleType.blankGray:
+                    font.Color = 8;
+                    cellStyle.FillForegroundColor = 22;
+                    cellStyle.FillPattern = FillPattern.SolidForeground;
+                    break;
+                case StyleType.bold:
+                    font.Boldweight = 700;
+                    break;
+                case StyleType.headNoBorder:
+                    font.FontHeightInPoints = 16;
+                    font.Boldweight = 700;
+                    break;
             }
-            return t;
+
+            cellStyle.SetFont(font);
+
+            return cellStyle;
         }
     }
 }

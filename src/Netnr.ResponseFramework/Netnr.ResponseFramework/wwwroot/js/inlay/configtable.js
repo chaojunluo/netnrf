@@ -120,18 +120,19 @@ $('#list_Config_Table').click(function () {
             $.ajax({
                 url: '/inlay/SaveConfigTable',
                 type: 'POST',
+                dataType: 'json',
                 data: {
                     tablename: z.TableName,
                     rows: JSON.stringify(rowData)
                 },
                 success: function (data) {
-                    if (data == "success") {
+                    if (data.code == 200) {
                         z.mdct.hide();
                         art('操作成功，刷新生效，是否刷新？', function () {
                             location.reload(false);
                         })
                     } else {
-                        art('fail');
+                        art(data.msg);
                     }
                 },
                 error: function () {

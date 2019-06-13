@@ -39,10 +39,10 @@ namespace Netnr.ResponseFramework.Controllers
             }
 
             #region 把实体转为JSON节点实体
-            var listNode = new List<JSONodeVM>();
+            var listNode = new List<TreeNodeVM>();
             foreach (var item in listMenu)
             {
-                listNode.Add(new JSONodeVM()
+                listNode.Add(new TreeNodeVM()
                 {
                     id = item.SmId,
                     pid = item.SmPid,
@@ -70,10 +70,10 @@ namespace Netnr.ResponseFramework.Controllers
             var list = Func.Common.QuerySysButtonList(x => x.SbStatus == 1);
 
             #region 把实体转为JSON节点实体
-            var listNode = new List<JSONodeVM>();
+            var listNode = new List<TreeNodeVM>();
             foreach (var item in list)
             {
-                listNode.Add(new JSONodeVM()
+                listNode.Add(new TreeNodeVM()
                 {
                     id = item.SbId,
                     pid = item.SbPid,
@@ -96,23 +96,21 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("公共查询：角色列表")]
-        public string QueryRole()
+        public List<ValueTextVM> QueryRole()
         {
-            string result = "[]";
             using (var db = new ContextBase())
             {
                 var query = from a in db.SysRole
                             where a.SrStatus == 1
                             orderby a.SrCreateTime
-                            select new
+                            select new ValueTextVM
                             {
                                 value = a.SrId,
                                 text = a.SrName
                             };
                 var list = query.ToList();
-                result = list.ToJson();
+                return list;
             }
-            return result;
         }
     }
 }

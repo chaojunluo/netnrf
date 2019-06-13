@@ -148,7 +148,7 @@ var col_custom_colhide = col_custom_formhide = function (value) {
 
 //载入
 var gd1 = z.Grid();
-gd1.url = "/RF/QuerySysTableConfig?tableName=systableconfig"
+gd1.url = "/RF/QuerySysTableConfig?tableName=SysTableConfig"
 gd1.multiSort = true;
 gd1.sortName = "TableName,ColOrder";
 gd1.sortOrder = "asc,asc";

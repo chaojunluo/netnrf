@@ -5,17 +5,17 @@ namespace Netnr.Func.ViewModel
     /// <summary>
     /// 通用请求方法返回对象
     /// </summary>
-    public class FunctionResultVM
+    public class ActionResultVM
     {
         /// <summary>
-        /// 错误码，200表示成功，-1表示异常，其它自定义
+        /// 错误码，200 表示成功，-1 表示异常，其它自定义建议从 1 开始累加
         /// </summary>
         public int code { get; set; } = 0;
 
         /// <summary>
         /// 消息
         /// </summary>
-        public string message { get; set; }
+        public string msg { get; set; }
 
         /// <summary>
         /// 主体数据
@@ -39,34 +39,51 @@ namespace Netnr.Func.ViewModel
         {
             get
             {
-                return ((endTime ?? DateTime.Now) - startTime).TotalMilliseconds;
+                endTime = endTime ?? DateTime.Now;
+                return (endTime.Value - startTime).TotalMilliseconds;
             }
         }
 
         /// <summary>
-        /// 设置快捷标签，赋值code、message
+        /// 设置快捷标签，赋值code、msg
         /// </summary>
         /// <param name="tag">快捷标签枚举</param>
-        public void Set(FRTag tag)
+        public void Set(ARTag tag)
         {
             code = Convert.ToInt32(tag);
-            message = tag.ToString();
+            msg = tag.ToString();
 
             endTime = DateTime.Now;
         }
 
         /// <summary>
-        /// 设置快捷标签，赋值code、message
+        /// 设置快捷标签，赋值code、msg
+        /// </summary>
+        /// <param name="tag">快捷标签枚举</param>
+        public void Set(bool isyes)
+        {
+            if (isyes)
+            {
+                Set(ARTag.success);
+            }
+            else
+            {
+                Set(ARTag.fail);
+            }
+        }
+
+        /// <summary>
+        /// 设置快捷标签，赋值code、msg
         /// </summary>
         /// <param name="ex"></param>
         /// <param name="appendCatch">追加错误消息，默认true</param>
         public void Set(Exception ex, bool appendCatch = true)
         {
             code = -1;
-            message = "处理出错";
+            msg = "处理出错";
             if (appendCatch)
             {
-                message += "，错误消息：" + ex.Message;
+                msg += "，错误消息：" + ex.Message;
             }
 
             endTime = DateTime.Now;
@@ -76,7 +93,7 @@ namespace Netnr.Func.ViewModel
     /// <summary>
     /// 快捷标签枚举
     /// </summary>
-    public enum FRTag
+    public enum ARTag
     {
         /// <summary>
         /// 成功

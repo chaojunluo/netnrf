@@ -12,6 +12,7 @@ namespace Netnr.ResponseFramework.Controllers
     public class RFController : Controller
     {
         #region 表配置示例
+
         [Description("表配置示例页面")]
         public IActionResult Tce()
         {
@@ -19,19 +20,21 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询表配置示例")]
-        public string QueryTempExample(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QueryTempExample(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.TempExample;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
+
         #endregion
 
         #region DataGrid示例页面
+
         [Description("DataGrid示例页面")]
         public IActionResult DataGrid()
         {
@@ -39,19 +42,21 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询表配置")]
-        public string QuerySysTableConfig(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysTableConfig(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.SysTableConfig;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
+
         #endregion
 
         #region TreeGrid示例页面
+
         [Description("TreeGrid示例页面")]
         public IActionResult TreeGrid(string id)
         {
@@ -84,19 +89,21 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询系统菜单")]
-        public string QuerySysMenu(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QuerySysMenu(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.SysMenu;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
+
         #endregion
 
         #region Grid多表格变动
+
         [Description("Grid多表格变动")]
         public IActionResult GridChange()
         {
@@ -104,44 +111,49 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("Grid多表格-主表")]
-        public string QueryGridChange1(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QueryGridChange1(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.SysRole;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("Grid多表格-子表")]
-        public string QueryGridChange2(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QueryGridChange2(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
             using (var db = new ContextBase())
             {
                 var query = db.SysUser;
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
+
         #endregion
 
         #region 生成多表单
+
         [Description("生成多表单")]
         public IActionResult BuildForms()
         {
             return View();
         }
+
         #endregion
 
         #region 静态表单示例页面
+
         [Description("静态表单示例页面")]
         public IActionResult Form()
         {
             return View();
         }
+
         #endregion
     }
 }

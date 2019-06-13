@@ -1,6 +1,6 @@
 ﻿//载入
 var gd1 = z.Grid();
-gd1.url = "/Setting/QuerySysButton?tableName=sysbutton";
+gd1.url = "/Setting/QuerySysButton?tableName=" + z.TableName;
 gd1.type = "treegrid";
 gd1.idField = "SbId";
 gd1.treeField = "SbBtnText";
@@ -83,12 +83,13 @@ $('#fv_save_1').click(function () {
             url: "/Setting/SaveSysButton?savetype=" + z.btnTrigger,
             type: "post",
             data: $("#fv_form_1").serialize(),
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     gd1.load();
                     $('#fv_modal_1').modal('hide');
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             },
             error: function () {
@@ -111,11 +112,12 @@ z.button('del', function () {
         $.ajax({
             url: "/Setting/DelSysButton?id=" + rowData.SbId,
             type: "post",
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     gd1.load();
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             }
         })

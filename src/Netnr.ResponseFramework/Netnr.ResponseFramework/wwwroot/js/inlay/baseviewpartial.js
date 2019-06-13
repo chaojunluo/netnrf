@@ -68,14 +68,30 @@ z.button("full_screen", function () {
 })
 
 //导出
-z.button("export", function () {
+z.button("export", GlobalExport);
+/**
+ * 公共导出
+ * @param {any} url 导出的源，可选
+ * @param {any} callback 导出回调，回填参数，可选
+ */
+function GlobalExport(url, callback) {
     var da = {
-        title: document.title
+        //导出标题
+        title: document.title,
+        //不分页
+        pagination: 0,
+        //处理类型
+        handleType: "export"
     };
 
     //导出回调，自定义导出事件
     if (typeof ExportCallBack == "function") {
         if (ExportCallBack(da) == false) {
+            return false;
+        }
+    }
+    if (typeof callback == "function") {
+        if (callback(da) == false) {
             return false;
         }
     }
@@ -97,8 +113,9 @@ z.button("export", function () {
     mod.modal.on('hidden.bs.modal', function () { $('#' + this.id).remove() });
     mod.show();
 
+    url = url || ('/io/export?tableName=' + z.TableName);
     $.ajax({
-        url: '/io/export?uri=' + z.TableName,
+        url: url,
         data: da,
         dataType: 'json',
         success: function (data) {
@@ -107,8 +124,8 @@ z.button("export", function () {
             if (data.code == 200) {
                 mb.html('<h2 class="text-center"><a class="btn btn-success btn-lg" href="' + data.data + '" ><i class="fa fa-download"></i> 点击下载文件</a></h2>');
             } else {
-                mb.html('<h4 class="text-center red">' + data.message + '</h4>');
+                mb.html('<h4 class="text-center red">' + data.msg + '</h4>');
             }
         }
     })
-});
+}

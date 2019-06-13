@@ -322,18 +322,19 @@ $('#list_Config_Form').click(function () {
             $.ajax({
                 url: '/Inlay/SaveConfigForm',
                 type: 'post',
+                dataType: 'json',
                 data: {
                     tablename: z.TableName,
                     rows: JSON.stringify(data)
                 },
                 success: function (data) {
-                    if (data == "success") {
+                    if (data.code == 200) {
                         z.ConfigForm.CF.modal('hide');
                         art('操作成功，刷新生效，是否刷新？', function () {
                             location.reload(false)
                         });
                     } else {
-                        art('fail');
+                        art(data.msg);
                     }
                 },
                 error: function () {
