@@ -249,7 +249,7 @@ $('#btnSaveAuth').click(function () {
         type: "post",
         data: rowData,
         success: function (data) {
-            if (data == "success") {
+            if (data.code == 200) {
                 gd1.func("updateRow", {
                     index: gd1.func('getRowIndex', rowData),
                     row: rowData
