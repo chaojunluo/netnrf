@@ -222,15 +222,50 @@ z.button('batch_close', function () {
     gd1.bind();
 })
 
-//批量删除
-z.button('batch_del', function () {
+//批量回调调用
+function BatchCallBack() {
     var rowDatas = gd1.func("getSelections");
     if (rowDatas.length) {
-        art("确定批量删除已选择的 " + rowDatas.length + " 条记录？", function () {
+        var msg = "";
+        switch (z.btnTrigger) {
+            case "batch_start":
+                msg = "启用";
+                break;
+            case "batch_stop":
+                msg = "停用";
+                break;
+            case "batch_edit":
+                msg = "修改";
+                break;
+            case "batch_del":
+                msg = "删除";
+                break;
+        }
+        art("确定批量" + msg + "已选择的 " + rowDatas.length + " 条记录？（演示非真" + msg + "）", function () {
             art("success")
             gd1.load();
         })
     } else {
         art('select');
     }
+}
+
+//批量启用
+z.button('batch_start', function () {
+    BatchCallBack()
+})
+
+//批量停用
+z.button('batch_stop', function () {
+    BatchCallBack()
+})
+
+//批量修改
+z.button('batch_edit', function () {
+    BatchCallBack()
+})
+
+//批量删除
+z.button('batch_del', function () {
+    BatchCallBack()
 })

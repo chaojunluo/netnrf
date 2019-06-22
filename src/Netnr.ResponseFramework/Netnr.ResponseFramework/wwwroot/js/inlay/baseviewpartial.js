@@ -68,7 +68,9 @@ z.button("full_screen", function () {
 })
 
 //导出
-z.button("export", GlobalExport);
+z.button("export", function () {
+    GlobalExport();
+});
 /**
  * 公共导出
  * @param {any} url 导出的源，可选

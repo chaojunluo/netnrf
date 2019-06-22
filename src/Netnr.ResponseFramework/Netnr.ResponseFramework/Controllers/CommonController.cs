@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
@@ -111,6 +113,75 @@ namespace Netnr.ResponseFramework.Controllers
                 var list = query.ToList();
                 return list;
             }
+        }
+
+        /// <summary>
+        /// 公共上传，支持同时上传多个
+        /// </summary>
+        /// <param name="temp">temp=1,表示临时文件</param>
+        /// <param name="path">upload下自定义子目录，如：doc</param>
+        /// <returns></returns>
+        [Description("公共上传")]
+        public async Task<ActionResultVM> Upload(int? temp, string path)
+        {
+            var vm = new ActionResultVM();
+
+            try
+            {
+                if (Request.Form.Files.Count > 0)
+                {
+                    var date = DateTime.Now;
+
+                    //虚拟路径
+                    var pathPrefix = "/upload/";
+                    if (temp == 1)
+                    {
+                        pathPrefix += "temp/";
+                    }
+                    else
+                    {
+                        pathPrefix += path + "/" + date.Year + "/" + date.ToString("yyyyMM") + "/";
+                    }
+
+                    //物理路径
+                    var mappath = (GlobalTo.WebRootPath + pathPrefix).Replace("\\", "/");
+                    if (!Directory.Exists(mappath))
+                    {
+                        Directory.CreateDirectory(mappath);
+                    }
+
+                    var listPath = new List<string>();
+                    for (int i = 0; i < Request.Form.Files.Count; i++)
+                    {
+                        var file = Request.Form.Files[i];
+                        var ext = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+                        var name = Core.UniqueTo.LongId().ToString() + ext;
+
+                        using (var stream = new FileStream(mappath + name, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        listPath.Add(pathPrefix + name);
+                    }
+
+                    if (listPath.Count == 1)
+                    {
+                        vm.data = listPath.FirstOrDefault();
+                    }
+                    else
+                    {
+                        vm.data = listPath;
+                    }
+                    vm.Set(ARTag.success);
+                }
+            }
+            catch (Exception ex)
+            {
+                vm.Set(ex);
+            }
+
+            return vm;
         }
     }
 }

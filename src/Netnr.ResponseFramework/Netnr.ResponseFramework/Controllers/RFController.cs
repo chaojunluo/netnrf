@@ -3,6 +3,10 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
 using Netnr.Func.ViewModel;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using Netnr.Domain;
 
 namespace Netnr.ResponseFramework.Controllers
 {
@@ -152,6 +156,102 @@ namespace Netnr.ResponseFramework.Controllers
         public IActionResult Form()
         {
             return View();
+        }
+
+        #endregion
+
+        #region 上传接口示例
+
+        [Description("公共上传示例")]
+        public IActionResult Upload()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region Bulk Test，请手动修改 private 为 public 后测试
+
+        [Description("批量新增")]
+        private ActionResultVM BulkInsert()
+        {
+            var vm = new ActionResultVM();
+
+            var list = new List<SysLog>();
+            for (int i = 0; i < 50_000; i++)
+            {
+                var mo = new SysLog()
+                {
+                    LogId = Guid.NewGuid().ToString(),
+                    LogAction = "/",
+                    LogBrowserName = "Chrome",
+                    LogCity = "重庆",
+                    LogContent = "测试信息",
+                    LogCreateTime = vm.startTime,
+                    LogGroup = 1,
+                    LogIp = "0.0.0.0",
+                    LogSystemName = "Win10",
+                    LogUrl = Request.Path,
+                    SuName = "netnr",
+                    SuNickname = "netnr",
+                    LogRemark = "无"
+                };
+                list.Add(mo);
+            }
+
+            using (var db = new ContextBase())
+            {
+                db.SysLog.BulkInsert(list);
+
+                db.BulkSaveChanges();
+
+                vm.Set(ARTag.success);
+            }
+
+            return vm;
+        }
+
+        [Description("批量修改")]
+        private ActionResultVM BulkUpdate()
+        {
+            var vm = new ActionResultVM();
+
+            using (var db = new ContextBase())
+            {
+                var list = db.SysLog.OrderBy(x => x.LogCreateTime).Take(50_000).ToList();
+
+                foreach (var item in list)
+                {
+                    item.LogRemark = Guid.NewGuid().ToString();
+                }
+
+                db.SysLog.BulkUpdate(list);
+
+                db.BulkSaveChanges();
+
+                vm.Set(ARTag.success);
+            }
+
+            return vm;
+        }
+
+        [Description("批量删除")]
+        private ActionResultVM BulkDelete()
+        {
+            var vm = new ActionResultVM();
+
+            using (var db = new ContextBase())
+            {
+                var list = db.SysLog.OrderBy(x => x.LogCreateTime).Take(50_000).ToList();
+
+                db.SysLog.BulkDelete(list);
+
+                db.BulkSaveChanges();
+
+                vm.Set(ARTag.success);
+            }
+
+            return vm;
         }
 
         #endregion
