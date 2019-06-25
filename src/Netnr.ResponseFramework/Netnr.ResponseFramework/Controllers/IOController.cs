@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
@@ -71,6 +69,14 @@ namespace Netnr.ResponseFramework.Controllers
                     case "syslog":
                         {
                             ovm = new SettingController().QuerySysLog(ivm);
+                            dtReport = ExportAid.ModelsMapping(ivm, ovm);
+                        }
+                        break;
+
+                    //字典
+                    case "sysdictionary":
+                        {
+                            ovm = new SettingController().QuerySysDictionary(ivm);
                             dtReport = ExportAid.ModelsMapping(ivm, ovm);
                         }
                         break;

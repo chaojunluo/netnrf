@@ -116,7 +116,7 @@ namespace Netnr.ResponseFramework.Controllers
                         vm.code = -9;
 
                         //重置一次数据库
-                        if (DateTime.Now.Day % 2 == 0 && DateTime.Now.ToString("HHmm") == "0404")
+                        if (DateTime.Now.ToString("HHmm") == "0404")
                         {
                             vm = sc.ExecTask("resetdatabase");
                         }

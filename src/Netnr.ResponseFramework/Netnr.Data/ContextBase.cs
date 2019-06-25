@@ -45,7 +45,7 @@ namespace Netnr.Data
                 if (_loggerFactory == null)
                 {
                     var sc = new ServiceCollection();
-                    sc.AddLogging(builder => builder.AddConsole().AddFilter(level => level >= LogLevel.Warning));
+                    sc.AddLogging(builder => builder.AddConsole().AddFilter(level => level >= LogLevel.Information));
                     _loggerFactory = sc.BuildServiceProvider().GetService<ILoggerFactory>();
                 }
                 return _loggerFactory;

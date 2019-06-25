@@ -588,6 +588,9 @@
 
             that.urlHide(false);
 
+            //拷贝输入框提示信息
+            $(that.id).next().find('input').first().attr('placeholder', $(that.id).attr('placeholder'));
+
             //执行完成事件
             for (var i = 1; i < that.completeIndex + 1; i++) {
                 typeof that["_onComplete" + i] == "function" && that["_onComplete" + i](that);
