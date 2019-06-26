@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -114,12 +115,13 @@ namespace Netnr.ResponseFramework
                 });
             });
 
-            //配置上传文件大小限制（详细信息：FormOptions）
-            //services.Configure<FormOptions>(optioins =>
-            //{
-            //    //20MB
-            //    optioins.ValueLengthLimit = 1024 * 1024 * 20;
-            //});
+            //全局限制请求大小，上传文件大小限制（详细信息：FormOptions）
+            services.Configure<FormOptions>(options =>
+            {
+                //20MB
+                options.ValueLengthLimit = 1024 * 1024 * 20;
+                options.MultipartBodyLengthLimit = options.ValueLengthLimit;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

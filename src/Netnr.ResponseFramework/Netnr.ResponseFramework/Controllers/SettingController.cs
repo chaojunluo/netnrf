@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
 using Netnr.Domain;
 using Netnr.Func.ViewModel;
-using Newtonsoft.Json.Linq;
 
 namespace Netnr.ResponseFramework.Controllers
 {
@@ -389,6 +386,71 @@ namespace Netnr.ResponseFramework.Controllers
                 Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
             return ovm;
+        }
+
+        #endregion
+
+        #region 数据字典
+
+        [Description("系统数据字典")]
+        public IActionResult SysDictionary()
+        {
+            return View();
+        }
+
+        [Description("查询系统数据字典")]
+        public QueryDataOutputVM QuerySysDictionary(QueryDataInputVM ivm)
+        {
+            var ovm = new QueryDataOutputVM();
+            using (var db = new ContextBase())
+            {
+                var query = db.SysDictionary;
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
+            }
+            return ovm;
+        }
+
+        [Description("保存数据字典")]
+        public ActionResultVM SaveSysDictionary(SysDictionary mo, string savetype)
+        {
+            var vm = new ActionResultVM();
+
+            using (var db = new ContextBase())
+            {
+                if (savetype == "add")
+                {
+                    mo.SdId = Guid.NewGuid().ToString();
+                    mo.SdPid = Guid.Empty.ToString();
+                    db.SysDictionary.Add(mo);
+                }
+                else
+                {
+                    db.SysDictionary.Update(mo);
+                }
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
+            }
+
+            return vm;
+        }
+
+        [Description("逻辑删除数据字典")]
+        public ActionResultVM DelSysDictionary(string id)
+        {
+            var vm = new ActionResultVM();
+
+            using (var db = new ContextBase())
+            {
+                var mo = db.SysDictionary.Find(id);
+                mo.SdStatus = -1;
+                db.SysDictionary.Update(mo);
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
+            }
+
+            return vm;
         }
 
         #endregion

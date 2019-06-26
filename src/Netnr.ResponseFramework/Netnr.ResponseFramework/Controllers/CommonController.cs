@@ -115,6 +115,22 @@ namespace Netnr.ResponseFramework.Controllers
             }
         }
 
+        [Description("公共查询：查询数据字典的例子")]
+        public List<ValueTextVM> QueryDictionaryDemo()
+        {
+            using (var db = new ContextBase())
+            {
+                var list = db.SysDictionary
+                    .Where(x => x.SdType == "SysDictionary:SdType" && x.SdStatus == 1)
+                    .Select(x => new ValueTextVM
+                    {
+                        value = x.SdId,
+                        text = x.SdValue
+                    }).ToList();
+                return list;
+            }
+        }
+
         /// <summary>
         /// 公共上传，支持同时上传多个
         /// </summary>
@@ -182,6 +198,41 @@ namespace Netnr.ResponseFramework.Controllers
             }
 
             return vm;
+        }
+
+        /// <summary>
+        /// 公共上传，富文本附件，限制大小2MB
+        /// </summary>
+        /// <returns></returns>
+        [Description("富文本文件上传")]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1024 * 1024 * 2)]
+        public async Task<string> UploadRich()
+        {
+            //调用通用的上传接口，富文本文件存放根目录：/upload/rich/
+            var vm = await Upload(null, "rich");
+
+            //返回富文本支持的接口信息
+            if (vm.code == 200)
+            {
+                var path = vm.data.ToString();
+                return new
+                {
+                    uploaded = 1,
+                    fileName = path.Split('/').LastOrDefault(),
+                    url = path
+                }.ToJson();
+            }
+            else
+            {
+                return new
+                {
+                    uploaded = 0,
+                    error = new
+                    {
+                        message = vm.msg
+                    }
+                }.ToJson();
+            }
         }
     }
 }

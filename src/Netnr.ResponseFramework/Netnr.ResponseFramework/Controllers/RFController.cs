@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
 using Netnr.Func.ViewModel;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using Netnr.Domain;
@@ -164,6 +163,16 @@ namespace Netnr.ResponseFramework.Controllers
 
         [Description("公共上传示例")]
         public IActionResult Upload()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region 富文本
+
+        [Description("嵌入富文本")]
+        public IActionResult RichText()
         {
             return View();
         }

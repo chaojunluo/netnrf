@@ -1,5 +1,4 @@
-﻿using Netnr.Data;
-using Netnr.Domain;
+﻿using Netnr.Domain;
 using Netnr.Func.ViewModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -168,6 +167,19 @@ namespace Netnr.Func
                             }
                         }
                         break;
+
+                    //数据字典
+                    case "sysdictionary":
+                        {
+                            switch (field.ToLower())
+                            {
+                                //状态
+                                case "sdstatus":
+                                    result = CellMapping.Status03(value);
+                                    break;
+                            }
+                        }
+                        break;
                 }
             }
             catch (Exception)
@@ -244,7 +256,7 @@ namespace Netnr.Func
             /// <returns></returns>
             public static string Status03(string value)
             {
-                var kv = "-1:删除,1:正常";
+                var kv = "-1:删除,1:正常,2:停用";
                 return KeyValueMap(kv, value);
             }
 
@@ -307,7 +319,7 @@ namespace Netnr.Func
 
                         var rows = sheet.GetRowEnumerator();
 
-                        var styleH = CreateCellStyle(workbook, StyleType.head);
+                        var styleH = CreateCellStyle(workbook, StyleType.headLeft);
 
                         while (rows.MoveNext())
                         {
@@ -324,10 +336,13 @@ namespace Netnr.Func
                             var cc = row.GetCell(1);
                             if (string.IsNullOrWhiteSpace(cc.StringCellValue))
                             {
+                                foreach (var cell in row.Cells)
+                                {
+                                    cell.CellStyle = styleH;
+                                }
+
                                 //合并
                                 sheet.AddMergedRegion(new CellRangeAddress(row.RowNum, row.RowNum, 0, row.Cells.Count - 1));
-
-                                cc.CellStyle = styleH;
                             }
                         }
                     }
@@ -354,9 +369,13 @@ namespace Netnr.Func
             /// </summary>
             normal,
             /// <summary>
-            /// 头部
+            /// 头部居中
             /// </summary>
-            head,
+            headCenter,
+            /// <summary>
+            /// 头部居左
+            /// </summary>
+            headLeft,
             /// <summary>
             /// 白色字体，绿色背景
             /// </summary>
@@ -419,9 +438,14 @@ namespace Netnr.Func
             {
                 case StyleType.normal:
                     break;
-                case StyleType.head:
-                    font.FontHeightInPoints = 12;
+                case StyleType.headCenter:
+                    font.FontHeightInPoints = 10;
                     font.Boldweight = 700;
+                    break;
+                case StyleType.headLeft:
+                    font.FontHeightInPoints = 10;
+                    font.Boldweight = 700;
+                    cellStyle.Alignment = HorizontalAlignment.Left;
                     break;
                 case StyleType.whiteGreen:
                     font.Color = 9;
@@ -448,7 +472,7 @@ namespace Netnr.Func
                     font.Boldweight = 700;
                     break;
                 case StyleType.headNoBorder:
-                    font.FontHeightInPoints = 16;
+                    font.FontHeightInPoints = 10;
                     font.Boldweight = 700;
                     break;
             }

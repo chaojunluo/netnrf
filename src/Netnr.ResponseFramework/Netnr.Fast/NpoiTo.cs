@@ -63,7 +63,7 @@ namespace Netnr.Fast
                     ////用column name 作为列名
                     int icolIndex = 0;
                     IRow headerRow = sheet.CreateRow(0);
-                    headerRow.Height = 20 * 20;
+                    headerRow.Height = 20 * 18;
                     foreach (DataColumn item in dt.Columns)
                     {
                         ICell cell = headerRow.CreateCell(icolIndex);
@@ -71,10 +71,9 @@ namespace Netnr.Fast
 
                         //单元格字体
                         IFont font = workbook.CreateFont();
-                        font.FontName = "宋体";
                         font.FontHeightInPoints = 10;
                         font.Color = 8;
-                        font.Boldweight = (short)FontBoldWeight.Bold;
+                        font.Boldweight = 700;
 
                         hStyle.SetFont(font);
 
@@ -101,7 +100,7 @@ namespace Netnr.Fast
                     foreach (DataRow Rowitem in dt.Rows)
                     {
                         IRow DataRow = sheet.CreateRow(iRowIndex);
-                        DataRow.Height = 20 * 16;
+                        DataRow.Height = 20 * 14;
                         foreach (DataColumn Colitem in dt.Columns)
                         {
                             ICell cell = DataRow.CreateCell(iCellIndex);

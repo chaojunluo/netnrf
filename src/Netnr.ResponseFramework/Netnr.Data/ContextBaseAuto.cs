@@ -10,6 +10,7 @@ namespace Netnr.Data
     {
         public virtual DbSet<SysAuthorize> SysAuthorize { get; set; }
         public virtual DbSet<SysButton> SysButton { get; set; }
+        public virtual DbSet<SysDictionary> SysDictionary { get; set; }
         public virtual DbSet<SysLog> SysLog { get; set; }
         public virtual DbSet<SysMenu> SysMenu { get; set; }
         public virtual DbSet<SysRole> SysRole { get; set; }
@@ -108,6 +109,50 @@ namespace Netnr.Data
                 entity.Property(e => e.SbPid)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<SysDictionary>(entity =>
+            {
+                entity.HasKey(e => e.SdId)
+                    .HasName("SysDictionary_SdId_PK")
+                    .ForSqlServerIsClustered(false);
+
+                entity.HasIndex(e => e.SdType)
+                    .HasName("SysDictionary_SdType")
+                    .ForSqlServerIsClustered();
+
+                entity.Property(e => e.SdId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.SdAttribute1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SdAttribute2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SdAttribute3)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SdKey)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SdPid)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SdRemark).HasMaxLength(200);
+
+                entity.Property(e => e.SdType)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SdValue).HasMaxLength(200);
             });
 
             modelBuilder.Entity<SysLog>(entity =>
