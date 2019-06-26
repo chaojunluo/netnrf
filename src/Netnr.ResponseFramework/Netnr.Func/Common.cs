@@ -6,6 +6,7 @@ using Netnr.Func.ViewModel;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -69,36 +70,42 @@ namespace Netnr.Func
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="query"></param>
-        /// <param name="param"></param>
+        /// <param name="ivm"></param>
         /// <param name="ru"></param>
-        /// <param name="or"></param>
-        public static void QueryJoin<T>(IQueryable<T> query, QueryDataVM.GetParams param, ContextBase db, ref QueryDataVM.OutputResult or)
+        /// <param name="ovm"></param>
+        public static void QueryJoin<T>(IQueryable<T> query, QueryDataInputVM ivm, ContextBase db, ref QueryDataOutputVM ovm)
         {
             //条件
-            query = QueryWhere(query, param);
+            query = QueryWhere(query, ivm);
 
             //总条数
-            or.total = query.Count();
+            ovm.total = query.Count();
 
             //排序
-            if (!string.IsNullOrWhiteSpace(param.sort))
+            if (!string.IsNullOrWhiteSpace(ivm.sort))
             {
-                query = Fast.QueryableTo.OrderBy(query, param.sort, param.order);
+                query = Fast.QueryableTo.OrderBy(query, ivm.sort, ivm.order);
             }
 
             //分页
-            if (param.pagination == 1)
+            if (ivm.pagination == 1)
             {
-                query = query.Skip((param.page - 1) * param.rows).Take(param.rows);
+                query = query.Skip((ivm.page - 1) * ivm.rows).Take(ivm.rows);
             }
 
             //数据
-            or.data = query.ToList();
+            var data = query.ToList();
+            ovm.data = data;
+            //导出时，存储数据表格
+            if (ivm.handleType == "export")
+            {
+                ovm.table = ToDataTableForString(data);
+            }
 
             //列
-            if (param.columnsExists != 1)
+            if (ivm.columnsExists != 1)
             {
-                or.columns = db.SysTableConfig.Where(x => x.TableName == param.tableName).OrderBy(x => x.ColOrder).ToList();
+                ovm.columns = db.SysTableConfig.Where(x => x.TableName == ivm.tableName).OrderBy(x => x.ColOrder).ToList();
             }
         }
 
@@ -107,14 +114,14 @@ namespace Netnr.Func
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="query"></param>
-        /// <param name="param"></param>
+        /// <param name="ivm"></param>
         /// <returns></returns>
-        public static IQueryable<T> QueryWhere<T>(IQueryable<T> query, QueryDataVM.GetParams param)
+        public static IQueryable<T> QueryWhere<T>(IQueryable<T> query, QueryDataInputVM ivm)
         {
             //条件
-            if (!string.IsNullOrWhiteSpace(param.wheres))
+            if (!string.IsNullOrWhiteSpace(ivm.wheres))
             {
-                var whereItems = JArray.Parse(param.wheres);
+                var whereItems = JArray.Parse(ivm.wheres);
                 foreach (var item in whereItems)
                 {
                     //关系符
@@ -187,6 +194,26 @@ namespace Netnr.Func
                 }
             }
             return query;
+        }
+
+        /// <summary>
+        /// 实体转表，类型为字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static DataTable ToDataTableForString<T>(List<T> list)
+        {
+            Type elementType = typeof(T);
+            var t = new DataTable();
+            elementType.GetProperties().ToList().ForEach(propInfo => t.Columns.Add(propInfo.Name, typeof(string)));
+            foreach (T item in list)
+            {
+                var row = t.NewRow();
+                elementType.GetProperties().ToList().ForEach(propInfo => row[propInfo.Name] = propInfo.GetValue(item, null) ?? DBNull.Value);
+                t.Rows.Add(row);
+            }
+            return t;
         }
 
         #endregion

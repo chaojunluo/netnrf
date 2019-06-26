@@ -4,40 +4,28 @@ z.DC["dataurl_ct_colalign"] = {
         { value: 1, text: "居左" },
         { value: 2, text: "居中" },
         { value: 3, text: "居右" }
-    ],
-    init: function () {
-        this.panelHeight = 100;
-    }
+    ]
 }
 //显示/隐藏
 z.DC["dataurl_ct_colhide"] = {
     data: [
         { value: 0, text: "显示" },
         { value: 1, text: "隐藏" }
-    ],
-    init: function () {
-        this.panelHeight = 100;
-    }
+    ]
 };
 //冻结
 z.DC["dataurl_ct_colfrozen"] = {
     data: [
         { value: 1, text: "冻结" },
         { value: 0, text: "不冻结" }
-    ],
-    init: function () {
-        this.panelHeight = 100;
-    }
+    ]
 };
 //导出
 z.DC["dataurl_ct_colexport"] = {
     data: [
         { value: 1, text: "导出" },
         { value: 0, text: "不导出" }
-    ],
-    init: function () {
-        this.panelHeight = 100;
-    }
+    ]
 };
 
 //页面表索引
@@ -120,18 +108,19 @@ $('#list_Config_Table').click(function () {
             $.ajax({
                 url: '/inlay/SaveConfigTable',
                 type: 'POST',
+                dataType: 'json',
                 data: {
                     tablename: z.TableName,
                     rows: JSON.stringify(rowData)
                 },
                 success: function (data) {
-                    if (data == "success") {
+                    if (data.code == 200) {
                         z.mdct.hide();
                         art('操作成功，刷新生效，是否刷新？', function () {
                             location.reload(false);
                         })
                     } else {
-                        art('fail');
+                        art(data.msg);
                     }
                 },
                 error: function () {

@@ -118,11 +118,6 @@ namespace Netnr.Fast
                     {
                         sheet.AutoSizeColumn(i);
                     }
-                    //写Excel
-                    using (FileStream file = new FileStream(fullPathName, FileMode.OpenOrCreate))
-                    {
-                        workbook.Write(file);
-                    }
                 }
 
                 //写Excel

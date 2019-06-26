@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Netnr.Data
 {
@@ -28,10 +29,9 @@ namespace Netnr.Data
         /// <summary>
         /// 上下文
         /// </summary>
-        /// <param name="typeDB">数据库类型</param>
-        public ContextBase(TypeDB typeDB = TypeDB.SQLServer) : base()
+        public ContextBase() : base()
         {
-            TDB = typeDB;
+            TDB = (TypeDB)Enum.Parse(typeof(TypeDB), GlobalTo.GetValue("TypeDB"), true);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Netnr.Data
                     });
                     break;
                 case TypeDB.PostgreSQL:
-                    optionsBuilder.UseNpgsql(GlobalTo.GetValue("ConnectionStrings:PostgreSQL"));
+                    optionsBuilder.UseNpgsql(GlobalTo.GetValue("ConnectionStrings:PostgreSQLConn"));
                     break;
             }
 

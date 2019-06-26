@@ -816,7 +816,7 @@
         var form = $(FormId || "#fv_form_1"), arrLab = [];
         form.find('label.required').each(function () {
             var ipt = $(this).parent().find('input,select,textarea').first(),
-                dtype = ipt.attr('data-type'), val = '', colorTarget;
+                dtype = ipt.attr('data-type') || ipt[0].type, val = '', colorTarget;
             switch (dtype) {
                 case 'combobox':
                 case 'combotree':

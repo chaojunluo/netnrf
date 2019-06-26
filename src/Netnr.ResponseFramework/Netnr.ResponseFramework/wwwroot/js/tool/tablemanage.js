@@ -35,11 +35,12 @@ function builder(maketype) {
                     names: names.join(','),
                     maketype: maketype
                 },
+                dataType: 'json',
                 success: function (data) {
-                    if (data == "success") {
+                    if (data.code == 200) {
                         gd1.load();
                     }
-                    art(data);
+                    art(data.msg);
                 },
                 error: function () {
                     art('error');
@@ -59,7 +60,9 @@ function exportexcel() {
         $(rowData).each(function () {
             names.push(this.name)
         })
-        location.href = "/tool/ExportTableInfo?names=" + names.join(',');
+        GlobalExport("/tool/ExportTableInfo", function (data) {
+            data.names = names.join(',')
+        })
     } else {
         art('select');
     }

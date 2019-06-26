@@ -1,6 +1,6 @@
 ﻿//载入
 var gd1 = z.Grid();
-gd1.url = "/Setting/QuerySysUser?tableName=sysuser";
+gd1.url = "/Setting/QuerySysUser?tableName=" + z.TableName;
 gd1.sortName = "SuCreateTime";
 gd1.onDblClickRow = function (index, row) {
     //双击行模拟点编辑
@@ -91,10 +91,11 @@ $('#fv_save_1').click(function () {
             url: "/Setting/SaveSysUser?savetype=" + z.btnTrigger,
             type: "post",
             data: $("#fv_form_1").serialize(),
+            dataType: 'json',
             success: function (data) {
-                if (data == "exists") {
+                if (data.code == 97) {
                     art('账号已经存在');
-                } else if (data == "success") {
+                } else if (data.code == 200) {
                     //新增成功，重新载入
                     if (z.btnTrigger == "add") {
                         gd1.load();
@@ -107,7 +108,7 @@ $('#fv_save_1').click(function () {
                     }
                     $('#fv_modal_1').modal('hide');
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             },
             error: function () {
@@ -130,11 +131,12 @@ z.button('del', function () {
         $.ajax({
             url: "/Setting/DelSysUser?id=" + rowData.SuId,
             type: "post",
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     gd1.load();
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             }
         })

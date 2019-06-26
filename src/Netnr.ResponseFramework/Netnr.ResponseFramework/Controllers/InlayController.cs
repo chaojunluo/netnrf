@@ -16,22 +16,25 @@ namespace Netnr.ResponseFramework.Controllers
     public class InlayController : Controller
     {
         #region 配置表格
+
         [Description("查询配置表格")]
-        public string QueryConfigTable(QueryDataVM.GetParams param)
+        public QueryDataOutputVM QueryConfigTable(QueryDataInputVM ivm)
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
 
             using (var db = new ContextBase())
             {
                 var query = db.SysTableConfig.Where(x => x.ColHide != 2);
-                Func.Common.QueryJoin(query, param, db, ref or);
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
             }
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("保存配置表格")]
-        public string SaveConfigTable(string rows, string tablename)
+        public ActionResultVM SaveConfigTable(string rows, string tablename)
         {
+            var vm = new ActionResultVM();
+
             JArray ja = JArray.Parse(rows);
 
             using (var db = new ContextBase())
@@ -57,15 +60,21 @@ namespace Netnr.ResponseFramework.Controllers
                 db.SysTableConfig.UpdateRange(listRow);
                 int num = db.SaveChanges();
 
-                return num >= 0 ? "success" : "fail";
+                vm.Set(num > 0);
             }
+
+            return vm;
         }
+
         #endregion
 
         #region 配置表单
+
         [Description("保存配置表单")]
-        public string SaveConfigForm(string rows, string tablename)
+        public ActionResultVM SaveConfigForm(string rows, string tablename)
         {
+            var vm = new ActionResultVM();
+
             JArray ja = JArray.Parse(rows);
 
             using (var db = new ContextBase())
@@ -87,9 +96,12 @@ namespace Netnr.ResponseFramework.Controllers
                 db.SysTableConfig.UpdateRange(listRow);
                 int num = db.SaveChanges();
 
-                return num >= 0 ? "success" : "fail";
+                vm.Set(num > 0);
             }
+
+            return vm;
         }
+
         #endregion
     }
 }

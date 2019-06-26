@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
@@ -39,10 +41,10 @@ namespace Netnr.ResponseFramework.Controllers
             }
 
             #region 把实体转为JSON节点实体
-            var listNode = new List<JSONodeVM>();
+            var listNode = new List<TreeNodeVM>();
             foreach (var item in listMenu)
             {
-                listNode.Add(new JSONodeVM()
+                listNode.Add(new TreeNodeVM()
                 {
                     id = item.SmId,
                     pid = item.SmPid,
@@ -70,10 +72,10 @@ namespace Netnr.ResponseFramework.Controllers
             var list = Func.Common.QuerySysButtonList(x => x.SbStatus == 1);
 
             #region 把实体转为JSON节点实体
-            var listNode = new List<JSONodeVM>();
+            var listNode = new List<TreeNodeVM>();
             foreach (var item in list)
             {
-                listNode.Add(new JSONodeVM()
+                listNode.Add(new TreeNodeVM()
                 {
                     id = item.SbId,
                     pid = item.SbPid,
@@ -96,23 +98,90 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("公共查询：角色列表")]
-        public string QueryRole()
+        public List<ValueTextVM> QueryRole()
         {
-            string result = "[]";
             using (var db = new ContextBase())
             {
                 var query = from a in db.SysRole
                             where a.SrStatus == 1
                             orderby a.SrCreateTime
-                            select new
+                            select new ValueTextVM
                             {
                                 value = a.SrId,
                                 text = a.SrName
                             };
                 var list = query.ToList();
-                result = list.ToJson();
+                return list;
             }
-            return result;
+        }
+
+        /// <summary>
+        /// 公共上传，支持同时上传多个
+        /// </summary>
+        /// <param name="temp">temp=1,表示临时文件</param>
+        /// <param name="path">upload下自定义子目录，如：doc</param>
+        /// <returns></returns>
+        [Description("公共上传")]
+        public async Task<ActionResultVM> Upload(int? temp, string path)
+        {
+            var vm = new ActionResultVM();
+
+            try
+            {
+                if (Request.Form.Files.Count > 0)
+                {
+                    var date = DateTime.Now;
+
+                    //虚拟路径
+                    var pathPrefix = "/upload/";
+                    if (temp == 1)
+                    {
+                        pathPrefix += "temp/";
+                    }
+                    else
+                    {
+                        pathPrefix += path + "/" + date.Year + "/" + date.ToString("yyyyMM") + "/";
+                    }
+
+                    //物理路径
+                    var mappath = (GlobalTo.WebRootPath + pathPrefix).Replace("\\", "/");
+                    if (!Directory.Exists(mappath))
+                    {
+                        Directory.CreateDirectory(mappath);
+                    }
+
+                    var listPath = new List<string>();
+                    for (int i = 0; i < Request.Form.Files.Count; i++)
+                    {
+                        var file = Request.Form.Files[i];
+                        var ext = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+                        var name = Core.UniqueTo.LongId().ToString() + ext;
+
+                        using (var stream = new FileStream(mappath + name, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        listPath.Add(pathPrefix + name);
+                    }
+
+                    if (listPath.Count == 1)
+                    {
+                        vm.data = listPath.FirstOrDefault();
+                    }
+                    else
+                    {
+                        vm.data = listPath;
+                    }
+                    vm.Set(ARTag.success);
+                }
+            }
+            catch (Exception ex)
+            {
+                vm.Set(ex);
+            }
+
+            return vm;
         }
     }
 }

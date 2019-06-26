@@ -107,14 +107,6 @@ body {
             margin-left: 5px;
         }
 
-/* iframe全屏 */
-.iframeFullScreen iframe {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    z-index: 3999;
-}
-
 /* 选项卡·内容 */
 .tab-content {
     padding: 0;

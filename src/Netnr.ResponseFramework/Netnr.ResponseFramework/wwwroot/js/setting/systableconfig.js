@@ -247,8 +247,9 @@ $('#fv_save_1').click(function () {
             url: "/Setting/SaveSysTableConfig?savetype=" + z.btnTrigger,
             type: "post",
             data: $("#fv_form_1").serialize(),
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     //新增成功，重新载入
                     if (z.btnTrigger == "add") {
                         gd1.load();
@@ -261,7 +262,7 @@ $('#fv_save_1').click(function () {
                     }
                     $('#fv_modal_1').modal('hide');
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             },
             error: function () {
@@ -285,11 +286,12 @@ z.button('del', function () {
         $.ajax({
             url: "/Setting/DelSysTableConfig?id=" + rowData.Id,
             type: "post",
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     gd1.load();
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             }
         })

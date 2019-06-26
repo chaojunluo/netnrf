@@ -86,8 +86,9 @@ $('#fv_save_1').click(function () {
             url: "/Setting/SaveSysRole?savetype=" + z.btnTrigger,
             type: "post",
             data: $("#fv_form_1").serialize(),
+            dataType: 'json',
             success: function (data) {
-                if (data == "success") {
+                if (data.code == 200) {
                     //新增成功，重新载入
                     if (z.btnTrigger == "add") {
                         gd1.load();
@@ -100,7 +101,7 @@ $('#fv_save_1').click(function () {
                     }
                     $('#fv_modal_1').modal('hide');
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             },
             error: function () {
@@ -123,13 +124,14 @@ z.button('del', function () {
         $.ajax({
             url: "/Setting/DelSysRole?id=" + rowData.SrId,
             type: "post",
+            dataType: 'json',
             success: function (data) {
-                if (data == "exists") {
+                if (data.code == 97) {
                     art('角色下有用户，不能删除');
-                } else if (data == "success") {
+                } else if (data.code == 200) {
                     gd1.load();
                 } else {
-                    art('fail');
+                    art(data.msg);
                 }
             }
         })
@@ -247,7 +249,7 @@ $('#btnSaveAuth').click(function () {
         type: "post",
         data: rowData,
         success: function (data) {
-            if (data == "success") {
+            if (data.code == 200) {
                 gd1.func("updateRow", {
                     index: gd1.func('getRowIndex', rowData),
                     row: rowData
@@ -303,12 +305,13 @@ $('#btnSaveCAuth').click(function () {
                 SrId: rowData.SrId,
                 copyid: sr[0]
             },
+            dataType: 'json',
             success: function (data) {
-                art(data)
-                if (data == "success") {
+                if (data.code == 200) {
                     $('#myModalCAuth').modal('hide');
                     gd1.load();
                 }
+                art(data.msg);
             },
             error: function () {
                 art('error')

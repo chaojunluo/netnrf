@@ -6,10 +6,10 @@
 @await Component.InvokeAsync("Form", new { tablename = "TempExample", modalsize = 3, paneltitle = "面板一,面板二" })
 
 <!--表单2-->
-@await Component.InvokeAsync("Form", new { tablename = "sysbutton", index = 2 })
+@await Component.InvokeAsync("Form", new { tablename = "SysButton", index = 2 })
 
 <!--表单3-->
-@await Component.InvokeAsync("Form", new { tablename = "sysuser", modalsize = 2, index = 3 })
+@await Component.InvokeAsync("Form", new { tablename = "SysUser", modalsize = 2, index = 3 })
 
 <pre class="h4">
 目前，在多表单的情况下，页面的表单、表格配置默认第一个，多表单、表格配置暂不支持；

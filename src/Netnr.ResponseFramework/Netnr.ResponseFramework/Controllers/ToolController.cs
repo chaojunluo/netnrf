@@ -38,9 +38,9 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询数据库表与表配置信息")]
-        public string QueryTableConfig()
+        public QueryDataOutputVM QueryTableConfig()
         {
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
 
             using (var db = new ContextBase())
             {
@@ -78,11 +78,11 @@ namespace Netnr.ResponseFramework.Controllers
                         listRow.Add(row);
                     }
                 }
-                or.data = listRow;
-                or.total = listRow.Count;
+                ovm.data = listRow;
+                ovm.total = listRow.Count;
             }
 
-            return or.ToJson();
+            return ovm;
         }
 
         /// <summary>
@@ -92,122 +92,147 @@ namespace Netnr.ResponseFramework.Controllers
         /// <param name="maketype">1追加不存在的列，2覆盖</param>
         /// <returns></returns>
         [Description("建立表配置信息")]
-        public string BuildTableConfig(string names, int maketype)
+        public ActionResultVM BuildTableConfig(string names, int maketype)
         {
-            using (var db = new ContextBase())
+            var vm = new ActionResultVM();
+
+            var listName = names.Split(',');
+            if (string.IsNullOrWhiteSpace(names) || listName.Length == 0)
             {
-                var listName = names.Split(',');
-
-                var dbname = db.Database.GetDbConnection().Database;
-                var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
-
-                foreach (var name in listName)
+                vm.code = 1;
+                vm.msg = "表名不能为空";
+            }
+            else
+            {
+                using (var db = new ContextBase())
                 {
-                    var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
+                    var dbname = db.Database.GetDbConnection().Database;
+                    var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
 
-                    if (!string.IsNullOrWhiteSpace(sql))
+                    foreach (var name in listName)
                     {
-                        var dt = new DataTable();
+                        var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
 
-                        using (var dbsql = new ContextBase())
+                        if (!string.IsNullOrWhiteSpace(sql))
                         {
-                            using (var conn = dbsql.Database.GetDbConnection())
+                            var dt = new DataTable();
+
+                            using (var dbsql = new ContextBase())
                             {
-                                conn.Open();
-                                var cmd = conn.CreateCommand();
-                                cmd.CommandText = sql;
-                                dt.Load(cmd.ExecuteReader());
+                                using (var conn = dbsql.Database.GetDbConnection())
+                                {
+                                    conn.Open();
+                                    var cmd = conn.CreateCommand();
+                                    cmd.CommandText = sql;
+                                    dt.Load(cmd.ExecuteReader());
+                                }
                             }
-                        }
 
-                        if (dt.Rows.Count > 0)
-                        {
-                            switch (maketype)
+                            if (dt.Rows.Count > 0)
                             {
-                                case 1:
-                                    {
-                                        var listField = db.SysTableConfig
-                                            .Where(x => listName.Contains(x.TableName))
-                                            .Select(x => new { x.TableName, x.ColField }).ToList();
-
-                                        for (int i = dt.Rows.Count - 1; i >= 0; i--)
+                                switch (maketype)
+                                {
+                                    case 1:
                                         {
-                                            string tbname = dt.Rows[i]["TableName"].ToString();
-                                            string field = dt.Rows[i]["ColField"].ToString();
-                                            var hasRow = listField.Where(x => x.TableName == tbname && x.ColField == field).ToList();
-                                            if (hasRow.Count > 0)
+                                            var listField = db.SysTableConfig
+                                                .Where(x => listName.Contains(x.TableName))
+                                                .Select(x => new { x.TableName, x.ColField }).ToList();
+
+                                            for (int i = dt.Rows.Count - 1; i >= 0; i--)
                                             {
-                                                dt.Rows.RemoveAt(i);
+                                                string tbname = dt.Rows[i]["TableName"].ToString();
+                                                string field = dt.Rows[i]["ColField"].ToString();
+                                                var hasRow = listField.Where(x => x.TableName == tbname && x.ColField == field).ToList();
+                                                if (hasRow.Count > 0)
+                                                {
+                                                    dt.Rows.RemoveAt(i);
+                                                }
                                             }
                                         }
-                                    }
-                                    break;
-                                case 2:
-                                    {
-                                        var delstc = db.SysTableConfig.Where(x => x.TableName == name).ToList();
-                                        db.SysTableConfig.RemoveRange(delstc);
-                                    }
-                                    break;
+                                        break;
+                                    case 2:
+                                        {
+                                            var delstc = db.SysTableConfig.Where(x => x.TableName == name).ToList();
+                                            db.SysTableConfig.RemoveRange(delstc);
+                                        }
+                                        break;
+                                }
+
+                                var listMo = dt.ToModel<SysTableConfig>();
+                                listMo.ForEach(x => x.Id = Guid.NewGuid().ToString());
+                                db.SysTableConfig.AddRange(listMo);
+
+                                db.SaveChanges();
                             }
-
-                            var listMo = dt.ToModel<SysTableConfig>();
-                            db.SysTableConfig.AddRange(listMo);
-
-                            db.SaveChanges();
                         }
                     }
+
+                    vm.Set(ARTag.success);
                 }
             }
-            return "success";
+
+            return vm;
         }
 
         [Description("补齐表配置信息")]
-        public string RepairTableConfig(string names)
+        public ActionResultVM RepairTableConfig(string names)
         {
-            using (var db = new ContextBase())
+            var vm = new ActionResultVM();
+
+            var listName = names.Split(',');
+            if (string.IsNullOrWhiteSpace(names) || listName.Length == 0)
             {
-                var listName = names.Split(',');
-
-                var dbname = db.Database.GetDbConnection().Database;
-                var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
-
-                var listTc = db.SysTableConfig.ToList();
-
-                foreach (var name in listName)
+                vm.code = 1;
+                vm.msg = "表名不能为空";
+            }
+            else
+            {
+                using (var db = new ContextBase())
                 {
-                    var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
+                    var dbname = db.Database.GetDbConnection().Database;
+                    var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
 
-                    if (!string.IsNullOrWhiteSpace(sql))
+                    var listTc = db.SysTableConfig.ToList();
+
+                    foreach (var name in listName)
                     {
-                        var dt = new DataTable();
+                        var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
 
-                        using (var dbsql = new ContextBase())
+                        if (!string.IsNullOrWhiteSpace(sql))
                         {
-                            using (var conn = dbsql.Database.GetDbConnection())
+                            var dt = new DataTable();
+
+                            using (var dbsql = new ContextBase())
                             {
-                                conn.Open();
-                                var cmd = conn.CreateCommand();
-                                cmd.CommandText = sql;
-                                dt.Load(cmd.ExecuteReader());
+                                using (var conn = dbsql.Database.GetDbConnection())
+                                {
+                                    conn.Open();
+                                    var cmd = conn.CreateCommand();
+                                    cmd.CommandText = sql;
+                                    dt.Load(cmd.ExecuteReader());
+                                }
                             }
-                        }
 
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            var tcmo = listTc.Where(x => x.TableName == dr["TableName"].ToString() && x.ColField == dr["ColField"].ToString()).FirstOrDefault();
-                            tcmo.FormMaxlength = Convert.ToInt32(dr["FormMaxlength"]);
-                            if (string.IsNullOrWhiteSpace(tcmo.ColRelation))
+                            foreach (DataRow dr in dt.Rows)
                             {
-                                tcmo.ColRelation = "Equal,Contains";
+                                var tcmo = listTc.Where(x => x.TableName == dr["TableName"].ToString() && x.ColField == dr["ColField"].ToString()).FirstOrDefault();
+                                tcmo.FormMaxlength = Convert.ToInt32(dr["FormMaxlength"]);
+                                if (string.IsNullOrWhiteSpace(tcmo.ColRelation))
+                                {
+                                    tcmo.ColRelation = "Equal,Contains";
+                                }
                             }
                         }
                     }
-                }
 
-                db.SysTableConfig.UpdateRange(listTc);
-                db.SaveChanges();
+                    db.SysTableConfig.UpdateRange(listTc);
+                    db.SaveChanges();
+
+                    vm.Set(ARTag.success);
+                }
             }
-            return "success";
+
+            return vm;
         }
 
         /// <summary>
@@ -216,12 +241,12 @@ namespace Netnr.ResponseFramework.Controllers
         /// <param name="names">表名，逗号分割</param>
         /// <returns></returns>
         [Description("查询数据库表信息")]
-        public string QueryTableInfo(string names)
+        public QueryDataOutputVM QueryTableInfo(string names)
         {
             var listName = names.Split(',').ToList();
             var innames = string.Join("','", listName);
 
-            var or = new QueryDataVM.OutputResult();
+            var ovm = new QueryDataOutputVM();
 
             var dt = new DataTable();
 
@@ -244,8 +269,8 @@ namespace Netnr.ResponseFramework.Controllers
                         dt.Load(cmd.ExecuteReader());
                     }
                 }
-                or.data = dt;
-                or.total = dt.Rows.Count;
+                ovm.data = dt;
+                ovm.total = dt.Rows.Count;
             }
 
             #region 其它处理
@@ -284,12 +309,14 @@ namespace Netnr.ResponseFramework.Controllers
             }
             #endregion
 
-            return or.ToJson();
+            return ovm;
         }
 
         [Description("导出表设计")]
-        public void ExportTableInfo(string names)
+        public ActionResultVM ExportTableInfo(string names)
         {
+            var vm = new ActionResultVM();
+
             var listName = names.Split(',').ToList();
             var innames = string.Join("','", listName);
 
@@ -318,8 +345,6 @@ namespace Netnr.ResponseFramework.Controllers
                 dt.PrimaryKey = null;
 
                 var drname = string.Empty;
-                var drdescription = string.Empty;
-
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     var dr = dt.Rows[i];
@@ -330,11 +355,12 @@ namespace Netnr.ResponseFramework.Controllers
                     if (string.IsNullOrWhiteSpace(drname))
                     {
                         drname = currname;
-                        drdescription = currdescription;
                     }
 
                     if (drname != currname || i == 0)
                     {
+                        drname = currname;
+                        string drdescription = currdescription;
                         var newdr = dt.NewRow();
                         foreach (DataColumn dc in dt.Columns)
                         {
@@ -352,20 +378,32 @@ namespace Netnr.ResponseFramework.Controllers
                 dt.Columns.RemoveAt(0);
                 dt.Columns.RemoveAt(0);
 
+<<<<<<< HEAD
                 var path = (GlobalTo.WebRootPath + "/upload/temp/").Replace("\\", "/");
+=======
+                var path = "/upload/temp/";
+                var vpath = (GlobalTo.WebRootPath + path).Replace("\\", "/");
+>>>>>>> c2269cf7bf5f7d5437b2cf17c2c451f688e34837
                 var filename = "数据库表设计_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-                Fast.NpoiTo.DataTableToExcel(dt, path + filename);
+                Fast.NpoiTo.DataTableToExcel(dt, vpath + filename);
 
-                Func.ExportAid.ExcelDraw(path + filename, "DatabaseTableDesign");
+                //基于导出的Excel绘制，加粗、合并等操作
+                Func.ExportAid.ExcelDraw(vpath + filename, new QueryDataInputVM()
+                {
+                    tableName = "DatabaseTableDesign"
+                });
 
-                new Core.DownTo(Response).Stream(path, filename);
+                vm.Set(ARTag.success);
+                vm.data = path + filename;
             }
+
+            return vm;
         }
 
         [Description("重置数据库")]
-        public FunctionResultVM ResetDataBase()
+        public ActionResultVM ResetDataBase()
         {
-            var vm = new FunctionResultVM();
+            var vm = new ActionResultVM();
 
             using (var db = new ContextBase())
             {
@@ -377,7 +415,7 @@ namespace Netnr.ResponseFramework.Controllers
                     cmd.CommandText = sql;
                     int num = cmd.ExecuteNonQuery();
 
-                    vm.Set(FRTag.success);
+                    vm.Set(ARTag.success);
                     vm.data = "受影响行数：" + num;
                 }
             }
