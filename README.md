@@ -16,7 +16,7 @@
 - Visual Studio 2017+ 运行项目
 
 ### 项目结构
-- Netnr.Core 类库（引用NuGet，源码地址：https://github.com/netnr/Netnr.ClassLibrary）
+- Netnr.Core 类库（引用NuGet，源码地址：<https://github.com/netnr/Netnr.ClassLibrary>）
 - Netnr.Data 数据访问、仓储（Scaffold-DbContext 命令自动生成）
 - Netnr.Domain 实体（Scaffold-DbContext 命令自动生成）
 - Netnr.Fast 常用方法
