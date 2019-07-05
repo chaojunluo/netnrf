@@ -163,16 +163,14 @@
             }
 
             //调整大小
-            if (z.isPC()) {
-                if (that.target.data('autosize') != 1) {
+            if (that.target.data('autosize') != 1) {
+                z.GridAuto(that);
+                $(window).resize(function () { z.GridAuto(that) });
+                that.target.data('autosize', 1);
+            } else {
+                //刷新内部会调整大小，所以需要再次调用调整大小
+                if ("treegrid,propertygrid".indexOf(that.type) >= 0) {
                     z.GridAuto(that);
-                    $(window).resize(function () { z.GridAuto(that) });
-                    that.target.data('autosize', 1);
-                } else {
-                    //刷新内部会调整大小，所以需要再次调用调整大小
-                    if ("treegrid,propertygrid".indexOf(that.type) >= 0) {
-                        z.GridAuto(that);
-                    }
                 }
             }
 
