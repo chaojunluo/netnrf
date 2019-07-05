@@ -112,17 +112,20 @@ namespace Netnr.ResponseFramework.Controllers
                         var sc = new ServicesController();
 
                         //执行结果
-                        var vm = new ActionResultVM();
-                        vm.code = -9;
+                        var vm = new ActionResultVM
+                        {
+                            code = -9
+                        };
+                        var now = DateTime.Now;
 
                         //重置一次数据库
-                        if (DateTime.Now.ToString("HHmm") == "0404")
+                        if (now.ToString("HHmm") == "0404")
                         {
                             vm = sc.ExecTask("resetdatabase");
                         }
 
                         //清理临时目录
-                        if (DateTime.Now.Day % 2 == 0 && DateTime.Now.ToString("HHmm") == "0303")
+                        if (now.Day % 2 == 0 && now.ToString("HHmm") == "0303")
                         {
                             vm = sc.ExecTask("cleartemp");
                         }
@@ -130,7 +133,7 @@ namespace Netnr.ResponseFramework.Controllers
                         //记录任务日志
                         if (vm.code != -9)
                         {
-                            string msg = "Tasking：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + Environment.NewLine + vm.ToJson();
+                            string msg = "Tasking：" + now.ToString("yyyy-MM-dd HH:mm:ss") + Environment.NewLine + vm.ToJson();
                             Core.ConsoleTo.Log(msg);
                         }
                     }

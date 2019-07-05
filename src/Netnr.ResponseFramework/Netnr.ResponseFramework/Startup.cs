@@ -101,6 +101,9 @@ namespace Netnr.ResponseFramework
                 options.Cookie.HttpOnly = true;
             });
 
+            //定时任务
+            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, Controllers.ServicesController.TaskService>();
+
             //跨域（ 用法：[EnableCors("Any")] ）
             services.AddCors(options =>
             {

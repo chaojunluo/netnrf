@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="Netnr.Core" Version="1.1.0" />
+    <PackageReference Include="Netnr.Core" Version="1.1.1" />
     <PackageReference Include="Netnr.Login" Version="3.1.0" />
   </ItemGroup>
 
