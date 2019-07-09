@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
-using System;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
+﻿using System;
 using System.Reflection;
-using System.Text;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 public class GlobalTo
 {
@@ -50,26 +46,6 @@ public class GlobalTo
     }
 
     /// <summary>
-    /// json配置文件，需AppsettingsJson复制到输出目录，不然调试找到文件
-    /// </summary>
-    private static JObject appsettingsJson;
-    public static JObject AppsettingsJson
-    {
-        get
-        {
-            if (appsettingsJson == null)
-            {
-                using (var sr = new StreamReader(ContentRootPath + "/appsettings.json", Encoding.Default))
-                {
-                    appsettingsJson = JObject.Parse(sr.ReadToEnd());
-                }
-            }
-            return appsettingsJson;
-        }
-        set => appsettingsJson = value;
-    }
-
-    /// <summary>
     /// 起始路径（Windows为磁盘跟目录，linux为/）
     /// </summary>
     public static string StartPath = "/";
@@ -77,38 +53,41 @@ public class GlobalTo
     /// <summary>
     /// 获取AppsettingsJson的值
     /// </summary>
-    /// <param name="path">如：ConnectionStrings:SQLServerConn</param>
+    /// <param name="key">键路径，如：ConnectionStrings:SQLServerConn</param>
     /// <returns></returns>
-    public static string GetValue(string path)
+    public static string GetValue(string key)
     {
-        string result = string.Empty;
-
-        if (!string.IsNullOrWhiteSpace(path))
-        {
-            var listp = path.Split(':').ToList();
-            var deep = 0;
-            var jo = AppsettingsJson as JToken;
-            while (deep < listp.Count)
-            {
-                try
-                {
-                    jo = jo[listp[deep++]];
-                }
-                catch (System.Exception)
-                {
-                    goto output;
-                }
-            }
-            result = jo?.ToString() ?? "";
-        }
-    output: return result;
+        return Configuration.GetValue<string>(key);
     }
 
-    public static T GetValue<T>(string path)
+    /// <summary>
+    /// 获取AppsettingsJson的值
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    /// <param name="key">键路径</param>
+    /// <returns></returns>
+    public static T GetValue<T>(string key)
     {
-        return (T)ConvertValue(typeof(T), GetValue(path));
+        return Configuration.GetValue<T>(key);
     }
 
+    /// <summary>
+    /// 值类型转换
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    /// <param name="value">值</param>
+    /// <returns></returns>
+    public static T ConvertValue<T>(string value)
+    {
+        return (T)ConvertValue(typeof(T), value);
+    }
+
+    /// <summary>
+    /// 值类型转换
+    /// </summary>
+    /// <param name="type">类型</param>
+    /// <param name="value">值</param>
+    /// <returns></returns>
     public static object ConvertValue(Type type, string value)
     {
         if (type == typeof(object))
