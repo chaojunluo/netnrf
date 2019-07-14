@@ -20,29 +20,27 @@ namespace Netnr.ResponseFramework
             GlobalTo.Configuration = configuration;
             GlobalTo.HostingEnvironment = env;
 
-            #region 第三方登录配置（如果不用，请以最快的速度删了，^_^）
-            //也可把秘钥配置到appsettings.json，如：GlobalVar.GetValue("Login:QQConfig:APPID")
+            #region 第三方登录（如果不用，请以最快的速度删了，^_^）
+            QQConfig.APPID = GlobalTo.GetValue("OAuthLogin:QQ:APPID");
+            QQConfig.APPKey = GlobalTo.GetValue("OAuthLogin:QQ:APPKey");
+            QQConfig.Redirect_Uri = GlobalTo.GetValue("OAuthLogin:QQ:Redirect_Uri");
 
-            QQConfig.APPID = "101511640";
-            QQConfig.APPKey = "f26b4af4a9d68bec2bbcbeee443feb83";
-            QQConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/qq";
+            WeiboConfig.AppKey = GlobalTo.GetValue("OAuthLogin:Weibo:AppKey");
+            WeiboConfig.AppSecret = GlobalTo.GetValue("OAuthLogin:Weibo:AppSecret");
+            WeiboConfig.Redirect_Uri = GlobalTo.GetValue("OAuthLogin:Weibo:Redirect_Uri");
 
-            WeiboConfig.AppKey = "";
-            WeiboConfig.AppSecret = "";
-            WeiboConfig.Redirect_Uri = "";
+            GitHubConfig.ClientID = GlobalTo.GetValue("OAuthLogin:GitHub:ClientID");
+            GitHubConfig.ClientSecret = GlobalTo.GetValue("OAuthLogin:GitHub:ClientSecret");
+            GitHubConfig.Redirect_Uri = GlobalTo.GetValue("OAuthLogin:GitHub:Redirect_Uri");
+            GitHubConfig.ApplicationName = GlobalTo.GetValue("OAuthLogin:GitHub:ApplicationName");
 
-            GitHubConfig.ClientID = "73cd8c706b166968db5b";
-            GitHubConfig.ClientSecret = "7e0495dff8e34e07b37b19b1f8762a36d4bb07a7";
-            GitHubConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/github";
-            GitHubConfig.ApplicationName = "netnrf";
+            TaobaoConfig.AppKey = GlobalTo.GetValue("OAuthLogin:Taobao:AppKey");
+            TaobaoConfig.AppSecret = GlobalTo.GetValue("OAuthLogin:Taobao:AppSecret");
+            TaobaoConfig.Redirect_Uri = GlobalTo.GetValue("OAuthLogin:Taobao:Redirect_Uri");
 
-            TaobaoConfig.AppKey = "25163813";
-            TaobaoConfig.AppSecret = "c3b45e2605aa8696fb5e8d399fd0ca54";
-            TaobaoConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/taobao";
-
-            MicroSoftConfig.ClientID = "6b5f41be-975d-48a4-a971-950bb01097b4";
-            MicroSoftConfig.ClientSecret = "ttzJRE0;()xgmdPQKC3211^";
-            MicroSoftConfig.Redirect_Uri = "https://rf2.netnr.com/account/authcallback/microsoft";
+            MicroSoftConfig.ClientID = GlobalTo.GetValue("OAuthLogin:MicroSoft:ClientID");
+            MicroSoftConfig.ClientSecret = GlobalTo.GetValue("OAuthLogin:MicroSoft:ClientSecret");
+            MicroSoftConfig.Redirect_Uri = GlobalTo.GetValue("OAuthLogin:MicroSoft:Redirect_Uri");
             #endregion
 
             //无创建，有忽略
@@ -121,8 +119,8 @@ namespace Netnr.ResponseFramework
             //全局限制请求大小，上传文件大小限制（详细信息：FormOptions）
             services.Configure<FormOptions>(options =>
             {
-                //20MB
-                options.ValueLengthLimit = 1024 * 1024 * 20;
+                //50MB
+                options.ValueLengthLimit = 1024 * 1024 * 50;
                 options.MultipartBodyLengthLimit = options.ValueLengthLimit;
             });
         }
@@ -139,6 +137,11 @@ namespace Netnr.ResponseFramework
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            //默认起始页index.html
+            DefaultFilesOptions options = new DefaultFilesOptions();
+            options.DefaultFileNames.Add("index.html");
+            app.UseDefaultFiles(options);
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
