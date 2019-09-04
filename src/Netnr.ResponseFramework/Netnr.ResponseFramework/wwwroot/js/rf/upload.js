@@ -22,6 +22,7 @@ function viewimg() {
             ao.modal.find('.modal-dialog').addClass('modal-lg modal-full');
             ao.modal.find('.modal-title').html('<i class="fa fa-eye blue"></i><span>查看<span>');
             ao.modal.find('.modal-body').children().removeClass('alert alert-info');
+            ao.modal.find('.modal-footer').addClass('hidden');
 
             var img = new Image();
             img.src = rowData.txtFile;

@@ -1,4 +1,10 @@
-﻿//新增
+﻿//完成事件
+window.addEventListener('DOMContentLoaded', function () {
+    //绑定数据
+    setTimeout(z.FormAttrAjax, 0);
+}, false);
+
+//新增
 z.button("add", function () {
     //重置
     z.FormRequired('reset');
@@ -31,9 +37,8 @@ z.button("batch_close", function () {
 
 //批处理按钮切换
 z.batchButtonSwitch = function (isopen) {
-    if (arguments.length == 0) {
-        z.batchControlStatus = isopen = !(z.batchControlStatus || false);
-    }
+    isopen = isopen == null ? !(z.batchControlStatus || false) : isopen;
+    z.batchControlStatus = isopen;
     $('#BtnMenu').children().each(function () {
         var that = $(this);
         if (this.nodeName != "BUTTON") {

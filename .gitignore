@@ -328,3 +328,4 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+/src/Netnr.ResponseFramework/Netnr.ResponseFramework/wwwroot/upload/temp/.ignore

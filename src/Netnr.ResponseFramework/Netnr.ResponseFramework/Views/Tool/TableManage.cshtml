@@ -8,33 +8,35 @@
     }
 </style>
 
-<div class="row mt15">
-    <div class="col-sm-12">
-        <a href="/tool/resetdatabase" class="btn btn-danger btn-sm" target="_blank">重置数据库</a>
-        <hr />
+<div class="row">
+    <div class="col-sm-12 mt15 mb15">
+        <a href="/tool/resetdatabase" onclick="return confirm('确定？')" class="btn btn-danger pull-right" target="_blank">重置数据库</a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                生成表配置 <i class="fa fa-fw fa-chevron-down"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><button class="btn btn-block btn-info" onclick="Generate(1)">追加不存在的字段</button></li>
+                <li><button class="btn btn-block btn-danger" onclick="Generate(2)">覆盖更新</button></li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-success" id="btnQuery">查询字典</button>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-fw fa-chevron-down"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <button class="btn btn-block btn-info" onclick="exportexcel()">
+                        <i class="fa fa-fw fa-file-excel-o"></i>导出表设计
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <button type="button" class="btn btn-warning" id="btnGenerateCode" title="单表简单的增删改查">生成代码</button>
     </div>
     <div class="col-sm-4">
-        <div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-                    生成表配置 <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><button class="btn btn-sm btn-block btn-info" onclick="builder(1)">追加不存在的字段</button></li>
-                    <li><button class="btn btn-sm btn-block btn-danger" onclick="builder(2)">覆盖更新</button></li>
-                </ul>
-            </div>
-            <div class="btn-group pull-right">
-                <button class="btn btn-success btn-sm" id="btnQuery">查询字典</button>
-                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><button class="btn btn-sm btn-block btn-info" onclick="exportexcel()">导出表设计（Excel）</button></li>
-                </ul>
-            </div>
-        </div>
-        <div id="PGrid1" class="mt15">
+        <div id="PGrid1">
             <div id="Grid1" class="loadingimg"></div>
         </div>
     </div>
@@ -45,6 +47,65 @@
     </div>
 </div>
 
+
+<!--模态框 生成代码-->
+<div class="modal fade modalautoheight" id="fv_modal_11" role="dialog" data-backdrop="static">
+    <div class='modal-dialog modal-full'>
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="fv_title_11">
+                    <i class="fa fa-code orange"></i><span>生成代码</span>
+                </h4>
+            </div>
+
+            <div class="modal-body">
+
+                <ul id="myTabs" class="nav nav-tabs">
+                    <li class="active"><a href="#TabC1" id="TabT1" data-toggle="tab">Controller</a></li>
+                    <li><a href="#TabC2" id="TabT2" data-toggle="tab">View</a></li>
+                    <li><a href="#TabC3" id="TabT3" data-toggle="tab">JavaScript</a></li>
+                    <li><a href="#TabC4" id="TabT4" data-toggle="tab"><i class="fa fa-fw fa-lg orange fa-save"></i></a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane active in" id="TabC1">
+                        <div></div>
+                    </div>
+                    <div class="tab-pane" id="TabC2">
+                        <div></div>
+                    </div>
+                    <div class="tab-pane" id="TabC3">
+                        <div></div>
+                    </div>
+                    <div class="tab-pane" id="TabC4">
+                        <div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    保存路径：<code>/upload/temp/.ignore/GenerateCode/</code>，会覆盖已存在的文件
+                                </li>
+                                <li class="list-group-item">
+                                    <code>.ignore</code>目录已加入VS、Git的忽略项，避免生成的代码对项目产生影响
+                                </li>
+                                <li class="list-group-item">
+                                    模版文件在<code>/scripts/table-code/</code>目录下
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="btn btn-primary" id="btnSaveGenerateCode">保存到临时目录</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer hidden"></div>
+        </div>
+    </div>
+</div>
+
 <script src="/lib/jquery-easyui/ext/datagrid-groupview.js" asp-append-version="true"></script>
+
+<partial name="_QuotePartial" model="@("vscode")" />
 
 <partial name="_BaseViewPartial" />

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using FluentScheduler;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Netnr.Func.ViewModel;
 
 namespace Netnr.ResponseFramework.Controllers
@@ -18,38 +16,57 @@ namespace Netnr.ResponseFramework.Controllers
     {
         #region 定时任务
 
-        [Description("执行任务")]
-        public ActionResultVM ExecTask(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                id = RouteData.Values["id"]?.ToString();
-            }
+        //帮助文档：https://github.com/fluentscheduler/FluentScheduler
 
+        /// <summary>
+        /// 任务项
+        /// </summary>
+        public enum TaskItem
+        {
+            /// <summary>
+            /// 重置数据库
+            /// </summary>
+            ResetDataBase,
+
+            /// <summary>
+            /// 清理临时目录
+            /// </summary>
+            ClearTemp
+        }
+
+        [Description("执行任务")]
+        public ActionResultVM ExecTask(TaskItem? ti)
+        {
             var vm = new ActionResultVM();
 
             try
             {
-                switch (id)
+                if (!ti.HasValue)
+                {
+                    ti = (TaskItem)Enum.Parse(typeof(TaskItem), RouteData.Values["id"]?.ToString(), true);
+                }
+
+                switch (ti)
                 {
                     default:
                         vm.Set(ARTag.invalid);
                         break;
 
-                    //重置数据库
-                    case "resetdatabase":
+                    case TaskItem.ResetDataBase:
+                        using (var tc = new ToolController())
                         {
-                            vm.data = new ToolController().ResetDataBase();
-                            vm.Set(ARTag.success);
+                            vm = tc.ResetDataBase();
                         }
                         break;
 
-                    //清理临时目录
-                    case "cleartemp":
+                    case TaskItem.ClearTemp:
                         {
                             string directoryPath = (GlobalTo.WebRootPath + "/upload/temp/").Replace("\\", "/");
 
                             var listLog = new List<string>();
+
+                            int delFileCount = 0;
+                            int delFolderCount = 0;
 
                             //删除文件
                             var listFile = Directory.GetFiles(directoryPath).ToList();
@@ -60,6 +77,7 @@ namespace Netnr.ResponseFramework.Controllers
                                     try
                                     {
                                         System.IO.File.Delete(path);
+                                        delFileCount++;
                                     }
                                     catch (Exception ex)
                                     {
@@ -75,6 +93,7 @@ namespace Netnr.ResponseFramework.Controllers
                                 try
                                 {
                                     Directory.Delete(path, true);
+                                    delFolderCount++;
                                 }
                                 catch (Exception ex)
                                 {
@@ -82,7 +101,7 @@ namespace Netnr.ResponseFramework.Controllers
                                 }
                             }
 
-                            listLog.Insert(0, $"删除文件{listFile.Count}个，删除{listFolder.Count}个文件夹");
+                            listLog.Insert(0, $"删除文件{delFileCount}个，删除{delFolderCount}个文件夹");
 
                             vm.data = listLog;
                             vm.Set(ARTag.success);
@@ -99,53 +118,43 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         /// <summary>
-        /// 定时任务服务
+        /// 任务组件
         /// </summary>
-        public class TaskService : BackgroundService
+        public class TaskComponent
         {
-            protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+            public class Reg : Registry
             {
-                while (!stoppingToken.IsCancellationRequested)
+                public Reg()
                 {
-                    try
-                    {
-                        var sc = new ServicesController();
-
-                        //执行结果
-                        var vm = new ActionResultVM
-                        {
-                            code = -9
-                        };
-                        var now = DateTime.Now;
-
-                        //重置一次数据库
-                        if (now.ToString("HHmm") == "0404")
-                        {
-                            vm = sc.ExecTask("resetdatabase");
-                        }
-
-                        //清理临时目录
-                        if (now.Day % 2 == 0 && now.ToString("HHmm") == "0303")
-                        {
-                            vm = sc.ExecTask("cleartemp");
-                        }
-
-                        //记录任务日志
-                        if (vm.code != -9)
-                        {
-                            string msg = "Tasking：" + now.ToString("yyyy-MM-dd HH:mm:ss") + Environment.NewLine + vm.ToJson();
-                            Core.ConsoleTo.Log(msg);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Core.ConsoleTo.Log(ex);
-                    }
-
-                    //1分钟
-                    await Task.Delay(1000 * 60 * 1, stoppingToken);
+                    //每间隔一天在4:4 重置数据库
+                    Schedule<ResetDataBaseJob>().ToRunEvery(1).Days().At(4, 4);
+                    //每间隔两天在3:3 清理临时目录
+                    Schedule<ClearTempJob>().ToRunEvery(2).Days().At(3, 3);
                 }
             }
+
+            public class ResetDataBaseJob : IJob
+            {
+                void IJob.Execute()
+                {
+                    using (var sc = new ServicesController())
+                    {
+                        Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ResetDataBase).ToJson());
+                    }
+                }
+            }
+
+            public class ClearTempJob : IJob
+            {
+                void IJob.Execute()
+                {
+                    using (var sc = new ServicesController())
+                    {
+                        Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ClearTemp).ToJson());
+                    }
+                }
+            }
+
         }
 
         #endregion

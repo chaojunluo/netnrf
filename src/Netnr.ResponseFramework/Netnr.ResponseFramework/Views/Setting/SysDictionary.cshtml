@@ -2,7 +2,10 @@
     ViewData["Title"] = "数据字典";
 }
 
-@await Component.InvokeAsync("Form", new { tablename = "SysDictionary" })
+@await Component.InvokeAsync("Form", new InvokeFormVM()
+{
+    TableName = "SysDictionary"
+})
 
 <!--快捷查询-->
 <div class="row">

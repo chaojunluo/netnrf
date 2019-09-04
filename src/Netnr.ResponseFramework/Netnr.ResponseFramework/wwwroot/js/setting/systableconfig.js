@@ -73,8 +73,10 @@ function col_custom_formtype(value) {
 //跨列
 z.DC["dataurl_formspan"] = {
     data: [
-        { value: 1, text: "半排", selected: true },
-        { value: 2, text: "整排" }
+        { value: 1, text: "占一半", selected: true },
+        { value: 2, text: "占一整" },
+        { value: 3, text: "占三分之一" },
+        { value: 4, text: "占三分之二" }
     ]
 };
 //跨列格式化
@@ -108,8 +110,8 @@ function col_custom_colalign(value) {
 //区域
 z.DC["dataurl_formarea"] = {
     data: [
-        { value: 1, text: "表格配置" },
-        { value: 2, text: "表单配置" }
+        { value: 1, text: "一区（选项卡1 或 单据表头）" },
+        { value: 2, text: "二区（选项卡2 或 单据表尾）" }
     ]
 };
 //区域格式化

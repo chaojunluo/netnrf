@@ -90,7 +90,7 @@ namespace Netnr.Func
             //分页
             if (ivm.pagination == 1)
             {
-                query = query.Skip((ivm.page - 1) * ivm.rows).Take(ivm.rows);
+                query = query.Skip((Math.Max(ivm.page, 1) - 1) * ivm.rows).Take(ivm.rows);
             }
 
             //数据
@@ -110,7 +110,7 @@ namespace Netnr.Func
         }
 
         /// <summary>
-        /// 查询条件
+        /// 查询条件（IQueryable）
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="query"></param>
@@ -189,6 +189,53 @@ namespace Netnr.Func
                                 }
                                 query = query.Where(x => !list.Contains(x.GetType().GetProperty(field).GetValue(x, null).ToString()));
                             }
+                            break;
+                    }
+                }
+            }
+            return query;
+        }
+
+        /// <summary>
+        /// 查询条件（IEnumerable,仅支持部分）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query"></param>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> QueryWhere<T>(IEnumerable<T> query, QueryDataInputVM ivm)
+        {
+            //条件
+            if (!string.IsNullOrWhiteSpace(ivm.wheres))
+            {
+                var whereItems = JArray.Parse(ivm.wheres);
+                foreach (var item in whereItems)
+                {
+                    //关系符
+                    var relation = item["relation"].ToStringOrEmpty();
+                    string rel = DicSqlRelation[relation];
+
+                    //字段
+                    var field = item["field"].ToStringOrEmpty();
+                    //值
+                    var value = item["value"].ToString().ToLower();
+
+                    switch (relation)
+                    {
+                        case "Equal":
+                            query = query.Where(x => x.GetType().GetProperty(field).GetValue(x, null).ToString().ToLower() == value);
+                            break;
+                        case "NotEqual":
+                            query = query.Where(x => x.GetType().GetProperty(field).GetValue(x, null).ToString().ToLower() != value);
+                            break;
+                        case "Contains":
+                            query = query.Where(x => x.GetType().GetProperty(field).GetValue(x, null).ToString().ToLower().Contains(value));
+                            break;
+                        case "StartsWith":
+                            query = query.Where(x => x.GetType().GetProperty(field).GetValue(x, null).ToString().ToLower().StartsWith(value));
+                            break;
+                        case "EndsWith":
+                            query = query.Where(x => x.GetType().GetProperty(field).GetValue(x, null).ToString().ToLower().EndsWith(value));
                             break;
                     }
                 }

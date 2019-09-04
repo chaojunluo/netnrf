@@ -109,7 +109,7 @@
         if (!isopen) {
             var pageid = "page_" + new Date().valueOf(), close = close == false ? '' : '<em class="fa fa-close"></em>';
             mmc.end().append('<a href="#' + pageid + '" class="active">' + title + close + '</a></li>');
-            mb.append('<div class="tab-pane active" id="' + pageid + '"><iframe frameborder="0" scrolling="no" src="about:blank"></iframe></div>');
+            mb.append('<div class="tab-pane active" id="' + pageid + '"><iframe frameborder="0" src="about:blank" allowfullscreen="true"></iframe></div>');
             var ifr = $('#' + pageid).find('iframe')[0];
             ifr.src = url;
             ifr.focus();
@@ -391,6 +391,7 @@ $('#usermenu').click(function (e) {
                     var ao = art('<div style="line-height:260px;text-align:center"><img src="/images/loading.gif" style="max-height:260px" /></div>');
                     ao.modal.find('.modal-title').html('<i class="fa fa-wechat green"></i><span>关注公众号:<span><b class="green">netnrcom</b>');
                     ao.modal.find('.modal-body').children().removeClass('alert alert-info');
+                    ao.modal.find('.modal-footer').addClass('hidden');
 
                     var img = new Image();
                     img.src = "https://gs.zme.ink/static/wechat_netnrcom.jpg";

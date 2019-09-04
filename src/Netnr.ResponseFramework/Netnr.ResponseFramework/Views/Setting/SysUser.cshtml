@@ -2,6 +2,10 @@
     ViewData["Title"] = "用户管理";
 }
 
-@await Component.InvokeAsync("Form", new { tablename = "SysUser", modalsize = 2 })
+@await Component.InvokeAsync("Form", new InvokeFormVM()
+{
+    TableName = "SysUser",
+    ModalSize = 2
+})
 
 <partial name="_BaseViewPartial" />

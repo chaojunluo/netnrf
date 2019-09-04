@@ -17,6 +17,8 @@ namespace Netnr.Data
         public virtual DbSet<SysTableConfig> SysTableConfig { get; set; }
         public virtual DbSet<SysUser> SysUser { get; set; }
         public virtual DbSet<TempExample> TempExample { get; set; }
+        public virtual DbSet<TempInvoiceDetail> TempInvoiceDetail { get; set; }
+        public virtual DbSet<TempInvoiceMain> TempInvoiceMain { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -349,6 +351,96 @@ namespace Netnr.Data
 
                 entity.Property(e => e.TableName)
                     .HasMaxLength(200)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TempInvoiceDetail>(entity =>
+            {
+                entity.HasKey(e => e.TidId)
+                    .HasName("TempInvoiceDetail_TidId_PK");
+
+                entity.Property(e => e.TidId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.GoodsCost).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.GoodsId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GoodsPrice).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.Spare1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Spare2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Spare3)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TempInvoiceMain>(entity =>
+            {
+                entity.HasKey(e => e.TimId)
+                    .HasName("TempInvoiceMain_TimId_PK");
+
+                entity.Property(e => e.TimId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Spare1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Spare2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Spare3)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimCreateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.TimDate).HasColumnType("datetime");
+
+                entity.Property(e => e.TimNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimOwnerId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimOwnerName).HasMaxLength(20);
+
+                entity.Property(e => e.TimRemark).HasMaxLength(200);
+
+                entity.Property(e => e.TimStore)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimSupplier)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimUser)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
             });
         }

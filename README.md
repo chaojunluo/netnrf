@@ -64,23 +64,23 @@
 
 #### 列表 
 
-![列表](https://gs.zme.ink/2018/05/18/403ce7d002.png)
+![列表](https://static.netnr.com/2018/05/18/403ce7d002.png)
 
 #### 新增、编辑、查看
 
-![表单](https://gs.zme.ink/2018/05/18/8d25d345b2.png)
+![表单](https://static.netnr.com/2018/05/18/8d25d345b2.png)
 
 #### 列表配置
 
-![列表配置](https://gs.zme.ink/2018/05/18/13da6572a3.png)
+![列表配置](https://static.netnr.com/2018/05/18/13da6572a3.png)
 
 #### 表单配置
 
-![表单配置](https://gs.zme.ink/2018/05/18/0c98ee578c.png)
+![表单配置](https://static.netnr.com/2018/05/18/0c98ee578c.png)
 
 #### 角色权限配置（树）
 
-![角色权限配置](https://gs.zme.ink/2018/08/16/31a55cac78.png)
+![角色权限配置](https://static.netnr.com/2018/08/16/31a55cac78.png)
 
 ### 第三方文档API
 - [EasyUI文档](https://ad.netnr.com/#EasyUI-1.5.2)

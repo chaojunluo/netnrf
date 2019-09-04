@@ -1,0 +1,84 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+using Netnr.Func.ViewModel;
+using Netnr.Domain;
+using Netnr.Data;
+using System;
+
+namespace Netnr.ResponseFramework.Controllers
+{
+    [Authorize]
+    public class @TableName@Controller : Controller
+    {
+        [Description("@TableTitle@页面")]
+        public IActionResult @TableName@()
+        {
+            return View();
+        }
+
+        [Description("查询@TableTitle@")]
+        public QueryDataOutputVM Query@TableName@(QueryDataInputVM ivm)
+        {
+            var ovm = new QueryDataOutputVM();
+
+            using (var db = new ContextBase())
+            {
+                var query = db.@TableName@;
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
+            }
+
+            return ovm;
+        }
+
+        [Description("保存@TableTitle@")]
+        public ActionResultVM Save@TableName@(@TableName@ mo, string savetype)
+        {
+            var vm = new ActionResultVM();
+
+            using (var db = new ContextBase())
+            {
+                if (savetype == "add")
+                {
+					mo.@PrimaryKey@ = Guid.NewGuid().ToString();
+
+                    db.@TableName@.Add(mo);
+                }
+                else
+                {
+                    db.@TableName@.Update(mo);
+                }
+
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
+            }
+
+            return vm;
+        }
+
+        [Description("删除@TableTitle@")]
+        public ActionResultVM Del@TableName@(string id)
+        {
+            var vm = new ActionResultVM();
+
+            using (var db = new ContextBase())
+            {
+                var mo = db.@TableName@.Find(id);
+                if (mo != null)
+                {
+                    db.@TableName@.Remove(mo);
+                    int num = db.SaveChanges();
+
+                    vm.Set(num > 0);
+                }
+                else
+                {
+                    vm.Set(ARTag.invalid);
+                }
+            }
+
+            return vm;
+        }
+    }
+}

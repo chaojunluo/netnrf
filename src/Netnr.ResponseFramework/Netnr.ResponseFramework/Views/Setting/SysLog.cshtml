@@ -2,6 +2,9 @@
     ViewData["Title"] = "操作日志";
 }
 
-@await Component.InvokeAsync("Form", new { tablename = "SysLog" })
+@await Component.InvokeAsync("Form", new InvokeFormVM()
+{
+    TableName = "SysLog"
+})
 
 <partial name="_BaseViewPartial" />

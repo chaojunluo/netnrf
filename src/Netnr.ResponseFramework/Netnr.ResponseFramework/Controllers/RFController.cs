@@ -105,9 +105,9 @@ namespace Netnr.ResponseFramework.Controllers
 
         #endregion
 
-        #region Grid多表格变动
+        #region Grid表格联动
 
-        [Description("Grid多表格变动")]
+        [Description("Grid表格联动")]
         public IActionResult GridChange()
         {
             return View();
@@ -139,6 +139,16 @@ namespace Netnr.ResponseFramework.Controllers
 
         #endregion
 
+        #region 静态表单示例页面
+
+        [Description("静态表单示例页面")]
+        public IActionResult Form()
+        {
+            return View();
+        }
+
+        #endregion
+
         #region 生成多表单
 
         [Description("生成多表单")]
@@ -149,12 +159,108 @@ namespace Netnr.ResponseFramework.Controllers
 
         #endregion
 
-        #region 静态表单示例页面
+        #region 单据
 
-        [Description("静态表单示例页面")]
-        public IActionResult Form()
+        [Description("单据")]
+        public IActionResult Invoice()
         {
             return View();
+        }
+
+        [Description("查询单据主表")]
+        public QueryDataOutputVM QueryInvoiceMain(QueryDataInputVM ivm)
+        {
+            var ovm = new QueryDataOutputVM();
+            using (var db = new ContextBase())
+            {
+                var query = db.TempInvoiceMain;
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
+            }
+            return ovm;
+        }
+
+        [Description("查询单据明细表")]
+        public QueryDataOutputVM QueryInvoiceDetail(QueryDataInputVM ivm)
+        {
+            var ovm = new QueryDataOutputVM();
+            using (var db = new ContextBase())
+            {
+                var query = from a in db.TempInvoiceDetail select a;
+                if (string.IsNullOrWhiteSpace(ivm.pe1))
+                {
+                    query = query.Where(x => false);
+                }
+                else
+                {
+                    query = query.Where(x => x.TimId == ivm.pe1);
+                }
+
+                Func.Common.QueryJoin(query, ivm, db, ref ovm);
+            }
+            return ovm;
+        }
+
+        [Description("保存单据")]
+        public ActionResultVM SaveInvoiceForm(TempInvoiceMain moMain, string rows)
+        {
+            var vm = new ActionResultVM();
+
+            //明细反序列化为对象
+            var listDetail = rows.ToEntitys<TempInvoiceDetail>();
+
+            //新增，补齐主表信息
+            var isadd = string.IsNullOrWhiteSpace(moMain.TimId);
+            if (isadd)
+            {
+                moMain.TimId = Guid.NewGuid().ToString();
+                moMain.TimCreateTime = DateTime.Now;
+
+                moMain.TimOwnerId = Guid.Empty.ToString();
+                moMain.TimOwnerName = "系统登录人员";
+            }
+
+            using (var db = new ContextBase())
+            {
+                if (isadd)
+                {
+                    db.TempInvoiceMain.Add(moMain);
+                }
+                else
+                {
+                    db.TempInvoiceMain.Update(moMain);
+
+                    //更新时，删除原有明细
+                    var currDetail = db.TempInvoiceDetail.Where(x => x.TimId == moMain.TimId).ToList();
+                    if (currDetail.Count > 0)
+                    {
+                        db.TempInvoiceDetail.RemoveRange(currDetail);
+                    }
+                }
+
+                //添加明细
+                if (listDetail.Count > 0)
+                {
+                    //初始值
+                    foreach (var item in listDetail)
+                    {
+                        item.TidId = Guid.NewGuid().ToString();
+                        item.TimId = moMain.TimId;
+                    }
+
+                    db.TempInvoiceDetail.AddRange(listDetail);
+                }
+
+                int num = db.SaveChanges();
+
+                vm.Set(num > 0);
+
+                if (isadd)
+                {
+                    vm.data = moMain.TimId;
+                }
+            }
+
+            return vm;
         }
 
         #endregion

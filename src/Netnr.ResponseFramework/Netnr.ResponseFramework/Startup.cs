@@ -100,7 +100,7 @@ namespace Netnr.ResponseFramework
             });
 
             //定时任务
-            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, Controllers.ServicesController.TaskService>();
+            FluentScheduler.JobManager.Initialize(new Controllers.ServicesController.TaskComponent.Reg());
 
             //跨域（ 用法：[EnableCors("Any")] ）
             services.AddCors(options =>

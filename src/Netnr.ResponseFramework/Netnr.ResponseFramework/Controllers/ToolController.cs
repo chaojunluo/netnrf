@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Netnr.Data;
 using Netnr.Domain;
 using Netnr.Func.ViewModel;
-using Newtonsoft.Json.Linq;
 
 namespace Netnr.ResponseFramework.Controllers
 {
@@ -38,7 +38,7 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         [Description("查询数据库表与表配置信息")]
-        public QueryDataOutputVM QueryTableConfig()
+        public QueryDataOutputVM QueryTableConfig(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
 
@@ -56,7 +56,7 @@ namespace Netnr.ResponseFramework.Controllers
 
                 var dt = new DataTable();
 
-                var listRow = new List<object>();
+                var listRow = new List<TreeNodeVM>();
                 if (!string.IsNullOrWhiteSpace(sql))
                 {
                     using (var conn = db.Database.GetDbConnection())
@@ -70,16 +70,18 @@ namespace Netnr.ResponseFramework.Controllers
                     {
                         var key = dr[0].ToString();
                         var val = (listHas.Exists(x => x.ToLower() == key.ToLower()) ? "1" : "");
-                        var row = new JObject
+                        var row = new TreeNodeVM
                         {
-                            ["name"] = key,
-                            ["exists"] = val
+                            id = key,
+                            pid = val
                         };
                         listRow.Add(row);
                     }
                 }
-                ovm.data = listRow;
-                ovm.total = listRow.Count;
+
+                var listFilter = Func.Common.QueryWhere(listRow, ivm);
+                ovm.data = listFilter;
+                ovm.total = listFilter.Count();
             }
 
             return ovm;
@@ -392,6 +394,45 @@ namespace Netnr.ResponseFramework.Controllers
 
                 vm.Set(ARTag.success);
                 vm.data = path + filename;
+            }
+
+            return vm;
+        }
+
+        [Description("保存生成的代码")]
+        public ActionResultVM SaveGenerateCode(string name, string controller, string view, string javascript)
+        {
+            var vm = new ActionResultVM();
+
+            try
+            {
+                var rootg = "/upload/temp/.ignore/GenerateCode/";
+                var rootc = GlobalTo.WebRootPath + rootg + "Controllers/";
+                var rootv = GlobalTo.WebRootPath + rootg + "Views/" + name + "/";
+                var rootj = GlobalTo.WebRootPath + rootg + "js/" + name.ToLower() + "/";
+
+                if (!Directory.Exists(rootc))
+                {
+                    Directory.CreateDirectory(rootc);
+                }
+                if (!Directory.Exists(rootv))
+                {
+                    Directory.CreateDirectory(rootv);
+                }
+                if (!Directory.Exists(rootj))
+                {
+                    Directory.CreateDirectory(rootj);
+                }
+
+                Core.FileTo.WriteText(controller, rootc, name + ".cs", false);
+                Core.FileTo.WriteText(view, rootv, name + ".cshtml", false);
+                Core.FileTo.WriteText(javascript, rootj, name.ToLower() + ".js", false);
+
+                vm.Set(ARTag.success);
+            }
+            catch (Exception ex)
+            {
+                vm.Set(ex);
             }
 
             return vm;

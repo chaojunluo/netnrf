@@ -10,9 +10,9 @@ gd1.checkbox = true;
 
 //表头配置
 gd1.columns = [[
-    { field: "name", title: "表名", width: 150, halign: "center" },
+    { field: "id", title: "表名", width: 150, halign: "center", ColQuery: 1, ColRelation: "Contains,Equal" },
     {
-        field: "exists", title: "表配置", width: 60, halign: "center", align: "center", formatter: function (value, row, index) {
+        field: "pid", title: "表配置", width: 60, halign: "center", align: "center", formatter: function (value, row, index) {
             return value == 1 ? '已生成' : value;
         }
     }
@@ -20,13 +20,13 @@ gd1.columns = [[
 gd1.load();
 
 //建立表配置
-function builder(maketype) {
+function Generate(maketype) {
     var rowData = gd1.func('getSelections');
     if (rowData.length) {
         art("警告：确定生成？", function () {
             var names = [];
             $(rowData).each(function () {
-                names.push(this.name)
+                names.push(this.id)
             })
 
             $.ajax({
@@ -58,7 +58,7 @@ function exportexcel() {
     if (rowData.length) {
         var names = [];
         $(rowData).each(function () {
-            names.push(this.name)
+            names.push(this.id)
         })
         GlobalExport("/tool/ExportTableInfo", function (data) {
             data.names = names.join(',')
@@ -101,11 +101,33 @@ gd2.onBeforeLoad = function (row, param) {
     if (rowData.length) {
         var names = [];
         $(rowData).each(function () {
-            names.push(this.name)
+            names.push(this.id)
         })
         param.names = names.join(',');
     }
 }
+gd2.onComplete(function () {
+    //是生成代码事件
+    if (gd2.isGenerateCode) {
+        codeGenerate.templateParam.PrimaryKey = null;
+        $.each(gd2.data, function (i, row) {
+            if (row["主键"] == "YES") {
+                codeGenerate.templateParam = {
+                    TableName: row["表名"],
+                    TableTitle: row["表说明"] || row["表名"],
+                    PrimaryKey: row["字段名"]
+                }
+                return false;
+            }
+        });
+        if (codeGenerate.templateParam.PrimaryKey) {
+            codeGenerate.viewCode();
+        } else {
+            art('未找到主键列');
+        }
+    }
+});
+
 $('#btnQuery').click(function () {
     var rowData = gd1.func('getSelections');
     if (rowData.length) {
@@ -113,4 +135,121 @@ $('#btnQuery').click(function () {
     } else {
         art('select');
     }
+})
+
+//生成代码
+$('#btnGenerateCode').click(function () {
+    gd2.isGenerateCode = 1;
+    var rowData = gd1.func('getSelections');
+    if (rowData.length == 1) {
+        gd2.load();
+    } else if (rowData.length > 1) {
+        art('请仅选择一行');
+    } else {
+        art('select');
+    }
+});
+
+var codeGenerate = {
+    //模版参数
+    templateParam: {
+        TableName: null,
+        TableTitle: null,
+        PrimaryKey: null
+    },
+    //显示代码
+    viewCode: function () {
+        gd2.isGenerateCode = 0;
+
+        $('#fv_modal_11').modal();
+
+        require(['vs/editor/editor.main'], function () {
+
+            $.get('/scripts/table-code/controller.txt').then(function (res) {
+                if (window.editor1) {
+                    window.editor1.dispose()
+                }
+                window.editor1 = monaco.editor.create(document.getElementById('TabC1').children[0], {
+                    value: codeGenerate.templateReplace(res),
+                    language: 'csharp',
+                    automaticLayout: true,
+                    minimap: {
+                        enabled: false
+                    }
+                });
+            })
+
+            $.get('/scripts/table-code/view.txt').then(function (res) {
+                if (window.editor2) {
+                    window.editor2.dispose()
+                }
+                window.editor2 = monaco.editor.create(document.getElementById('TabC2').children[0], {
+                    value: codeGenerate.templateReplace(res),
+                    language: 'csharp',
+                    automaticLayout: true,
+                    minimap: {
+                        enabled: false
+                    }
+                });
+            })
+
+            $.get('/scripts/table-code/javascript.txt').then(function (res) {
+                if (window.editor3) {
+                    window.editor3.dispose()
+                }
+                window.editor3 = monaco.editor.create(document.getElementById('TabC3').children[0], {
+                    value: codeGenerate.templateReplace(res),
+                    language: 'javascript',
+                    automaticLayout: true,
+                    minimap: {
+                        enabled: false
+                    }
+                });
+            })
+        });
+    },
+    //模版参数替换
+    templateReplace: function (template) {
+        return template.replace(/@TableName@/g, codeGenerate.templateParam.TableName)
+            .replace(/@TableTitle@/g, codeGenerate.templateParam.TableTitle)
+            .replace(/@PrimaryKey@/g, codeGenerate.templateParam.PrimaryKey)
+    },
+    //代码编辑器高度自适应
+    editorAutoHeight: function () {
+        var mtc = $('#myTabContent');
+        mtc.children().children().height($(window).height() - mtc.offset().top - 35);
+    }
+}
+
+//保存代码
+$('#btnSaveGenerateCode').click(function () {
+    $('#btnSaveGenerateCode')[0].disabled = true;
+    $.ajax({
+        url: "/Tool/SaveGenerateCode",
+        type: 'post',
+        data: {
+            name: codeGenerate.templateParam.TableName,
+            controller: editor1.getValue(),
+            view: editor2.getValue(),
+            javascript: editor3.getValue()
+        },
+        dataType: "json",
+        success: function (data) {
+            art(data.msg)
+        },
+        error: function () {
+            art('error')
+        },
+        complete: function () {
+            $('#btnSaveGenerateCode')[0].disabled = false;
+        }
+    })
+});
+
+//显示时、窗口大小变动时，编辑器高度自适应
+$('#fv_modal_11').on("shown.bs.modal", function () {
+    codeGenerate.editorAutoHeight();
+})
+$(window).on('resize', function () {
+    codeGenerate.editorAutoHeight();
 })
