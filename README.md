@@ -13,7 +13,7 @@
     - 数据库脚本放置于 `wwwroot/scripts/`目录下
     - 数据库转换使用的工具：http://www.szmesoft.com/DB2DB
     - 全部采用 LINQ，跨数据库、避免SQL注入
-- Visual Studio 2017+ 运行项目
+- Visual Studio 2019 运行项目
 
 ### 项目结构
 - Netnr.Core 类库（引用NuGet，源码地址：<https://github.com/netnr/Netnr.ClassLibrary>）
@@ -33,7 +33,7 @@
 - 表配置（SysTableConfig）
 
 ### 功能
-- 登录：系统账号登录，第三方账号登录（QQ、微信、微博、GitHub、Microsoft 等）
+- 登录：系统账号登录
 - 权限：角色权限，控制菜单及页面按钮
 - 表格：动态配置标题、宽度、排序、对齐方式、格式化、冻结、点击排序等
 - 表单：动态生成表单，自定义标题、排序、跨列、类型、必填等，支持多表单生成
