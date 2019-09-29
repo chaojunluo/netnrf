@@ -137,10 +137,8 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 void IJob.Execute()
                 {
-                    using (var sc = new ServicesController())
-                    {
-                        Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ResetDataBase).ToJson());
-                    }
+                    using var sc = new ServicesController();
+                    Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ResetDataBase).ToJson());
                 }
             }
 
@@ -148,10 +146,8 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 void IJob.Execute()
                 {
-                    using (var sc = new ServicesController())
-                    {
-                        Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ClearTemp).ToJson());
-                    }
+                    using var sc = new ServicesController();
+                    Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ClearTemp).ToJson());
                 }
             }
 

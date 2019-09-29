@@ -100,35 +100,31 @@ namespace Netnr.ResponseFramework.Controllers
         [Description("公共查询：角色列表")]
         public List<ValueTextVM> QueryRole()
         {
-            using (var db = new ContextBase())
-            {
-                var query = from a in db.SysRole
-                            where a.SrStatus == 1
-                            orderby a.SrCreateTime
-                            select new ValueTextVM
-                            {
-                                value = a.SrId,
-                                text = a.SrName
-                            };
-                var list = query.ToList();
-                return list;
-            }
+            using var db = new ContextBase();
+            var query = from a in db.SysRole
+                        where a.SrStatus == 1
+                        orderby a.SrCreateTime
+                        select new ValueTextVM
+                        {
+                            value = a.SrId,
+                            text = a.SrName
+                        };
+            var list = query.ToList();
+            return list;
         }
 
         [Description("公共查询：查询数据字典的例子")]
         public List<ValueTextVM> QueryDictionaryDemo()
         {
-            using (var db = new ContextBase())
-            {
-                var list = db.SysDictionary
-                    .Where(x => x.SdType == "SysDictionary:SdType" && x.SdStatus == 1)
-                    .Select(x => new ValueTextVM
-                    {
-                        value = x.SdId,
-                        text = x.SdValue
-                    }).ToList();
-                return list;
-            }
+            using var db = new ContextBase();
+            var list = db.SysDictionary
+.Where(x => x.SdType == "SysDictionary:SdType" && x.SdStatus == 1)
+.Select(x => new ValueTextVM
+{
+value = x.SdId,
+text = x.SdValue
+}).ToList();
+            return list;
         }
 
         /// <summary>

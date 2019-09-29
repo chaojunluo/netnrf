@@ -114,7 +114,7 @@ namespace Netnr.ResponseFramework.Controllers
         public void ExportDown(string path)
         {
             path = GlobalTo.ContentRootPath + path;
-            new Core.DownTo(Response).Stream(path, "");
+            new Fast.DownTo(Response).Stream(path, "");
         }
 
         #endregion

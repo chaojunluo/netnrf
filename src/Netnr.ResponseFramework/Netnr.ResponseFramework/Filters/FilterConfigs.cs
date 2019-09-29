@@ -96,7 +96,7 @@ namespace Netnr.ResponseFramework.Filters
                     try
                     {
                         //客户端信息
-                        var ct = new Core.ClientTo(hc);
+                        var ct = new Fast.ClientTo(hc);
 
                         //用户信息
                         var userinfo = Func.Common.GetLoginUserInfo(hc);
@@ -109,7 +109,7 @@ namespace Netnr.ResponseFramework.Filters
                             SuNickname = userinfo.Nickname,
                             LogAction = controller + "/" + action,
                             LogUrl = url,
-                            LogIp = ct.IPv4,
+                            LogIp = ct.IPv4.Split(',')[0].Trim(),
                             LogCreateTime = DateTime.Now,
                             LogBrowserName = ct.BrowserName,
                             LogSystemName = ct.SystemName,

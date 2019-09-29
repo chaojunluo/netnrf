@@ -275,7 +275,7 @@ namespace Netnr.Func
         {
             var loginUser = new LoginUserVM
             {
-                UserId = context.User.FindFirst(ClaimTypes.Sid)?.Value,
+                UserId = context.User.FindFirst(ClaimTypes.PrimarySid)?.Value,
                 UserName = context.User.FindFirst(ClaimTypes.Name)?.Value,
                 Nickname = context.User.FindFirst(ClaimTypes.GivenName)?.Value,
                 RoleId = context.User.FindFirst(ClaimTypes.Role)?.Value
@@ -335,11 +335,9 @@ namespace Netnr.Func
         /// <returns></returns>
         public static List<SysTableConfig> QuerySysTableConfigList(Expression<Func<SysTableConfig, bool>> predicate)
         {
-            using (var db = new ContextBase())
-            {
-                var list = db.SysTableConfig.Where(predicate).OrderBy(x => x.ColOrder).ToList();
-                return list;
-            }
+            using var db = new ContextBase();
+            var list = db.SysTableConfig.Where(predicate).OrderBy(x => x.ColOrder).ToList();
+            return list;
         }
 
         /// <summary>
@@ -353,11 +351,9 @@ namespace Netnr.Func
             var list = Core.CacheTo.Get(GlobalCacheKey.SysMenu) as List<SysMenu>;
             if (!cache || list == null)
             {
-                using (var db = new ContextBase())
-                {
-                    list = db.SysMenu.OrderBy(x => x.SmOrder).ToList();
-                    Core.CacheTo.Set(GlobalCacheKey.SysMenu, list, 300, false);
-                }
+                using var db = new ContextBase();
+                list = db.SysMenu.OrderBy(x => x.SmOrder).ToList();
+                Core.CacheTo.Set(GlobalCacheKey.SysMenu, list, 300, false);
             }
             list = list.Where(predicate).ToList();
             return list;
@@ -373,11 +369,9 @@ namespace Netnr.Func
             var list = Core.CacheTo.Get(GlobalCacheKey.SysButton) as List<SysButton>;
             if (!cache || list == null)
             {
-                using (var db = new ContextBase())
-                {
-                    list = db.SysButton.OrderBy(x => x.SbBtnOrder).ToList();
-                    Core.CacheTo.Set(GlobalCacheKey.SysButton, list, 300, false);
-                }
+                using var db = new ContextBase();
+                list = db.SysButton.OrderBy(x => x.SbBtnOrder).ToList();
+                Core.CacheTo.Set(GlobalCacheKey.SysButton, list, 300, false);
             }
             list = list.Where(predicate).ToList();
             return list;
@@ -390,11 +384,9 @@ namespace Netnr.Func
         /// <returns></returns>
         public static SysRole QuerySysRoleEntity(Expression<Func<SysRole, bool>> predicate)
         {
-            using (var db = new ContextBase())
-            {
-                var mo = db.SysRole.Where(predicate).FirstOrDefault();
-                return mo;
-            }
+            using var db = new ContextBase();
+            var mo = db.SysRole.Where(predicate).FirstOrDefault();
+            return mo;
         }
 
         #endregion

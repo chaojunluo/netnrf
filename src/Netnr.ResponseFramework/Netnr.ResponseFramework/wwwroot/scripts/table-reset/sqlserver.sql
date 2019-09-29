@@ -1,5 +1,4 @@
 -- 删除所有表
-DROP TABLE dbo.SysAuthorize 
 DROP TABLE dbo.SysButton;
 DROP TABLE dbo.SysDictionary;
 -- TRUNCATE TABLE dbo.SysLog;
@@ -11,33 +10,6 @@ DROP TABLE dbo.TempExample;
 DROP TABLE dbo.TempInvoiceMain;
 DROP TABLE dbo.TempInvoiceDetail;
 
-/****** Object:  Table [dbo].[SysAuthorize]    Script Date: 2019-9-4 11:38:21 ******/
-SET ANSI_NULLS ON
-;
-SET QUOTED_IDENTIFIER ON
-;
-CREATE TABLE [dbo].[SysAuthorize](
-	[SaId] [varchar](50) NOT NULL,
-	[SuId] [varchar](50) NOT NULL,
-	[OpenId1] [varchar](50) NULL,
-	[OpenId2] [varchar](50) NULL,
-	[OpenId4] [varchar](50) NULL,
-	[OpenId3] [varchar](50) NULL,
-	[OpenId5] [varchar](50) NULL,
-	[OpenId6] [varchar](50) NULL,
-	[OpenId7] [varchar](50) NULL,
-	[OpenId8] [varchar](50) NULL,
-	[OpenId9] [varchar](50) NULL
-) ON [PRIMARY]
-;
-SET ANSI_PADDING ON
-;
-/****** Object:  Index [SysAuthorize_SuId_PK]    Script Date: 2019-9-4 11:38:21 ******/
-CREATE UNIQUE CLUSTERED INDEX [SysAuthorize_SuId_PK] ON [dbo].[SysAuthorize]
-(
-	[SuId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-;
 /****** Object:  Table [dbo].[SysButton]    Script Date: 2019-9-4 11:38:21 ******/
 SET ANSI_NULLS ON
 ;
@@ -480,14 +452,6 @@ INSERT [dbo].[TempInvoiceDetail] ([TidId], [TimId], [TimNo], [TidOrder], [GoodsI
 INSERT [dbo].[TempInvoiceMain] ([TimId], [TimNo], [TimDate], [TimStore], [TimType], [TimSupplier], [TimUser], [TimRemark], [TimOwnerId], [TimOwnerName], [TimCreateTime], [TimStatus], [Spare1], [Spare2], [Spare3]) VALUES (N'3b750ae8-0b7b-47f3-84ea-4eea75a3939c', N'1001', CAST(N'2019-08-29T00:00:00.000' AS DateTime), N'813984B9-06CA-4D85-AD82-3C4AD2CB834E', 1, N'2', N'netnr', N'测试信息，单据明细表，浏览模态框、下拉列表等输入模式支持需逐步完善', NULL, NULL, CAST(N'2019-08-29T15:54:14.000' AS DateTime), NULL, NULL, NULL, NULL)
 SET ANSI_PADDING ON
 ;
-/****** Object:  Index [SysAuthorize_SaId]    Script Date: 2019-9-4 11:38:22 ******/
-ALTER TABLE [dbo].[SysAuthorize] ADD  CONSTRAINT [SysAuthorize_SaId] PRIMARY KEY NONCLUSTERED 
-(
-	[SaId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-;
-SET ANSI_PADDING ON
-;
 /****** Object:  Index [SysDictionary_SdId_PK]    Script Date: 2019-9-4 11:38:22 ******/
 ALTER TABLE [dbo].[SysDictionary] ADD  CONSTRAINT [SysDictionary_SdId_PK] PRIMARY KEY NONCLUSTERED 
 (
@@ -517,28 +481,6 @@ ALTER TABLE [dbo].[SysTableConfig] ADD  CONSTRAINT [DF_SysTableConfig_ColQuery] 
 ALTER TABLE [dbo].[SysTableConfig] ADD  CONSTRAINT [DF_SysTableConfig_FormRequired]  DEFAULT ((0)) FOR [FormRequired]
 ;
 ALTER TABLE [dbo].[SysUser] ADD  CONSTRAINT [DF_SysUser_Status]  DEFAULT ((0)) FOR [SuStatus]
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关联SysUser表ID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'SuId'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId1'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId2'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId4'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId3'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId5'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId6'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId7'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId8'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'第三方授权标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize', @level2type=N'COLUMN',@level2name=N'OpenId9'
-;
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'系统用户授权登录' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysAuthorize'
 ;
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'按钮文本' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SysButton', @level2type=N'COLUMN',@level2name=N'SbBtnText'
 ;

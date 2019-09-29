@@ -33,7 +33,7 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 ext = ".pdm";
             }
-            var sql = Core.FileTo.ReadText(Core.MapPathTo.Map($"/scripts/table-{cmd}/", GlobalTo.HostingEnvironment), typedb.ToLower() + ext);
+            var sql = Core.FileTo.ReadText(GlobalTo.WebRootPath + $"/scripts/table-{cmd}/", typedb.ToLower() + ext);
             return sql;
         }
 
@@ -106,71 +106,67 @@ namespace Netnr.ResponseFramework.Controllers
             }
             else
             {
-                using (var db = new ContextBase())
+                using var db = new ContextBase();
+                var dbname = db.Database.GetDbConnection().Database;
+                var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
+
+                foreach (var name in listName)
                 {
-                    var dbname = db.Database.GetDbConnection().Database;
-                    var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
+                    var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
 
-                    foreach (var name in listName)
+                    if (!string.IsNullOrWhiteSpace(sql))
                     {
-                        var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
+                        var dt = new DataTable();
 
-                        if (!string.IsNullOrWhiteSpace(sql))
+                        using (var dbsql = new ContextBase())
                         {
-                            var dt = new DataTable();
+                            using var conn = dbsql.Database.GetDbConnection();
+                            conn.Open();
+                            var cmd = conn.CreateCommand();
+                            cmd.CommandText = sql;
+                            dt.Load(cmd.ExecuteReader());
+                        }
 
-                            using (var dbsql = new ContextBase())
+                        if (dt.Rows.Count > 0)
+                        {
+                            switch (maketype)
                             {
-                                using (var conn = dbsql.Database.GetDbConnection())
-                                {
-                                    conn.Open();
-                                    var cmd = conn.CreateCommand();
-                                    cmd.CommandText = sql;
-                                    dt.Load(cmd.ExecuteReader());
-                                }
-                            }
+                                case 1:
+                                    {
+                                        var listField = db.SysTableConfig
+                                            .Where(x => listName.Contains(x.TableName))
+                                            .Select(x => new { x.TableName, x.ColField }).ToList();
 
-                            if (dt.Rows.Count > 0)
-                            {
-                                switch (maketype)
-                                {
-                                    case 1:
+                                        for (int i = dt.Rows.Count - 1; i >= 0; i--)
                                         {
-                                            var listField = db.SysTableConfig
-                                                .Where(x => listName.Contains(x.TableName))
-                                                .Select(x => new { x.TableName, x.ColField }).ToList();
-
-                                            for (int i = dt.Rows.Count - 1; i >= 0; i--)
+                                            string tbname = dt.Rows[i]["TableName"].ToString();
+                                            string field = dt.Rows[i]["ColField"].ToString();
+                                            var hasRow = listField.Where(x => x.TableName == tbname && x.ColField == field).ToList();
+                                            if (hasRow.Count > 0)
                                             {
-                                                string tbname = dt.Rows[i]["TableName"].ToString();
-                                                string field = dt.Rows[i]["ColField"].ToString();
-                                                var hasRow = listField.Where(x => x.TableName == tbname && x.ColField == field).ToList();
-                                                if (hasRow.Count > 0)
-                                                {
-                                                    dt.Rows.RemoveAt(i);
-                                                }
+                                                dt.Rows.RemoveAt(i);
                                             }
                                         }
-                                        break;
-                                    case 2:
-                                        {
-                                            var delstc = db.SysTableConfig.Where(x => x.TableName == name).ToList();
-                                            db.SysTableConfig.RemoveRange(delstc);
-                                        }
-                                        break;
-                                }
-
-                                var listMo = dt.ToModel<SysTableConfig>();
-                                listMo.ForEach(x => x.Id = Guid.NewGuid().ToString());
-                                db.SysTableConfig.AddRange(listMo);
-
-                                db.SaveChanges();
+                                    }
+                                    break;
+                                case 2:
+                                    {
+                                        var delstc = db.SysTableConfig.Where(x => x.TableName == name).ToList();
+                                        db.SysTableConfig.RemoveRange(delstc);
+                                    }
+                                    break;
                             }
+
+                            var listMo = dt.ToModel<SysTableConfig>();
+                            listMo.ForEach(x => x.Id = Guid.NewGuid().ToString());
+                            db.SysTableConfig.AddRange(listMo);
+
+                            db.SaveChanges();
                         }
                     }
-
-                    vm.Set(ARTag.success);
                 }
+
+                vm.Set(ARTag.success);
             }
 
             return vm;
@@ -189,49 +185,45 @@ namespace Netnr.ResponseFramework.Controllers
             }
             else
             {
-                using (var db = new ContextBase())
+                using var db = new ContextBase();
+                var dbname = db.Database.GetDbConnection().Database;
+                var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
+
+                var listTc = db.SysTableConfig.ToList();
+
+                foreach (var name in listName)
                 {
-                    var dbname = db.Database.GetDbConnection().Database;
-                    var sqltemplate = QueryScripts(db.TDB.ToString(), "config");
+                    var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
 
-                    var listTc = db.SysTableConfig.ToList();
-
-                    foreach (var name in listName)
+                    if (!string.IsNullOrWhiteSpace(sql))
                     {
-                        var sql = sqltemplate.Replace("@DataBaseName", dbname).Replace("@TableName", name);
+                        var dt = new DataTable();
 
-                        if (!string.IsNullOrWhiteSpace(sql))
+                        using (var dbsql = new ContextBase())
                         {
-                            var dt = new DataTable();
+                            using var conn = dbsql.Database.GetDbConnection();
+                            conn.Open();
+                            var cmd = conn.CreateCommand();
+                            cmd.CommandText = sql;
+                            dt.Load(cmd.ExecuteReader());
+                        }
 
-                            using (var dbsql = new ContextBase())
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            var tcmo = listTc.Where(x => x.TableName == dr["TableName"].ToString() && x.ColField == dr["ColField"].ToString()).FirstOrDefault();
+                            tcmo.FormMaxlength = Convert.ToInt32(dr["FormMaxlength"]);
+                            if (string.IsNullOrWhiteSpace(tcmo.ColRelation))
                             {
-                                using (var conn = dbsql.Database.GetDbConnection())
-                                {
-                                    conn.Open();
-                                    var cmd = conn.CreateCommand();
-                                    cmd.CommandText = sql;
-                                    dt.Load(cmd.ExecuteReader());
-                                }
-                            }
-
-                            foreach (DataRow dr in dt.Rows)
-                            {
-                                var tcmo = listTc.Where(x => x.TableName == dr["TableName"].ToString() && x.ColField == dr["ColField"].ToString()).FirstOrDefault();
-                                tcmo.FormMaxlength = Convert.ToInt32(dr["FormMaxlength"]);
-                                if (string.IsNullOrWhiteSpace(tcmo.ColRelation))
-                                {
-                                    tcmo.ColRelation = "Equal,Contains";
-                                }
+                                tcmo.ColRelation = "Equal,Contains";
                             }
                         }
                     }
-
-                    db.SysTableConfig.UpdateRange(listTc);
-                    db.SaveChanges();
-
-                    vm.Set(ARTag.success);
                 }
+
+                db.SysTableConfig.UpdateRange(listTc);
+                db.SaveChanges();
+
+                vm.Set(ARTag.success);
             }
 
             return vm;
@@ -263,13 +255,11 @@ namespace Netnr.ResponseFramework.Controllers
 
                 if (!string.IsNullOrWhiteSpace(sql))
                 {
-                    using (var conn = db.Database.GetDbConnection())
-                    {
-                        conn.Open();
-                        var cmd = conn.CreateCommand();
-                        cmd.CommandText = sql;
-                        dt.Load(cmd.ExecuteReader());
-                    }
+                    using var conn = db.Database.GetDbConnection();
+                    conn.Open();
+                    var cmd = conn.CreateCommand();
+                    cmd.CommandText = sql;
+                    dt.Load(cmd.ExecuteReader());
                 }
                 ovm.data = dt;
                 ovm.total = dt.Rows.Count;
@@ -332,13 +322,11 @@ namespace Netnr.ResponseFramework.Controllers
 
                 if (!string.IsNullOrWhiteSpace(sql))
                 {
-                    using (var conn = db.Database.GetDbConnection())
-                    {
-                        conn.Open();
-                        var cmd = conn.CreateCommand();
-                        cmd.CommandText = sql;
-                        dt.Load(cmd.ExecuteReader());
-                    }
+                    using var conn = db.Database.GetDbConnection();
+                    conn.Open();
+                    var cmd = conn.CreateCommand();
+                    cmd.CommandText = sql;
+                    dt.Load(cmd.ExecuteReader());
                 }
             }
 
@@ -446,16 +434,14 @@ namespace Netnr.ResponseFramework.Controllers
             using (var db = new ContextBase())
             {
                 string sql = QueryScripts(db.TDB.ToString(), "reset");
-                using (var conn = db.Database.GetDbConnection())
-                {
-                    conn.Open();
-                    var cmd = conn.CreateCommand();
-                    cmd.CommandText = sql;
-                    int num = cmd.ExecuteNonQuery();
+                using var conn = db.Database.GetDbConnection();
+                conn.Open();
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = sql;
+                int num = cmd.ExecuteNonQuery();
 
-                    vm.Set(ARTag.success);
-                    vm.data = "受影响行数：" + num;
-                }
+                vm.Set(ARTag.success);
+                vm.data = "受影响行数：" + num;
             }
 
             return vm;

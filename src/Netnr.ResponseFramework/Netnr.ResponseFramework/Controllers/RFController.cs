@@ -65,27 +65,25 @@ namespace Netnr.ResponseFramework.Controllers
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                using (var db = new ContextBase())
-                {
-                    var query = from a in db.SysMenu
-                                where a.SmPid == id
-                                orderby a.SmOrder
-                                select new
-                                {
-                                    a.SmId,
-                                    a.SmPid,
-                                    a.SmName,
-                                    a.SmUrl,
-                                    a.SmOrder,
-                                    a.SmIcon,
-                                    a.SmStatus,
-                                    a.SmGroup,
-                                    //查询是否有子集
-                                    state = (from b in db.SysMenu where b.SmPid == a.SmId select b.SmId).Count() > 0 ? "closed" : "open"
-                                };
-                    var list = query.ToList();
-                    return Content(list.ToJson());
-                }
+                using var db = new ContextBase();
+                var query = from a in db.SysMenu
+                            where a.SmPid == id
+                            orderby a.SmOrder
+                            select new
+                            {
+                                a.SmId,
+                                a.SmPid,
+                                a.SmName,
+                                a.SmUrl,
+                                a.SmOrder,
+                                a.SmIcon,
+                                a.SmStatus,
+                                a.SmGroup,
+                                //查询是否有子集
+                                state = (from b in db.SysMenu where b.SmPid == a.SmId select b.SmId).Count() > 0 ? "closed" : "open"
+                            };
+                var list = query.ToList();
+                return Content(list.ToJson());
             }
 
             return View();
