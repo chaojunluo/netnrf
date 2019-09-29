@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
@@ -13,19 +13,20 @@ namespace Netnr.ResponseFramework.Controllers
     /// <summary>
     /// 输入输出
     /// </summary>
-    [Authorize]
+    //[Authorize]
     public class IOController : Controller
     {
         #region 导出
 
         [Description("公共导出")]
-        public ActionResultVM Export(QueryDataInputVM ivm, string title)
+        public ActionResultVM Export(QueryDataInputVM ivm, string title = "export")
         {
             var vm = new ActionResultVM();
 
             //文件路径
             string path = "/upload/temp/";
-            var vpath = (GlobalTo.WebRootPath + path).Replace("\\", "/");
+            var vpath = GlobalTo.WebRootPath + path;
+
             if (!Directory.Exists(vpath))
             {
                 Directory.CreateDirectory(vpath);
@@ -39,10 +40,6 @@ namespace Netnr.ResponseFramework.Controllers
 
             try
             {
-                var ovm = new QueryDataOutputVM();
-
-                var db = new ContextBase();
-
                 switch (ivm.tableName?.ToLower())
                 {
                     default:
@@ -52,37 +49,35 @@ namespace Netnr.ResponseFramework.Controllers
                     //角色
                     case "sysrole":
                         {
-                            ovm = new SettingController().QuerySysRole(ivm);
-                            dtReport = ExportAid.ModelsMapping(ivm, ovm);
+                            using var ctl = new SettingController();
+                            dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysRole(ivm));
                         }
                         break;
 
                     //用户
                     case "sysuser":
                         {
-                            ovm = new SettingController().QuerySysUser(ivm);
-                            dtReport = ExportAid.ModelsMapping(ivm, ovm);
+                            using var ctl = new SettingController();
+                            dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysUser(ivm));
                         }
                         break;
 
                     //日志
                     case "syslog":
                         {
-                            ovm = new SettingController().QuerySysLog(ivm);
-                            dtReport = ExportAid.ModelsMapping(ivm, ovm);
+                            using var ctl = new SettingController();
+                            dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysLog(ivm));
                         }
                         break;
 
                     //字典
                     case "sysdictionary":
                         {
-                            ovm = new SettingController().QuerySysDictionary(ivm);
-                            dtReport = ExportAid.ModelsMapping(ivm, ovm);
+                            using var ctl = new SettingController();
+                            dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysDictionary(ivm));
                         }
                         break;
                 }
-
-                db.Dispose();
 
                 if (vm.msg != ARTag.invalid.ToString())
                 {
@@ -104,6 +99,7 @@ namespace Netnr.ResponseFramework.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 vm.Set(ex);
             }
 

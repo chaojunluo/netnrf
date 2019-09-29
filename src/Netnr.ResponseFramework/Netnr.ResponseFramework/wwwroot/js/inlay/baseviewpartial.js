@@ -1,4 +1,4 @@
-﻿//完成事件
+//完成事件
 window.addEventListener('DOMContentLoaded', function () {
     //绑定数据
     setTimeout(z.FormAttrAjax, 0);

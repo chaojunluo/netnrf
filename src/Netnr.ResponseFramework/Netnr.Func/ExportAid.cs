@@ -1,4 +1,4 @@
-﻿using Netnr.Domain;
+using Netnr.Domain;
 using Netnr.Func.ViewModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -64,6 +64,7 @@ namespace Netnr.Func
                     dt.Columns.Remove(dt.Columns[col.ColField]);
                 }
             }
+
             //剔除没在表配置的列
             List<string> removeColNotExists = new List<string>();
             foreach (DataColumn dc in dt.Columns)
