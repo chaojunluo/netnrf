@@ -7,7 +7,7 @@
 
 ### [文档说明](DOCUMENT.md)
 
-### v2.x
+### v3.x
 - 前端采用 jQuery + Bootstrap + EasyUI + AceAdmin + fontAwesome
 - 后端采用 .NET Core + EF + SQL（SQLServer、MySQL、PostgreSQL、SQLite）
     - 数据库脚本放置于 `wwwroot/scripts/`目录下
