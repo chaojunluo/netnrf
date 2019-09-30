@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "表管理";
 }
 
@@ -9,8 +9,18 @@
 </style>
 
 <div class="row">
-    <div class="col-sm-12 mt15 mb15">
-        <a href="/tool/resetdatabase" onclick="return confirm('确定？')" class="btn btn-danger pull-right" target="_blank">重置数据库</a>
+    <div class="col-sm-12 mt15 mb15">        
+        <div class="btn-group btn-danger pull-right">
+            <a href="/tool/resetdatabaseforjson" onclick="return confirm('确定？')" class="btn btn-danger" target="_blank">重置数据库</a>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-fw fa-chevron-down"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="/tool/backupdatabaseasjson" target="_blank">备份数据为JSON</a>
+                </li>
+            </ul>
+        </div>
         <div class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 生成表配置 <i class="fa fa-fw fa-chevron-down"></i>

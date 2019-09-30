@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -55,7 +55,7 @@ namespace Netnr.ResponseFramework.Controllers
                     case TaskItem.ResetDataBase:
                         using (var tc = new ToolController())
                         {
-                            vm = tc.ResetDataBase();
+                            vm = tc.ResetDataBaseForJson();
                         }
                         break;
 

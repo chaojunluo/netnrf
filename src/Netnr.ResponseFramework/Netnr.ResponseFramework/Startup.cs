@@ -24,7 +24,7 @@ namespace Netnr.ResponseFramework
             if (db.Database.EnsureCreated())
             {
                 //调用重置数据库（实际开发中，你可能不需要，或只初始化一些表数据）
-                new Controllers.ToolController().ResetDataBase();
+                new Controllers.ToolController().ResetDataBaseForJson();
             }
         }
 

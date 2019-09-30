@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -426,22 +426,40 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("重置数据库")]
-        public ActionResultVM ResetDataBase()
+        [Description("根据JSON数据重置数据库")]
+        public ActionResultVM ResetDataBaseForJson()
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            try
             {
-                string sql = QueryScripts(db.TDB.ToString(), "reset");
-                using var conn = db.Database.GetDbConnection();
-                conn.Open();
-                var cmd = conn.CreateCommand();
-                cmd.CommandText = sql;
-                int num = cmd.ExecuteNonQuery();
+                int num = new Func.DataMirrorAid().AddForJson();
+                vm.Set(num > 0);
+                vm.data = num;
+            }
+            catch (Exception ex)
+            {
+                vm.Set(ex);
+            }
 
-                vm.Set(ARTag.success);
-                vm.data = "受影响行数：" + num;
+            return vm;
+        }
+
+        [Description("数据库备份数据为JSON")]
+        public ActionResultVM BackupDataBaseAsJson()
+        {
+            var vm = new ActionResultVM();
+
+            try
+            {
+                //是否覆盖JSON文件，默认不覆盖，避免线上重置功能被破坏
+                var CoverJson = false;
+
+                vm = new Func.DataMirrorAid().SaveAsJson(CoverJson);
+            }
+            catch (Exception ex)
+            {
+                vm.Set(ex);
             }
 
             return vm;
