@@ -22,6 +22,12 @@ namespace Netnr.ResponseFramework.Controllers
         [Description("表管理")]
         public IActionResult TableManage()
         {
+            using var db = new ContextBase();
+            if (db.TDB == ContextBase.TypeDB.InMemory)
+            {
+                return Content("不支持内存数据库，请切换其它数据库");
+            }
+
             return View();
         }
 
