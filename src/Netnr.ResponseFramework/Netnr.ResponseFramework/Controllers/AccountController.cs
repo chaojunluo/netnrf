@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Security.Claims;
@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
 using Netnr.Domain;
 using Netnr.Func.ViewModel;
-using Netnr.Login;
 
 namespace Netnr.ResponseFramework.Controllers
 {
