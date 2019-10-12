@@ -257,24 +257,103 @@ namespace Netnr.ResponseFramework.Controllers
 
                 var dbname = db.Database.GetDbConnection().Database;
 
-                var sql = QueryScripts(db.TDB.ToString(), "info").Replace("@DataBaseName", dbname).Replace("@TableName", innames);
-
-                if (!string.IsNullOrWhiteSpace(sql))
+                if (db.TDB == ContextBase.TypeDB.SQLite)
                 {
                     using var conn = db.Database.GetDbConnection();
                     conn.Open();
-                    var cmd = conn.CreateCommand();
-                    cmd.CommandText = sql;
-                    dt.Load(cmd.ExecuteReader());
+                    //遍历表查询
+                    foreach (var tname in listName)
+                    {
+                        var sql = QueryScripts(db.TDB.ToString(), "info").Replace("@TableName", tname);
+
+                        if (!string.IsNullOrWhiteSpace(sql))
+                        {
+                            var dtone = new DataTable();
+
+                            var cmd = conn.CreateCommand();
+                            cmd.CommandText = sql;
+                            dtone.Load(cmd.ExecuteReader());
+
+                            //创建列
+                            if (dt.Columns.Count == 0)
+                            {
+                                dt.Columns.Add(new DataColumn("表名"));
+                                dt.Columns.Add(new DataColumn("表说明"));
+
+                                foreach (DataColumn dc in dtone.Columns)
+                                {
+                                    dt.Columns.Add(new DataColumn(dc.ColumnName));
+                                }
+                            }
+
+                            //合并表
+                            foreach (DataRow drone in dtone.Rows)
+                            {
+                                var newdr = dt.NewRow();
+
+                                foreach (DataColumn dc in dtone.Columns)
+                                {
+                                    newdr[dc.ColumnName] = drone[dc.ColumnName].ToString();
+                                }
+
+                                newdr["表名"] = tname;
+                                newdr["表说明"] = tname;
+
+                                newdr["notnull"] = newdr["notnull"].ToString() == "1" ? "YES" : "";
+                                newdr["pk"] = newdr["pk"].ToString() == "0" ? "" : "YES (" + newdr["pk"].ToString() + ")";
+                                newdr["type"] = newdr["type"].ToString().ToLower();
+
+                                dt.Rows.Add(newdr);
+                            }
+                        }
+                    }
+                    //更改列名
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        if (dc.ColumnName == "name")
+                        {
+                            dc.ColumnName = "字段名";
+                        }
+                        if (dc.ColumnName == "type")
+                        {
+                            dc.ColumnName = "类型";
+                        }
+                        if (dc.ColumnName == "notnull")
+                        {
+                            dc.ColumnName = "不为空";
+                        }
+                        if (dc.ColumnName == "dflt_value")
+                        {
+                            dc.ColumnName = "默认值";
+                        }
+                        if (dc.ColumnName == "pk")
+                        {
+                            dc.ColumnName = "主键";
+                        }
+                    }
                 }
+                else
+                {
+                    var sql = QueryScripts(db.TDB.ToString(), "info").Replace("@DataBaseName", dbname).Replace("@TableName", innames);
+
+                    if (!string.IsNullOrWhiteSpace(sql))
+                    {
+                        using var conn = db.Database.GetDbConnection();
+                        conn.Open();
+                        var cmd = conn.CreateCommand();
+                        cmd.CommandText = sql;
+                        dt.Load(cmd.ExecuteReader());
+                    }
+                }
+
                 ovm.data = dt;
                 ovm.total = dt.Rows.Count;
             }
 
             #region 其它处理
-            //mysql默认值，单独查询
             switch (tdb)
             {
+                //mysql默认值，单独查询
                 case ContextBase.TypeDB.MySQL:
                     using (var db = new ContextBase())
                     {
