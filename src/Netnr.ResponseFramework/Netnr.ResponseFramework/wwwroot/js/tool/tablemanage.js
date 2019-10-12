@@ -111,7 +111,7 @@ gd2.onComplete(function () {
     if (gd2.isGenerateCode) {
         codeGenerate.templateParam.PrimaryKey = null;
         $.each(gd2.data, function (i, row) {
-            if (row["主键"] == "YES") {
+            if (row["主键"].indexOf("YES")>=0) {
                 codeGenerate.templateParam = {
                     TableName: row["表名"],
                     TableTitle: row["表说明"] || row["表名"],
@@ -144,8 +144,10 @@ $('#btnGenerateCode').click(function () {
     if (rowData.length == 1) {
         gd2.load();
     } else if (rowData.length > 1) {
+        gd2.isGenerateCode = 0;
         art('请仅选择一行');
     } else {
+        gd2.isGenerateCode = 0;
         art('select');
     }
 });

@@ -25,7 +25,7 @@ namespace Netnr.Data
         /// <summary>
         /// 数据库
         /// </summary>
-        public readonly TypeDB TDB;
+        public static TypeDB TDB;
 
         public ContextBase()
         {
