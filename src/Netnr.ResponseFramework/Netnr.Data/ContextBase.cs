@@ -69,7 +69,7 @@ namespace Netnr.Data
                         optionsBuilder.UseMySql(GlobalTo.GetValue("ConnectionStrings:MySQLConn"));
                         break;
                     case TypeDB.SQLite:
-                        optionsBuilder.UseSqlite(GlobalTo.GetValue("ConnectionStrings:SQLiteConn"));
+                        optionsBuilder.UseSqlite(GlobalTo.GetValue("ConnectionStrings:SQLiteConn").Replace("~", GlobalTo.ContentRootPath));
                         break;
                     case TypeDB.InMemory:
                         optionsBuilder.UseInMemoryDatabase(GlobalTo.GetValue("ConnectionStrings:InMemoryConn"));
@@ -88,7 +88,7 @@ namespace Netnr.Data
 
                 //注册日志（修改日志等级为Information，可查看执行的SQL语句）
                 optionsBuilder.UseLoggerFactory(LoggerFactory);
-            }            
+            }
         }
     }
 }
