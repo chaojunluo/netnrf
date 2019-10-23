@@ -154,8 +154,7 @@ namespace Netnr.Func
                         case "StartsWith":
                         case "EndsWith":
                             {
-                                string iwhere = string.Format(rel, value.ToStringOrEmpty());
-                                query = query.Where(x => EF.Functions.Like(x.GetType().GetProperty(field).GetValue(x, null).ToString(), iwhere));
+                                query = DynamicQueryableExtensions.Where(query, field + "." + relation + "(@0)", value.ToStringOrEmpty());
                             }
                             break;
                         case "BetweenAnd":
@@ -166,28 +165,6 @@ namespace Netnr.Func
 
                                 var iwhere = string.Format(rel, field, v1, v2);
                                 query = DynamicQueryableExtensions.Where(query, iwhere);
-                            }
-                            break;
-                        case "In":
-                            {
-                                var list = new List<string>();
-                                int len = value.Count();
-                                for (int i = 0; i < len; i++)
-                                {
-                                    list.Add(value[i].ToString());
-                                }
-                                query = query.Where(x => list.Contains(x.GetType().GetProperty(field).GetValue(x, null).ToString()));
-                            }
-                            break;
-                        case "NotIn":
-                            {
-                                var list = new List<string>();
-                                int len = value.Count();
-                                for (int i = 0; i < len; i++)
-                                {
-                                    list.Add(value[i].ToString());
-                                }
-                                query = query.Where(x => !list.Contains(x.GetType().GetProperty(field).GetValue(x, null).ToString()));
                             }
                             break;
                     }
@@ -348,8 +325,7 @@ namespace Netnr.Func
         /// <returns></returns>
         public static List<SysMenu> QuerySysMenuList(Func<SysMenu, bool> predicate, bool cache = true)
         {
-            var list = Core.CacheTo.Get(GlobalCacheKey.SysMenu) as List<SysMenu>;
-            if (!cache || list == null)
+            if (!cache || !(Core.CacheTo.Get(GlobalCacheKey.SysMenu) is List<SysMenu> list))
             {
                 using var db = new ContextBase();
                 list = db.SysMenu.OrderBy(x => x.SmOrder).ToList();
@@ -366,8 +342,7 @@ namespace Netnr.Func
         /// <returns></returns>
         public static List<SysButton> QuerySysButtonList(Func<SysButton, bool> predicate, bool cache = true)
         {
-            var list = Core.CacheTo.Get(GlobalCacheKey.SysButton) as List<SysButton>;
-            if (!cache || list == null)
+            if (!cache || !(Core.CacheTo.Get(GlobalCacheKey.SysButton) is List<SysButton> list))
             {
                 using var db = new ContextBase();
                 list = db.SysButton.OrderBy(x => x.SbBtnOrder).ToList();
