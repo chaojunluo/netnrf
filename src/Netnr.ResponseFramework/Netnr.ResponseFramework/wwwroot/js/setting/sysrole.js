@@ -301,6 +301,7 @@ $('#btnSaveCAuth').click(function () {
         var rowData = gd1.func("getSelected");
         $.ajax({
             url: "/Setting/CopySysRoleAuth",
+            type: "post",
             data: {
                 SrId: rowData.SrId,
                 copyid: sr[0]

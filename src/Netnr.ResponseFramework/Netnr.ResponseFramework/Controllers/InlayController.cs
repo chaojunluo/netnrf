@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +12,18 @@ namespace Netnr.ResponseFramework.Controllers
     /// 公共组件、视图
     /// </summary>
     [Authorize]
+    [Route("[controller]/[action]")]
     public class InlayController : Controller
     {
         #region 配置表格
 
-        [Description("查询配置表格")]
+        /// <summary>
+        /// 查询配置表格
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QueryConfigTable(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -30,7 +36,13 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存配置表格")]
+        /// <summary>
+        /// 保存配置表格
+        /// </summary>
+        /// <param name="rows">配置JSON</param>
+        /// <param name="tablename">虚拟表名</param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveConfigTable(string rows, string tablename)
         {
             var vm = new ActionResultVM();
@@ -70,7 +82,13 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 配置表单
 
-        [Description("保存配置表单")]
+        /// <summary>
+        /// 保存配置表单
+        /// </summary>
+        /// <param name="rows">配置JSON</param>
+        /// <param name="tablename">虚拟表名</param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveConfigForm(string rows, string tablename)
         {
             var vm = new ActionResultVM();

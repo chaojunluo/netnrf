@@ -9,15 +9,26 @@ using System;
 namespace Netnr.ResponseFramework.Controllers
 {
     [Authorize]
+    [Route("[controller]/[action]")]
     public class @TableName@Controller : Controller
     {
-        [Description("@TableTitle@页面")]
+		/// <summary>
+        /// @TableTitle@页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult @TableName@()
         {
             return View();
         }
-
-        [Description("查询@TableTitle@")]
+		
+        /// <summary>
+        /// 查询@TableTitle@
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM Query@TableName@(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -30,8 +41,14 @@ namespace Netnr.ResponseFramework.Controllers
 
             return ovm;
         }
-
-        [Description("保存@TableTitle@")]
+		
+        /// <summary>
+        /// 保存@TableTitle@
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="savetype">保存类型</param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM Save@TableName@(@TableName@ mo, string savetype)
         {
             var vm = new ActionResultVM();
@@ -56,8 +73,13 @@ namespace Netnr.ResponseFramework.Controllers
 
             return vm;
         }
-
-        [Description("删除@TableTitle@")]
+		
+        /// <summary>
+        /// 删除@TableTitle@
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM Del@TableName@(string id)
         {
             var vm = new ActionResultVM();

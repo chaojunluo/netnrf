@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
+using System.Xml;
 
 namespace Netnr.ResponseFramework.Filters
 {
@@ -39,6 +39,17 @@ namespace Netnr.ResponseFramework.Filters
                     var ass = System.Reflection.Assembly.GetExecutingAssembly();
                     var listController = ass.ExportedTypes.Where(x => x.BaseType.FullName == "Microsoft.AspNetCore.Mvc.Controller").ToList();
 
+                    //载入xml注释
+                    var cp = AppContext.BaseDirectory + ass.FullName.Split(',').FirstOrDefault() + ".xml";
+                    XmlDocument xmldoc = new XmlDocument();
+                    xmldoc.Load(cp);
+                    var xns = xmldoc.DocumentElement.SelectSingleNode("members").SelectNodes("member");
+                    var listMember = new List<XmlNode>();
+                    for (int i = 0; i < xns.Count; i++)
+                    {
+                        listMember.Add(xns[i]);
+                    }
+
                     var dic = new Dictionary<string, string>();
                     foreach (var conll in listController)
                     {
@@ -49,11 +60,26 @@ namespace Netnr.ResponseFramework.Filters
                             {
                                 string remark = "未备注说明";
 
-                                var desc = item.CustomAttributes.Where(x => x.AttributeType == typeof(DescriptionAttribute)).FirstOrDefault();
-                                if (desc != null)
+                                //方法完整命名空间及名称
+                                var cname = "M:" + conll.FullName + "." + item.Name;
+                                //方法参数
+                                var cparam = item.GetParameters();
+                                if (cparam.Length > 0)
                                 {
-                                    remark = desc.ConstructorArguments.FirstOrDefault().Value.ToString();
+                                    var listParam = new List<string>();
+                                    foreach (var par in cparam)
+                                    {
+                                        listParam.Add(par.ParameterType.FullName);
+                                    }
+                                    cname += "(" + string.Join(",", listParam) + ")";
                                 }
+
+                                var xnm = listMember.FirstOrDefault(x => x.Attributes["name"].Value.ToString() == cname);
+                                if (xnm != null)
+                                {
+                                    remark = xnm.SelectSingleNode("summary").InnerText.ToString().Trim();
+                                }
+
                                 var action = (conll.Name.Replace("Controller", "/") + item.Name).ToLower();
                                 if (!dic.ContainsKey(action))
                                 {

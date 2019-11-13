@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace Netnr.ResponseFramework.Components
 {
+    /// <summary>
+    /// 表单视图组件
+    /// </summary>
     public class FormViewComponent : ViewComponent
     {
         /// <summary>
-        /// 表单组件
+        /// 表单、单据 组件
         /// </summary>
         /// <param name="vm">表单组件参数</param>
         /// <returns></returns>

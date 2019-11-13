@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,10 +16,16 @@ namespace Netnr.ResponseFramework.Controllers
     /// <summary>
     /// 账号
     /// </summary>
+    [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
         #region 登录
-        [Description("生成验证码")]
+
+        /// <summary>
+        /// 生成登录验证码
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public FileResult Captcha()
         {
             string num = Core.RandomTo.NumCode(4);
@@ -29,7 +34,11 @@ namespace Netnr.ResponseFramework.Controllers
             return File(bytes, "image/jpeg");
         }
 
-        [Description("登录页面")]
+        /// <summary>
+        /// 登录页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Login()
         {
             return View();
@@ -42,7 +51,7 @@ namespace Netnr.ResponseFramework.Controllers
         /// <param name="captcha">验证码</param>
         /// <param name="remember">1记住登录状态</param>
         /// <returns></returns>
-        [Description("登录验证")]
+        [HttpPost]
         public async Task<AccountValidationVM> LoginValidation(SysUser mo, string captcha, int remember)
         {
             var result = new AccountValidationVM();
@@ -129,7 +138,12 @@ namespace Netnr.ResponseFramework.Controllers
         #endregion
 
         #region 注销
-        [Description("注销")]
+
+        /// <summary>
+        /// 注销
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -142,8 +156,13 @@ namespace Netnr.ResponseFramework.Controllers
         #endregion
 
         #region 修改密码
-        [Description("修改密码页面")]
+
+        /// <summary>
+        /// 修改密码页面
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult UpdatePassword()
         {
             return View();
@@ -156,23 +175,23 @@ namespace Netnr.ResponseFramework.Controllers
         /// <param name="newpwd1">新</param>
         /// <param name="newpwd2"></param>
         /// <returns></returns>
-        [Description("执行修改密码")]
+        [HttpPost]
         [Authorize]
-        public IActionResult UpdateNewPassword(string oldpwd, string newpwd1, string newpwd2)
+        public ActionResultVM UpdateNewPassword(string oldpwd, string newpwd1, string newpwd2)
         {
-            string result = "fail";
+            var vm = new ActionResultVM();
 
             if (string.IsNullOrWhiteSpace(oldpwd) || string.IsNullOrWhiteSpace(newpwd1))
             {
-                result = "密码不能为空";
+                vm.msg = "密码不能为空";
             }
             else if (newpwd1.Length < 5)
             {
-                result = "密码长度至少 5 位";
+                vm.msg = "密码长度至少 5 位";
             }
             else if (newpwd1 != newpwd2)
             {
-                result = "两次输入的密码不一致";
+                vm.msg = "两次输入的密码不一致";
             }
             else
             {
@@ -184,17 +203,16 @@ namespace Netnr.ResponseFramework.Controllers
                 {
                     mo.SuPwd = Core.CalcTo.MD5(newpwd1);
                     db.SysUser.Update(mo);
-                    db.SaveChanges();
-
-                    result = "success";
+                    
+                    vm.Set(db.SaveChanges() > 0);
                 }
                 else
                 {
-                    result = "现有密码错误";
+                    vm.msg = "现有密码错误";
                 }
             }
 
-            return Content(result);
+            return vm;
         }
         #endregion
     }

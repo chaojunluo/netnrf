@@ -176,7 +176,6 @@
     loadNav: function () {
         $.ajax({
             url: '/Common/QueryMenu',
-            type: 'post',
             dataType: 'json',
             success: function (data) {
                 top.navtreedata = data;

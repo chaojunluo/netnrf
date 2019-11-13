@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using FluentScheduler;
@@ -12,6 +11,7 @@ namespace Netnr.ResponseFramework.Controllers
     /// <summary>
     /// 服务
     /// </summary>
+    [Route("[controller]/[action]")]
     public class ServicesController : Controller
     {
         #region 定时任务
@@ -34,7 +34,12 @@ namespace Netnr.ResponseFramework.Controllers
             ClearTemp
         }
 
-        [Description("执行任务")]
+        /// <summary>
+        /// 执行任务
+        /// </summary>
+        /// <param name="ti">任务项枚举</param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM ExecTask(TaskItem? ti)
         {
             var vm = new ActionResultVM();
@@ -122,8 +127,14 @@ namespace Netnr.ResponseFramework.Controllers
         /// </summary>
         public class TaskComponent
         {
+            /// <summary>
+            /// 任务注册
+            /// </summary>
             public class Reg : Registry
             {
+                /// <summary>
+                /// 构造
+                /// </summary>
                 public Reg()
                 {
                     //每间隔一天在4:4 重置数据库
@@ -133,6 +144,9 @@ namespace Netnr.ResponseFramework.Controllers
                 }
             }
 
+            /// <summary>
+            /// 重置数据库
+            /// </summary>
             public class ResetDataBaseJob : IJob
             {
                 void IJob.Execute()
@@ -142,6 +156,9 @@ namespace Netnr.ResponseFramework.Controllers
                 }
             }
 
+            /// <summary>
+            /// 清理临时目录
+            /// </summary>
             public class ClearTempJob : IJob
             {
                 void IJob.Execute()

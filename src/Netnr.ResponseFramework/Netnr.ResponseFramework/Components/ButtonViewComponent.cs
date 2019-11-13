@@ -5,8 +5,15 @@ using System.Linq;
 
 namespace Netnr.ResponseFramework.ViewComponents
 {
+    /// <summary>
+    /// 按钮视图组件
+    /// </summary>
     public class ButtonViewComponent : ViewComponent
     {
+        /// <summary>
+        /// 按钮组件
+        /// </summary>
+        /// <returns></returns>
         public IViewComponentResult Invoke()
         {
             string current_url = "/" + RouteData.Values["controller"]?.ToString() + "/" + RouteData.Values["action"]?.ToString();

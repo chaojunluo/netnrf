@@ -8,10 +8,12 @@
         } else {
             $.ajax({
                 url: '/account/updatenewpassword',
+                type: 'post',
+                dataType: 'json',
                 data: fv.serialize(),
                 success: function (data) {
                     txts.val('');
-                    art(data)
+                    art(data.msg);
                 }
             })
         }

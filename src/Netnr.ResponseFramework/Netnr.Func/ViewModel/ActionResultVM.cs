@@ -59,7 +59,7 @@ namespace Netnr.Func.ViewModel
         /// <summary>
         /// 设置快捷标签，赋值code、msg
         /// </summary>
-        /// <param name="tag">快捷标签枚举</param>
+        /// <param name="isyes"></param>
         public void Set(bool isyes)
         {
             if (isyes)
@@ -108,10 +108,10 @@ namespace Netnr.Func.ViewModel
         /// </summary>
         error = 500,
         /// <summary>
-        /// <summary>
         /// 未授权
         /// </summary>
         unauthorized = 401,
+        /// <summary>
         /// 存在
         /// </summary>
         exist = 97,

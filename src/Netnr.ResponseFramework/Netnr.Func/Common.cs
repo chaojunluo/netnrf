@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Netnr.Data;
 using Netnr.Domain;
 using Netnr.Func.ViewModel;
@@ -71,7 +70,7 @@ namespace Netnr.Func
         /// <typeparam name="T"></typeparam>
         /// <param name="query"></param>
         /// <param name="ivm"></param>
-        /// <param name="ru"></param>
+        /// <param name="db"></param>
         /// <param name="ovm"></param>
         public static void QueryJoin<T>(IQueryable<T> query, QueryDataInputVM ivm, ContextBase db, ref QueryDataOutputVM ovm)
         {
@@ -277,8 +276,11 @@ namespace Netnr.Func
 
         #endregion
 
-        #region 全局缓存KEY
+        #region 全局缓存
 
+        /// <summary>
+        /// 全局缓存KEY
+        /// </summary>
         public class GlobalCacheKey
         {
             /// <summary>
@@ -339,6 +341,7 @@ namespace Netnr.Func
         /// 查询按钮
         /// </summary>
         /// <param name="predicate"></param>
+        /// <param name="cache"></param>
         /// <returns></returns>
         public static List<SysButton> QuerySysButtonList(Func<SysButton, bool> predicate, bool cache = true)
         {

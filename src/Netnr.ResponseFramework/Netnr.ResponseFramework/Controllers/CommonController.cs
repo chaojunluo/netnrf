@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,9 +14,16 @@ namespace Netnr.ResponseFramework.Controllers
     /// 公共、常用查询
     /// </summary>
     [Authorize]
+    [Route("[controller]/[action]")]
     public class CommonController : Controller
     {
-        [Description("公共查询：菜单树")]
+        /// <summary>
+        /// 公共查询：菜单树
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public string QueryMenu(string type)
         {
             string result = string.Empty;
@@ -65,7 +71,12 @@ namespace Netnr.ResponseFramework.Controllers
             return result;
         }
 
-        [Description("公共查询：功能按钮树")]
+        /// <summary>
+        /// 公共查询：功能按钮树
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public string QueryButtonTree()
         {
             string result = string.Empty;
@@ -97,7 +108,12 @@ namespace Netnr.ResponseFramework.Controllers
             return result;
         }
 
-        [Description("公共查询：角色列表")]
+        /// <summary>
+        /// 公共查询：角色列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public List<ValueTextVM> QueryRole()
         {
             using var db = new ContextBase();
@@ -113,17 +129,22 @@ namespace Netnr.ResponseFramework.Controllers
             return list;
         }
 
-        [Description("公共查询：查询数据字典的例子")]
+        /// <summary>
+        /// 公共查询：查询数据字典的例子
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public List<ValueTextVM> QueryDictionaryDemo()
         {
             using var db = new ContextBase();
-            var list = db.SysDictionary
-.Where(x => x.SdType == "SysDictionary:SdType" && x.SdStatus == 1)
-.Select(x => new ValueTextVM
-{
-value = x.SdId,
-text = x.SdValue
-}).ToList();
+
+            var list = db.SysDictionary.Where(x => x.SdType == "SysDictionary:SdType" && x.SdStatus == 1).Select(x => new ValueTextVM
+            {
+                value = x.SdId,
+                text = x.SdValue
+            }).ToList();
+
             return list;
         }
 
@@ -133,7 +154,7 @@ text = x.SdValue
         /// <param name="temp">temp=1,表示临时文件</param>
         /// <param name="path">upload下自定义子目录，如：doc</param>
         /// <returns></returns>
-        [Description("公共上传")]
+        [HttpPost]
         public async Task<ActionResultVM> Upload(int? temp, string path)
         {
             var vm = new ActionResultVM();
@@ -200,7 +221,7 @@ text = x.SdValue
         /// 公共上传，富文本附件，限制大小2MB
         /// </summary>
         /// <returns></returns>
-        [Description("富文本文件上传")]
+        [HttpPost]
         [RequestFormLimits(MultipartBodyLengthLimit = 1024 * 1024 * 2)]
         public async Task<string> UploadRich()
         {

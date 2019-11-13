@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
 using Netnr.Func.ViewModel;
@@ -16,13 +15,20 @@ namespace Netnr.ResponseFramework.Controllers
     {
         #region 表配置示例
 
-        [Description("表配置示例页面")]
+        /// <summary>
+        /// 表配置示例页面
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Tce()
         {
             return View();
         }
 
-        [Description("查询表配置示例")]
+        /// <summary>
+        /// 查询表配置示例
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
         public QueryDataOutputVM QueryTempExample(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -38,13 +44,20 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region DataGrid示例页面
 
-        [Description("DataGrid示例页面")]
+        /// <summary>
+        /// DataGrid示例页面
+        /// </summary>
+        /// <returns></returns>
         public IActionResult DataGrid()
         {
             return View();
         }
 
-        [Description("查询表配置")]
+        /// <summary>
+        /// 查询表配置
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
         public QueryDataOutputVM QuerySysTableConfig(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -60,7 +73,11 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region TreeGrid示例页面
 
-        [Description("TreeGrid示例页面")]
+        /// <summary>
+        /// TreeGrid示例页面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult TreeGrid(string id)
         {
             if (!string.IsNullOrWhiteSpace(id))
@@ -89,7 +106,11 @@ namespace Netnr.ResponseFramework.Controllers
             return View();
         }
 
-        [Description("查询系统菜单")]
+        /// <summary>
+        /// 查询系统菜单
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
         public QueryDataOutputVM QuerySysMenu(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -105,13 +126,20 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region Grid表格联动
 
-        [Description("Grid表格联动")]
+        /// <summary>
+        /// Grid表格联动
+        /// </summary>
+        /// <returns></returns>
         public IActionResult GridChange()
         {
             return View();
         }
 
-        [Description("Grid多表格-主表")]
+        /// <summary>
+        /// Grid多表格-主表
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
         public QueryDataOutputVM QueryGridChange1(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -123,7 +151,11 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("Grid多表格-子表")]
+        /// <summary>
+        /// Grid多表格-子表
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
         public QueryDataOutputVM QueryGridChange2(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -139,7 +171,10 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 静态表单示例页面
 
-        [Description("静态表单示例页面")]
+        /// <summary>
+        /// 静态表单示例页面
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Form()
         {
             return View();
@@ -149,7 +184,10 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 生成多表单
 
-        [Description("生成多表单")]
+        /// <summary>
+        /// 生成多表单
+        /// </summary>
+        /// <returns></returns>
         public IActionResult BuildForms()
         {
             return View();
@@ -159,13 +197,20 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 单据
 
-        [Description("单据")]
+        /// <summary>
+        /// 单据
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Invoice()
         {
             return View();
         }
 
-        [Description("查询单据主表")]
+        /// <summary>
+        /// 查询单据主表
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
         public QueryDataOutputVM QueryInvoiceMain(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -177,7 +222,11 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("查询单据明细表")]
+        /// <summary>
+        /// 查询单据明细表
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
         public QueryDataOutputVM QueryInvoiceDetail(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -198,7 +247,12 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存单据")]
+        /// <summary>
+        /// 保存单据
+        /// </summary>
+        /// <param name="moMain"></param>
+        /// <param name="rows"></param>
+        /// <returns></returns>
         public ActionResultVM SaveInvoiceForm(TempInvoiceMain moMain, string rows)
         {
             var vm = new ActionResultVM();
@@ -265,7 +319,10 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 上传接口示例
 
-        [Description("公共上传示例")]
+        /// <summary>
+        /// 公共上传示例
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Upload()
         {
             return View();
@@ -275,7 +332,10 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 富文本
 
-        [Description("嵌入富文本")]
+        /// <summary>
+        /// 嵌入富文本
+        /// </summary>
+        /// <returns></returns>
         public IActionResult RichText()
         {
             return View();
@@ -285,7 +345,10 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region Bulk Test，请手动修改 private 为 public 后测试
 
-        [Description("批量新增")]
+        /// <summary>
+        /// 批量新增
+        /// </summary>
+        /// <returns></returns>
         private ActionResultVM BulkInsert()
         {
             var vm = new ActionResultVM();
@@ -324,7 +387,10 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("批量修改")]
+        /// <summary>
+        /// 批量修改
+        /// </summary>
+        /// <returns></returns>
         private ActionResultVM BulkUpdate()
         {
             var vm = new ActionResultVM();
@@ -348,7 +414,10 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("批量删除")]
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <returns></returns>
         private ActionResultVM BulkDelete()
         {
             var vm = new ActionResultVM();

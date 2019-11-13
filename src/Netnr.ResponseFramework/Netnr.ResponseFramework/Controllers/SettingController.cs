@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -15,17 +14,28 @@ namespace Netnr.ResponseFramework.Controllers
     /// 系统设置
     /// </summary>
     [Authorize]
+    [Route("[controller]/[action]")]
     public class SettingController : Controller
     {
         #region 系统按钮
 
-        [Description("系统按钮页面")]
+        /// <summary>
+        /// 系统按钮页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysButton()
         {
             return View();
         }
 
-        [Description("查询系统按钮")]
+        /// <summary>
+        /// 查询系统按钮
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QuerySysButton(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -44,7 +54,13 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存系统按钮")]
+        /// <summary>
+        /// 保存系统按钮
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="savetype">保存类型</param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveSysButton(SysButton mo, string savetype)
         {
             var vm = new ActionResultVM();
@@ -80,7 +96,12 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("删除系统按钮")]
+        /// <summary>
+        /// 删除系统按钮
+        /// </summary>
+        /// <param name="id">按钮ID</param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM DelSysButton(string id)
         {
             var vm = new ActionResultVM();
@@ -101,13 +122,23 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 系统菜单
 
-        [Description("系统菜单页面")]
+        /// <summary>
+        /// 系统菜单页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysMenu()
         {
             return View();
         }
 
-        [Description("查询系统菜单")]
+        /// <summary>
+        /// 查询系统菜单
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QuerySysMenu(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -126,7 +157,13 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存系统菜单")]
+        /// <summary>
+        /// 保存系统菜单
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="savetype"></param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveSysMenu(SysMenu mo, string savetype)
         {
             var vm = new ActionResultVM();
@@ -157,7 +194,12 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("删除系统菜单")]
+        /// <summary>
+        /// 删除系统菜单
+        /// </summary>
+        /// <param name="id">菜单ID</param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM DelSysMenu(string id)
         {
             var vm = new ActionResultVM();
@@ -179,13 +221,23 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 系统角色
 
-        [Description("系统角色页面")]
+        /// <summary>
+        /// 系统角色页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysRole()
         {
             return View();
         }
 
-        [Description("查询系统角色")]
+        /// <summary>
+        /// 查询系统角色
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QuerySysRole(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -197,7 +249,13 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存系统角色")]
+        /// <summary>
+        /// 保存系统角色
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="savetype"></param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveSysRole(SysRole mo, string savetype)
         {
             var vm = new ActionResultVM();
@@ -222,7 +280,13 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("复制角色权限")]
+        /// <summary>
+        /// 复制角色权限
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="copyid">复制的角色ID</param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM CopySysRoleAuth(SysRole mo, string copyid)
         {
             var vm = new ActionResultVM();
@@ -245,7 +309,12 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("删除系统角色")]
+        /// <summary>
+        /// 删除系统角色
+        /// </summary>
+        /// <param name="id">角色ID</param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM DelSysRole(string id)
         {
             var vm = new ActionResultVM();
@@ -273,13 +342,23 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 系统用户
 
-        [Description("系统用户页面")]
+        /// <summary>
+        /// 系统用户页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysUser()
         {
             return View();
         }
 
-        [Description("查询系统用户")]
+        /// <summary>
+        /// 查询系统用户
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QuerySysUser(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -306,7 +385,14 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存系统用户")]
+        /// <summary>
+        /// 保存系统用户
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="savetype"></param>
+        /// <param name="OldUserPwd">原密码，有变化代表为改密码</param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveSysUser(SysUser mo, string savetype, string OldUserPwd)
         {
             var vm = new ActionResultVM();
@@ -350,7 +436,12 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("删除系统用户")]
+        /// <summary>
+        /// 删除系统用户
+        /// </summary>
+        /// <param name="id">用户ID</param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM DelSysUser(string id)
         {
             var vm = new ActionResultVM();
@@ -370,13 +461,23 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 系统日志
 
-        [Description("系统日志页面")]
+        /// <summary>
+        /// 系统日志页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysLog()
         {
             return View();
         }
 
-        [Description("查询系统日志")]
+        /// <summary>
+        /// 查询系统日志
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QuerySysLog(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -392,13 +493,23 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 数据字典
 
-        [Description("系统数据字典")]
+        /// <summary>
+        /// 系统数据字典
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysDictionary()
         {
             return View();
         }
 
-        [Description("查询系统数据字典")]
+        /// <summary>
+        /// 查询系统数据字典
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QuerySysDictionary(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -410,7 +521,13 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存数据字典")]
+        /// <summary>
+        /// 保存数据字典
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="savetype"></param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveSysDictionary(SysDictionary mo, string savetype)
         {
             var vm = new ActionResultVM();
@@ -435,7 +552,12 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("逻辑删除数据字典")]
+        /// <summary>
+        /// 逻辑删除数据字典
+        /// </summary>
+        /// <param name="id">字典ID</param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM DelSysDictionary(string id)
         {
             var vm = new ActionResultVM();
@@ -457,13 +579,23 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 表配置
 
-        [Description("系统表配置页面")]
+        /// <summary>
+        /// 系统表配置页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysTableConfig()
         {
             return View();
         }
 
-        [Description("查询表配置")]
+        /// <summary>
+        /// 查询表配置
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QuerySysTableConfig(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -475,7 +607,14 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("保存表配置")]
+        /// <summary>
+        /// 保存表配置
+        /// </summary>
+        /// <param name="mo"></param>
+        /// <param name="ColRelation">关系符</param>
+        /// <param name="savetype"></param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveSysTableConfig(SysTableConfig mo, List<string> ColRelation, string savetype)
         {
             var vm = new ActionResultVM();
@@ -500,7 +639,12 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("删除表配置")]
+        /// <summary>
+        /// 删除表配置
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM DelSysTableConfig(string id)
         {
             var vm = new ActionResultVM();
@@ -521,7 +665,11 @@ namespace Netnr.ResponseFramework.Controllers
 
         #region 样式配置
 
-        [Description("样式配置页面")]
+        /// <summary>
+        /// 样式配置页面
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult SysStyle()
         {
             return View();

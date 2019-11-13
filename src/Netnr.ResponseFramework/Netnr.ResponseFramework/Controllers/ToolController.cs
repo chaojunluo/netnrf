@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -15,11 +14,16 @@ namespace Netnr.ResponseFramework.Controllers
     /// <summary>
     /// 工具
     /// </summary>
+    [Route("[controller]/[action]")]
     public class ToolController : Controller
     {
         #region 表管理
 
-        [Description("表管理")]
+        /// <summary>
+        /// 表管理
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult TableManage()
         {
             using var db = new ContextBase();
@@ -31,7 +35,13 @@ namespace Netnr.ResponseFramework.Controllers
             return View();
         }
 
-        [Description("获取scripts")]
+        /// <summary>
+        /// 获取scripts
+        /// </summary>
+        /// <param name="typedb">数据库类型</param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        [HttpGet]
         public string QueryScripts(string typedb, string cmd)
         {
             string ext = ".sql";
@@ -43,7 +53,13 @@ namespace Netnr.ResponseFramework.Controllers
             return sql;
         }
 
-        [Description("查询数据库表与表配置信息")]
+        /// <summary>
+        /// 查询数据库表与表配置信息
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QueryTableConfig(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
@@ -99,7 +115,7 @@ namespace Netnr.ResponseFramework.Controllers
         /// <param name="names">表名，逗号分割</param>
         /// <param name="maketype">1追加不存在的列，2覆盖</param>
         /// <returns></returns>
-        [Description("建立表配置信息")]
+        [HttpGet]
         public ActionResultVM BuildTableConfig(string names, int maketype)
         {
             var vm = new ActionResultVM();
@@ -184,7 +200,13 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("补齐表配置信息")]
+        /// <summary>
+        /// 补齐表配置信息
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
         public ActionResultVM RepairTableConfig(string names)
         {
             var vm = new ActionResultVM();
@@ -246,7 +268,8 @@ namespace Netnr.ResponseFramework.Controllers
         /// </summary>
         /// <param name="names">表名，逗号分割</param>
         /// <returns></returns>
-        [Description("查询数据库表信息")]
+        [HttpGet]
+        [HttpPost]
         public QueryDataOutputVM QueryTableInfo(string names)
         {
             var listName = names.Split(',').ToList();
@@ -394,7 +417,12 @@ namespace Netnr.ResponseFramework.Controllers
             return ovm;
         }
 
-        [Description("导出表设计")]
+        /// <summary>
+        /// 导出表设计
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM ExportTableInfo(string names)
         {
             var vm = new ActionResultVM();
@@ -458,7 +486,15 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("保存生成的代码")]
+        /// <summary>
+        /// 保存生成的代码
+        /// </summary>
+        /// <param name="name">视图名称</param>
+        /// <param name="controller">控制器名称</param>
+        /// <param name="view">视图内容</param>
+        /// <param name="javascript">视图页面脚本内容</param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResultVM SaveGenerateCode(string name, string controller, string view, string javascript)
         {
             var vm = new ActionResultVM();
@@ -497,7 +533,11 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("根据JSON数据重置数据库")]
+        /// <summary>
+        /// 根据JSON数据重置数据库
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM ResetDataBaseForJson()
         {
             var vm = new ActionResultVM();
@@ -516,7 +556,11 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("数据库备份数据为JSON")]
+        /// <summary>
+        /// 数据库备份数据为JSON
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM BackupDataBaseAsJson()
         {
             var vm = new ActionResultVM();

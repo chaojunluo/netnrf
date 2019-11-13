@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\ROOM\netnrf\src\Netnr.ResponseFramework\Netnr.Func\Netnr.Func.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Netnr.Core" Version="1.2.1" />
   </ItemGroup>
@@ -12,6 +16,12 @@
     <ProjectReference Include="..\Netnr.Data\Netnr.Data.csproj" />
     <ProjectReference Include="..\Netnr.Domain\Netnr.Domain.csproj" />
     <ProjectReference Include="..\Netnr.Fast\Netnr.Fast.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Netnr.Func.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

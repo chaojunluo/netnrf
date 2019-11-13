@@ -1,36 +1,49 @@
-﻿using System.ComponentModel;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Netnr.ResponseFramework.Controllers
 {
     /// <summary>
     /// 起始页
+    /// 
+    /// 注意：该页面勿写接口
     /// </summary>
     [Authorize]
     public class HomeController : Controller
     {
-        [Description("首页")]
+        /// <summary>
+        /// 首页
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             var vm = Func.Common.GetLoginUserInfo(HttpContext);
             return View(vm);
         }
 
-        [Description("桌面")]
+        /// <summary>
+        /// 桌面
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Desk()
         {
             return View();
         }
 
-        [Description("请升级你的浏览器")]
+        /// <summary>
+        /// 请升级你的浏览器
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         public IActionResult UpdateBrowser()
         {
             return View();
         }
 
-        [Description("向导")]
+        /// <summary>
+        /// 向导
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Guide()
         {
             return View();

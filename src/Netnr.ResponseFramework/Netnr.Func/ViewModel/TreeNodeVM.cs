@@ -7,16 +7,43 @@
     /// </summary>
     public class TreeNodeVM
     {
+        /// <summary>
+        /// ID
+        /// </summary>
         public string id { get; set; }
+        /// <summary>
+        /// 父ID
+        /// </summary>
         public string pid { get; set; }
+        /// <summary>
+        /// 内容
+        /// </summary>
         public string text { get; set; }
 
+        /// <summary>
+        /// 拓展
+        /// </summary>
         public string ext1 { get; set; }
+        /// <summary>
+        /// 拓展
+        /// </summary>
         public string ext2 { get; set; }
+        /// <summary>
+        /// 拓展
+        /// </summary>
         public string ext3 { get; set; }
 
+        /// <summary>
+        /// 备用
+        /// </summary>
         public object spare1 { get; set; }
+        /// <summary>
+        /// 备用
+        /// </summary>
         public object spare2 { get; set; }
+        /// <summary>
+        /// 备用
+        /// </summary>
         public object spare3 { get; set; }
     }
 }

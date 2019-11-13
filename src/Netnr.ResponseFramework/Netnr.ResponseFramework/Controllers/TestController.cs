@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
-using Netnr.Func.ViewModel;
-using Netnr.Domain;
-using Netnr.Data;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Netnr.ResponseFramework.Controllers
 {
-    [Authorize]
+    /// <summary>
+    /// 测试
+    /// </summary>
     public class TestController : Controller
     {
+        /// <summary>
+        /// 测试
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return Content("");

@@ -1,10 +1,8 @@
 using System;
-using System.ComponentModel;
 using System.Data;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Netnr.Data;
 using Netnr.Func;
 using Netnr.Func.ViewModel;
 
@@ -13,12 +11,19 @@ namespace Netnr.ResponseFramework.Controllers
     /// <summary>
     /// 输入输出
     /// </summary>
-    //[Authorize]
+    [Authorize]
+    [Route("[controller]/[action]")]
     public class IOController : Controller
     {
         #region 导出
 
-        [Description("公共导出")]
+        /// <summary>
+        /// 公共导出
+        /// </summary>
+        /// <param name="ivm"></param>
+        /// <param name="title">标题，文件名</param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResultVM Export(QueryDataInputVM ivm, string title = "export")
         {
             var vm = new ActionResultVM();
@@ -106,7 +111,11 @@ namespace Netnr.ResponseFramework.Controllers
             return vm;
         }
 
-        [Description("导出下载")]
+        /// <summary>
+        /// 导出下载
+        /// </summary>
+        /// <param name="path">下载文件路径</param>
+        [HttpGet]
         public void ExportDown(string path)
         {
             path = GlobalTo.ContentRootPath + path;

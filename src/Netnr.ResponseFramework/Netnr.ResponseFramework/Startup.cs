@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.OpenApi.Models;
 
 namespace Netnr.ResponseFramework
 {
@@ -37,7 +38,6 @@ namespace Netnr.ResponseFramework
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddRazorPages();
             services.AddControllersWithViews(options =>
             {
                 //注册全局错误过滤器
@@ -53,6 +53,23 @@ namespace Netnr.ResponseFramework
                 //日期格式化
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             });
+
+            //配置swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "RF API"
+                });
+
+                var cp1 = System.AppContext.BaseDirectory + "Netnr.ResponseFramework.xml";
+                var cp2 = System.AppContext.BaseDirectory + "Netnr.Func.xml";
+                c.IncludeXmlComments(cp1);
+                c.IncludeXmlComments(cp2);
+            });
+
+            //路由小写
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             //授权访问信息
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
@@ -81,6 +98,7 @@ namespace Netnr.ResponseFramework
             //缓存
             Core.CacheTo.memoryCache = memoryCache;
 
+            //是开发环境
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -90,6 +108,13 @@ namespace Netnr.ResponseFramework
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            //配置swagger（生产环境不需要，把该代码移至 是开发环境 条件里面）
+            app.UseSwagger().UseSwaggerUI(c =>
+            {
+                c.DocumentTitle = "RF API";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "RF API");
+            });
 
             //默认起始页index.html
             DefaultFilesOptions options = new DefaultFilesOptions();
@@ -105,25 +130,23 @@ namespace Netnr.ResponseFramework
                 }
             });
 
-            //跨域
-            app.UseCors("any");
-
-            //session
-            app.UseSession();
-
             app.UseRouting();
 
             //授权访问
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //跨域
+            app.UseCors("any");
+
+            //session
+            app.UseSession();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                endpoints.MapRazorPages();
             });
         }
     }
