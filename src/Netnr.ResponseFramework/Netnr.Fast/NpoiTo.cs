@@ -19,11 +19,12 @@ namespace Netnr.Fast
         /// </summary>
         /// <param name="dt">数据表</param>
         /// <param name="fullPathName">物理路径 + 文件名称 + 格式</param>
+        /// <param name="isAutoSizeColumn">是否自适应列宽，默认否，开启自适应列宽需要成倍的时间</param>
         /// <returns>返回生成状态</returns>
-        public static bool DataTableToExcel(DataTable dt, string fullPathName)
+        public static bool DataTableToExcel(DataTable dt, string fullPathName, bool isAutoSizeColumn = false)
         {
             var dc = new Dictionary<string, DataTable>() { { "Sheet1", dt } };
-            return DataTableToExcel(dc, fullPathName);
+            return DataTableToExcel(dc, fullPathName, isAutoSizeColumn);
         }
 
         /// <summary>
@@ -31,8 +32,9 @@ namespace Netnr.Fast
         /// </summary>
         /// <param name="dicSheet">工作簿名：数据表</param>
         /// <param name="fullPathName">物理路径 + 文件名称 + 格式</param>
+        /// <param name="isAutoSizeColumn">是否自适应列宽，默认否，开启自适应列宽需要成倍的时间</param>
         /// <returns></returns>
-        public static bool DataTableToExcel(Dictionary<string, DataTable> dicSheet, string fullPathName)
+        public static bool DataTableToExcel(Dictionary<string, DataTable> dicSheet, string fullPathName, bool isAutoSizeColumn = false)
         {
             try
             {
@@ -96,26 +98,27 @@ namespace Netnr.Fast
 
                     //建立内容行
                     int iRowIndex = 1;
-                    int iCellIndex = 0;
                     foreach (DataRow Rowitem in dt.Rows)
                     {
-                        IRow DataRow = sheet.CreateRow(iRowIndex);
+                        IRow DataRow = sheet.CreateRow(iRowIndex++);
                         DataRow.Height = 20 * 14;
+                        int iCellIndex = 0;
                         foreach (DataColumn Colitem in dt.Columns)
                         {
-                            ICell cell = DataRow.CreateCell(iCellIndex);
+                            ICell cell = DataRow.CreateCell(iCellIndex++);
                             cell.SetCellValue(Rowitem[Colitem].ToString());
                             cell.CellStyle = cellStyle;
-                            iCellIndex++;
                         }
-                        iCellIndex = 0;
-                        iRowIndex++;
                     }
 
-                    //自适应列宽度
-                    for (int i = 0; i < icolIndex; i++)
+                    //自适应列宽度（开启自适应列宽 或 少量数据行时自动开启）
+                    //随着数据的增加需要的时间会越来越久
+                    if (isAutoSizeColumn || dt.Rows.Count < 999)
                     {
-                        sheet.AutoSizeColumn(i);
+                        for (int i = 0; i < icolIndex; i++)
+                        {
+                            sheet.AutoSizeColumn(i);
+                        }
                     }
                 }
 
@@ -130,6 +133,7 @@ namespace Netnr.Fast
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+
                 return false;
             }
         }
