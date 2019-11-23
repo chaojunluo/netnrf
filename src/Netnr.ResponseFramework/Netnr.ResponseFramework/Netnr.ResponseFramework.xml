@@ -154,7 +154,7 @@
             公共组件、视图
             </summary>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.InlayController.QueryConfigTable(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.InlayController.QueryConfigTable(QueryDataInputVM)">
             <summary>
             查询配置表格
             </summary>
@@ -182,7 +182,7 @@
             输入输出
             </summary>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.IOController.Export(Netnr.Func.ViewModel.QueryDataInputVM,System.String)">
+        <member name="M:Netnr.ResponseFramework.Controllers.IOController.Export(QueryDataInputVM,System.String)">
             <summary>
             公共导出
             </summary>
@@ -207,7 +207,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryTempExample(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryTempExample(QueryDataInputVM)">
             <summary>
             查询表配置示例
             </summary>
@@ -220,7 +220,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QuerySysTableConfig(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QuerySysTableConfig(QueryDataInputVM)">
             <summary>
             查询表配置
             </summary>
@@ -234,7 +234,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QuerySysMenu(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QuerySysMenu(QueryDataInputVM)">
             <summary>
             查询系统菜单
             </summary>
@@ -247,14 +247,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryGridChange1(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryGridChange1(QueryDataInputVM)">
             <summary>
             Grid多表格-主表
             </summary>
             <param name="ivm"></param>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryGridChange2(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryGridChange2(QueryDataInputVM)">
             <summary>
             Grid多表格-子表
             </summary>
@@ -279,14 +279,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryInvoiceMain(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryInvoiceMain(QueryDataInputVM)">
             <summary>
             查询单据主表
             </summary>
             <param name="ivm"></param>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryInvoiceDetail(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.RFController.QueryInvoiceDetail(QueryDataInputVM)">
             <summary>
             查询单据明细表
             </summary>
@@ -394,7 +394,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysButton(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysButton(QueryDataInputVM)">
             <summary>
             查询系统按钮
             </summary>
@@ -422,7 +422,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysMenu(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysMenu(QueryDataInputVM)">
             <summary>
             查询系统菜单
             </summary>
@@ -450,7 +450,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysRole(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysRole(QueryDataInputVM)">
             <summary>
             查询系统角色
             </summary>
@@ -486,7 +486,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysUser(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysUser(QueryDataInputVM)">
             <summary>
             查询系统用户
             </summary>
@@ -515,7 +515,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysLog(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysLog(QueryDataInputVM)">
             <summary>
             查询系统日志
             </summary>
@@ -528,7 +528,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysDictionary(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysDictionary(QueryDataInputVM)">
             <summary>
             查询系统数据字典
             </summary>
@@ -556,7 +556,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysTableConfig(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.SettingController.QuerySysTableConfig(QueryDataInputVM)">
             <summary>
             查询表配置
             </summary>
@@ -615,7 +615,7 @@
             <param name="cmd"></param>
             <returns></returns>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.ToolController.QueryTableConfig(Netnr.Func.ViewModel.QueryDataInputVM)">
+        <member name="M:Netnr.ResponseFramework.Controllers.ToolController.QueryTableConfig(QueryDataInputVM)">
             <summary>
             查询数据库表与表配置信息
             </summary>

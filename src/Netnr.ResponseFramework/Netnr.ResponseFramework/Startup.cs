@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
+using System.Linq;
 
 namespace Netnr.ResponseFramework
 {
@@ -62,10 +63,11 @@ namespace Netnr.ResponseFramework
                     Title = "RF API"
                 });
 
-                var cp1 = System.AppContext.BaseDirectory + "Netnr.ResponseFramework.xml";
-                var cp2 = System.AppContext.BaseDirectory + "Netnr.Func.xml";
-                c.IncludeXmlComments(cp1);
-                c.IncludeXmlComments(cp2);
+
+                "ResponseFramework,Func,Fast".Split(',').ToList().ForEach(x =>
+                {
+                    c.IncludeXmlComments(System.AppContext.BaseDirectory + "Netnr." + x + ".xml", true);
+                });
             });
 
             //路由小写

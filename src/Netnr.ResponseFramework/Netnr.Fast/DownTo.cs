@@ -23,6 +23,8 @@ namespace Netnr.Fast
         /// <summary>
         /// 流的方式下载
         /// </summary>
+        /// <param name="path"></param>
+        /// <param name="fileName"></param>
         public void Stream(string path, string fileName)
         {
             FileStream fileStream = new FileStream(path + fileName, FileMode.Open);
@@ -33,6 +35,11 @@ namespace Netnr.Fast
             Stream(bytes, fileName);
         }
 
+        /// <summary>
+        /// 流的方式下载
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="fileName"></param>
         public void Stream(byte[] bytes, string fileName)
         {
             Response.ContentType = "application/octet-stream";
