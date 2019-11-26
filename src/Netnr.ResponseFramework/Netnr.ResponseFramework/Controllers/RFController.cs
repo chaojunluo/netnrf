@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
-using Netnr.Func.ViewModel;
 using System;
 using System.Collections.Generic;
 using Netnr.Domain;

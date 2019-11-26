@@ -138,9 +138,6 @@ namespace Netnr.ResponseFramework
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //跨域
-            app.UseCors("any");
-
             //session
             app.UseSession();
 

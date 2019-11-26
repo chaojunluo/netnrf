@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
 using Netnr.Domain;
-using Netnr.Func.ViewModel;
 
 namespace Netnr.ResponseFramework.Controllers
 {

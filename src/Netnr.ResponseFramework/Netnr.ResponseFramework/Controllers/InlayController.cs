@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Netnr.Data;
-using Netnr.Func.ViewModel;
 using Newtonsoft.Json.Linq;
 
 namespace Netnr.ResponseFramework.Controllers

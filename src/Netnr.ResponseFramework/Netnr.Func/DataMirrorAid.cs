@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Netnr.Data;
 using Netnr.Domain;
-using Netnr.Func.ViewModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

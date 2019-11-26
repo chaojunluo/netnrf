@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using FluentScheduler;
 using Microsoft.AspNetCore.Mvc;
-using Netnr.Func.ViewModel;
 
 namespace Netnr.ResponseFramework.Controllers
 {

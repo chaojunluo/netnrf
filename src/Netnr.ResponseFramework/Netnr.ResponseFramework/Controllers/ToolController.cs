@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Netnr.Data;
 using Netnr.Domain;
-using Netnr.Func.ViewModel;
 
 namespace Netnr.ResponseFramework.Controllers
 {
