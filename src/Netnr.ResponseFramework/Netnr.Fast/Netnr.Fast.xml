@@ -183,6 +183,170 @@
             <param name="skipRow">跳过指定行开始读取，默认0</param>
             <returns></returns>
         </member>
+        <member name="T:Netnr.Fast.OSInfoTo">
+            <summary>
+            系统信息
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.Is64BitOperatingSystem">
+            <summary>
+            确定当前操作系统是否为64位操作系统
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.MachineName">
+            <summary>
+            获取此本地计算机的NetBIOS名称
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.OSVersion">
+            <summary>
+            获取当前平台标识符和版本号
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.ProcessorCount">
+            <summary>
+            获取当前计算机上的处理器数量
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.ProcessorName">
+            <summary>
+            处理器名称
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.SystemDirectory">
+            <summary>
+            获取系统目录的标准路径
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.SystemPageSize">
+            <summary>
+            获取操作系统的内存页面中的字节数
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.TickCount">
+            <summary>
+            获取自系统启动以来经过的毫秒数
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.UserDomainName">
+            <summary>
+            获取与当前用户关联的网络域名
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.UserName">
+            <summary>
+            获取当前登录到操作系统的用户的用户名
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.Version">
+            <summary>
+            获取公共语言运行时的主要，次要，内部和修订版本号
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.FrameworkDescription">
+            <summary>
+            获取运行应用程序的.NET安装的名称
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.OSDescription">
+            <summary>
+            获取描述应用程序正在运行的操作系统的字符串
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.OS">
+            <summary>
+            代表操作系统平台
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.TotalPhysicalMemory">
+            <summary>
+            总物理内存 B
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.FreePhysicalMemory">
+            <summary>
+            可用物理内存 B
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.SwapTotal">
+            <summary>
+            总交换空间（Linux）B
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.SwapFree">
+            <summary>
+            可用交换空间（Linux）B
+            </summary>
+        </member>
+        <member name="P:Netnr.Fast.OSInfoTo.LogicalDisk">
+            <summary>
+            逻辑磁盘
+            </summary>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.#ctor">
+            <summary>
+            构造
+            </summary>
+        </member>
+        <member name="T:Netnr.Fast.OSInfoTo.PlatformForWindows">
+            <summary>
+            WINDOWS
+            </summary>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForWindows.TotalPhysicalMemory">
+            <summary>
+            获取物理内存 B
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForWindows.FreePhysicalMemory">
+            <summary>
+            获取可用内存 B
+            </summary>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForWindows.LogicalDisk">
+            <summary>
+            获取磁盘信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForWindows.ProcessorName">
+            <summary>
+            获取处理器名称
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Netnr.Fast.OSInfoTo.PlatformForLinux">
+            <summary>
+            Linux系统
+            </summary>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForLinux.MemInfo(System.String)">
+            <summary>
+            获取 /proc/meminfo
+            </summary>
+            <param name="pkey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForLinux.CpuInfo(System.String)">
+            <summary>
+            获取 /proc/cpuinfo
+            </summary>
+            <param name="pkey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForLinux.LogicalDisk">
+            <summary>
+            获取磁盘信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netnr.Fast.OSInfoTo.PlatformForLinux.CPULoad">
+            <summary>
+            获取CPU使用率 %
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Netnr.Fast.QueryableTo">
             <summary>
             查询支持

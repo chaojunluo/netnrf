@@ -580,5 +580,43 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         #endregion
+
+        #region 服务器信息
+
+        /// <summary>
+        /// 服务器信息
+        /// </summary>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IActionResult ServerInfo()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 查询服务器信息
+        /// </summary>
+        /// <returns></returns>
+        [ValidateAntiForgeryToken]
+        [ResponseCache(Duration = 10)]
+        public ActionResultVM QueryServerInfo()
+        {
+            var vm = new ActionResultVM();
+
+            try
+            {
+                vm.data = new Fast.OSInfoTo();
+                vm.Set(ARTag.success);
+            }
+            catch (Exception ex)
+            {
+                vm.Set(ex);
+                Core.ConsoleTo.Log(ex);
+            }
+
+            return vm;
+        }
+
+        #endregion
     }
 }
