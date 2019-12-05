@@ -597,7 +597,7 @@ namespace Netnr.ResponseFramework.Controllers
         /// 查询服务器信息
         /// </summary>
         /// <returns></returns>
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         [ResponseCache(Duration = 10)]
         public ActionResultVM QueryServerInfo()
         {

@@ -1,10 +1,6 @@
 function loadOSinfo() {
     $.ajax({
         url: "/Tool/QueryServerInfo",
-        type: 'post',
-        data: {
-            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-        },
         dataType: 'json',
         success: function (data, status, xhr) {
             if (data.code != 200) {
