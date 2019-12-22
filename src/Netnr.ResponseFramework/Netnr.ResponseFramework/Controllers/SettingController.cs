@@ -16,6 +16,13 @@ namespace Netnr.ResponseFramework.Controllers
     [Route("[controller]/[action]")]
     public class SettingController : Controller
     {
+        public ContextBase db;
+
+        public SettingController(ContextBase cb)
+        {
+            db = cb;
+        }
+
         #region 系统按钮
 
         /// <summary>
@@ -38,18 +45,17 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysButton(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var list = db.SysButton.OrderBy(x => x.SbBtnOrder).ToList();
-                var tree = Core.TreeTo.ListToTree(list, "SbPid", "SbId", new List<string> { Guid.Empty.ToString() });
-                ovm.data = tree.ToJArray();
 
-                //列
-                if (ivm.columnsExists != 1)
-                {
-                    ovm.columns = db.SysTableConfig.Where(x => x.TableName == ivm.tableName).OrderBy(x => x.ColOrder).ToList();
-                }
+            var list = db.SysButton.OrderBy(x => x.SbBtnOrder).ToList();
+            var tree = Core.TreeTo.ListToTree(list, "SbPid", "SbId", new List<string> { Guid.Empty.ToString() });
+            ovm.data = tree.ToJArray();
+
+            //列
+            if (ivm.columnsExists != 1)
+            {
+                ovm.columns = db.SysTableConfig.Where(x => x.TableName == ivm.tableName).OrderBy(x => x.ColOrder).ToList();
             }
+
             return ovm;
         }
 
@@ -72,22 +78,20 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 mo.SbBtnHide = -1;
             }
-            using (var db = new ContextBase())
+
+            if (savetype == "add")
             {
-                if (savetype == "add")
-                {
-                    mo.SbId = Guid.NewGuid().ToString();
-                    db.SysButton.Add(mo);
-                }
-                else
-                {
-                    db.SysButton.Update(mo);
-                }
-
-                int num = db.SaveChanges();
-
-                vm.Set(num > 0);
+                mo.SbId = Guid.NewGuid().ToString();
+                db.SysButton.Add(mo);
             }
+            else
+            {
+                db.SysButton.Update(mo);
+            }
+
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             //清理缓存
             Core.CacheTo.Remove(Func.Common.GlobalCacheKey.SysButton);
@@ -105,14 +109,11 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
-            {
-                var mo = db.SysButton.Find(id);
-                db.SysButton.Remove(mo);
-                int num = db.SaveChanges();
+            var mo = db.SysButton.Find(id);
+            db.SysButton.Remove(mo);
+            int num = db.SaveChanges();
 
-                vm.Set(num > 0);
-            }
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -141,18 +142,17 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysMenu(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var list = db.SysMenu.OrderBy(x => x.SmOrder).ToList();
-                var tree = Core.TreeTo.ListToTree(list, "SmPid", "SmId", new List<string> { Guid.Empty.ToString() });
-                ovm.data = tree.ToJArray();
 
-                //列
-                if (ivm.columnsExists != 1)
-                {
-                    ovm.columns = db.SysTableConfig.Where(x => x.TableName == ivm.tableName).OrderBy(x => x.ColOrder).ToList();
-                }
+            var list = db.SysMenu.OrderBy(x => x.SmOrder).ToList();
+            var tree = Core.TreeTo.ListToTree(list, "SmPid", "SmId", new List<string> { Guid.Empty.ToString() });
+            ovm.data = tree.ToJArray();
+
+            //列
+            if (ivm.columnsExists != 1)
+            {
+                ovm.columns = db.SysTableConfig.Where(x => x.TableName == ivm.tableName).OrderBy(x => x.ColOrder).ToList();
             }
+
             return ovm;
         }
 
@@ -171,21 +171,19 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 mo.SmPid = Guid.Empty.ToString();
             }
-            using (var db = new ContextBase())
-            {
-                if (savetype == "add")
-                {
-                    mo.SmId = Guid.NewGuid().ToString();
-                    db.SysMenu.Add(mo);
-                }
-                else
-                {
-                    db.SysMenu.Update(mo);
-                }
-                int num = db.SaveChanges();
 
-                vm.Set(num > 0);
+            if (savetype == "add")
+            {
+                mo.SmId = Guid.NewGuid().ToString();
+                db.SysMenu.Add(mo);
             }
+            else
+            {
+                db.SysMenu.Update(mo);
+            }
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             //清理缓存
             Core.CacheTo.Remove(Func.Common.GlobalCacheKey.SysMenu);
@@ -203,15 +201,12 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
-            {
-                var mo = db.SysMenu.Find(id);
-                db.SysMenu.Remove(mo);
+            var mo = db.SysMenu.Find(id);
+            db.SysMenu.Remove(mo);
 
-                int num = db.SaveChanges();
+            int num = db.SaveChanges();
 
-                vm.Set(num > 0);
-            }
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -240,11 +235,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysRole(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysRole;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysRole;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -259,22 +253,19 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            if (savetype == "add")
             {
-                if (savetype == "add")
-                {
-                    mo.SrId = Guid.Empty.ToString();
-                    mo.SrCreateTime = DateTime.Now;
-                    db.SysRole.Add(mo);
-                }
-                else
-                {
-                    db.SysRole.Update(mo);
-                }
-                int num = db.SaveChanges();
-
-                vm.Set(num > 0);
+                mo.SrId = Guid.Empty.ToString();
+                mo.SrCreateTime = DateTime.Now;
+                db.SysRole.Add(mo);
             }
+            else
+            {
+                db.SysRole.Update(mo);
+            }
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -290,20 +281,17 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            var list = db.SysRole.Where(x => x.SrId == mo.SrId || x.SrId == copyid).ToList();
+            var copymo = list.Find(x => x.SrId == copyid);
+            foreach (var item in list)
             {
-                var list = db.SysRole.Where(x => x.SrId == mo.SrId || x.SrId == copyid).ToList();
-                var copymo = list.Find(x => x.SrId == copyid);
-                foreach (var item in list)
-                {
-                    item.SrMenus = copymo.SrMenus;
-                    item.SrButtons = copymo.SrButtons;
-                }
-                db.SysRole.UpdateRange(list);
-                int num = db.SaveChanges();
-
-                vm.Set(num > 0);
+                item.SrMenus = copymo.SrMenus;
+                item.SrButtons = copymo.SrButtons;
             }
+            db.SysRole.UpdateRange(list);
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -318,20 +306,17 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            if (db.SysUser.Where(x => x.SrId == id).Count() > 0)
             {
-                if (db.SysUser.Where(x => x.SrId == id).Count() > 0)
-                {
-                    vm.Set(ARTag.exist);
-                }
-                else
-                {
-                    var mo = db.SysRole.Find(id);
-                    db.SysRole.Remove(mo);
-                    int num = db.SaveChanges();
+                vm.Set(ARTag.exist);
+            }
+            else
+            {
+                var mo = db.SysRole.Find(id);
+                db.SysRole.Remove(mo);
+                int num = db.SaveChanges();
 
-                    vm.Set(num > 0);
-                }
+                vm.Set(num > 0);
             }
 
             return vm;
@@ -361,26 +346,25 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysUser(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = from a in db.SysUser
-                            join b in db.SysRole on a.SrId equals b.SrId
-                            select new
-                            {
-                                a.SuId,
-                                a.SuNickname,
-                                a.SrId,
-                                a.SuSign,
-                                a.SuStatus,
-                                a.SuGroup,
-                                a.SuName,
-                                a.SuPwd,
-                                a.SuCreateTime,
-                                OldUserPwd = a.SuPwd,
-                                b.SrName
-                            };
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = from a in db.SysUser
+                        join b in db.SysRole on a.SrId equals b.SrId
+                        select new
+                        {
+                            a.SuId,
+                            a.SuNickname,
+                            a.SrId,
+                            a.SuSign,
+                            a.SuStatus,
+                            a.SuGroup,
+                            a.SuName,
+                            a.SuPwd,
+                            a.SuCreateTime,
+                            OldUserPwd = a.SuPwd,
+                            b.SrName
+                        };
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -396,41 +380,38 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            if (savetype == "add")
             {
-                if (savetype == "add")
+                if (db.SysUser.Where(x => x.SuName == mo.SuName).Count() > 0)
                 {
-                    if (db.SysUser.Where(x => x.SuName == mo.SuName).Count() > 0)
-                    {
-                        vm.Set(ARTag.exist);
-                    }
-                    else
-                    {
-                        mo.SuId = Guid.NewGuid().ToString();
-                        mo.SuCreateTime = DateTime.Now;
-                        mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
-                        db.SysUser.Add(mo);
-                    }
+                    vm.Set(ARTag.exist);
                 }
                 else
                 {
-                    if (db.SysUser.Where(x => x.SuName == mo.SuName && x.SuId != mo.SuId).Count() > 0)
-                    {
-                        vm.Set(ARTag.exist);
-                    }
-                    else
-                    {
-                        if (mo.SuPwd != OldUserPwd)
-                        {
-                            mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
-                        }
-                        db.SysUser.Update(mo);
-                    }
+                    mo.SuId = Guid.NewGuid().ToString();
+                    mo.SuCreateTime = DateTime.Now;
+                    mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
+                    db.SysUser.Add(mo);
                 }
-                int num = db.SaveChanges();
-
-                vm.Set(num > 0);
             }
+            else
+            {
+                if (db.SysUser.Where(x => x.SuName == mo.SuName && x.SuId != mo.SuId).Count() > 0)
+                {
+                    vm.Set(ARTag.exist);
+                }
+                else
+                {
+                    if (mo.SuPwd != OldUserPwd)
+                    {
+                        mo.SuPwd = Core.CalcTo.MD5(mo.SuPwd);
+                    }
+                    db.SysUser.Update(mo);
+                }
+            }
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -445,13 +426,10 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
-            {
-                var mo = db.SysUser.Find(id);
-                db.SysUser.Remove(mo);
-                int num = db.SaveChanges();
-                vm.Set(num > 0);
-            }
+            var mo = db.SysUser.Find(id);
+            db.SysUser.Remove(mo);
+            int num = db.SaveChanges();
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -480,11 +458,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysLog(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysLog;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysLog;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -512,11 +489,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysDictionary(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysDictionary;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysDictionary;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -531,22 +507,19 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            if (savetype == "add")
             {
-                if (savetype == "add")
-                {
-                    mo.SdId = Guid.NewGuid().ToString();
-                    mo.SdPid = Guid.Empty.ToString();
-                    db.SysDictionary.Add(mo);
-                }
-                else
-                {
-                    db.SysDictionary.Update(mo);
-                }
-                int num = db.SaveChanges();
-
-                vm.Set(num > 0);
+                mo.SdId = Guid.NewGuid().ToString();
+                mo.SdPid = Guid.Empty.ToString();
+                db.SysDictionary.Add(mo);
             }
+            else
+            {
+                db.SysDictionary.Update(mo);
+            }
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -561,15 +534,12 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
-            {
-                var mo = db.SysDictionary.Find(id);
-                mo.SdStatus = -1;
-                db.SysDictionary.Update(mo);
-                int num = db.SaveChanges();
+            var mo = db.SysDictionary.Find(id);
+            mo.SdStatus = -1;
+            db.SysDictionary.Update(mo);
+            int num = db.SaveChanges();
 
-                vm.Set(num > 0);
-            }
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -598,11 +568,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysTableConfig(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysTableConfig;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysTableConfig;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -619,21 +588,19 @@ namespace Netnr.ResponseFramework.Controllers
             var vm = new ActionResultVM();
 
             mo.ColRelation = string.Join(',', ColRelation);
-            using (var db = new ContextBase())
-            {
-                if (savetype == "add")
-                {
-                    mo.Id = Guid.NewGuid().ToString();
-                    db.SysTableConfig.Add(mo);
-                }
-                else
-                {
-                    db.SysTableConfig.Update(mo);
-                }
-                int num = db.SaveChanges();
 
-                vm.Set(num > 0);
+            if (savetype == "add")
+            {
+                mo.Id = Guid.NewGuid().ToString();
+                db.SysTableConfig.Add(mo);
             }
+            else
+            {
+                db.SysTableConfig.Update(mo);
+            }
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -648,14 +615,11 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
-            {
-                var mo = db.SysTableConfig.Find(id);
-                db.SysTableConfig.Remove(mo);
-                int num = db.SaveChanges();
+            var mo = db.SysTableConfig.Find(id);
+            db.SysTableConfig.Remove(mo);
+            int num = db.SaveChanges();
 
-                vm.Set(num > 0);
-            }
+            vm.Set(num > 0);
 
             return vm;
         }

@@ -19,6 +19,13 @@ namespace Netnr.ResponseFramework.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
+        public ContextBase db;
+
+        public AccountController(ContextBase cb)
+        {
+            db = cb;
+        }
+
         #region 登录
 
         /// <summary>
@@ -81,7 +88,6 @@ namespace Netnr.ResponseFramework.Controllers
                     return result;
                 }
 
-                using var db = new ContextBase();
                 outMo = db.SysUser.Where(x => x.SuName == mo.SuName && x.SuPwd == Core.CalcTo.MD5(mo.SuPwd, 32)).FirstOrDefault();
             }
 
@@ -197,13 +203,12 @@ namespace Netnr.ResponseFramework.Controllers
             {
                 var userinfo = Func.Common.GetLoginUserInfo(HttpContext);
 
-                using var db = new ContextBase();
                 var mo = db.SysUser.Find(userinfo.UserId);
                 if (mo != null && mo.SuPwd == Core.CalcTo.MD5(oldpwd))
                 {
                     mo.SuPwd = Core.CalcTo.MD5(newpwd1);
                     db.SysUser.Update(mo);
-                    
+
                     vm.Set(db.SaveChanges() > 0);
                 }
                 else

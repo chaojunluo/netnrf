@@ -144,17 +144,21 @@ namespace Netnr.ResponseFramework.Filters
 
                         try
                         {
-                            //IP城市
-                            var city = new ipdb.City(GlobalTo.GetValue("logs:ipdb").Replace("~", GlobalTo.ContentRootPath));
+                            var dbpath = GlobalTo.GetValue("logs:dbpath").Replace("~", GlobalTo.ContentRootPath);
+                            using var ds = new IP2Region.DbSearcher(dbpath);
 
                             var ips = mo.LogIp.Split(',');
-                            var ipc = string.Empty;
+                            var ipi = new List<string>();
                             foreach (var ip in ips)
                             {
-                                var listCity = city.find(ip.Trim().Replace("::1", "127.0.0.1"), "CN").Distinct();
-                                ipc += string.Join(",", listCity).TrimEnd(',') + ";";
+                                //内容格式：国家|区域|省份|市|运营商。无数据默认为0。
+                                var listIpInfo = ds.MemorySearch(ip.Trim().Replace("::1", "127.0.0.1")).Region.Split('|').ToList();
+                                listIpInfo.RemoveAt(1);
+                                listIpInfo = listIpInfo.Where(x => x != "0").Distinct().ToList();
+
+                                ipi.Add(string.Join(",", listIpInfo));
                             }
-                            mo.LogCity = ipc.TrimEnd(';');
+                            mo.LogCity = string.Join(";", ipi);
                         }
                         catch (Exception)
                         {
@@ -189,7 +193,7 @@ namespace Netnr.ResponseFramework.Filters
 
                         if (cacheLogs?.Count > cacheLogCount || DateTime.Now.ToTimestamp() - cacheLogWrite.Value.ToTimestamp() > cacheLogTime)
                         {
-                            using (var db = new Data.ContextBase())
+                            using (var db = new Data.ContextBase(Data.ContextBase.DCOB().Options))
                             {
                                 db.SysLog.AddRange(cacheLogs);
                                 db.SaveChanges();

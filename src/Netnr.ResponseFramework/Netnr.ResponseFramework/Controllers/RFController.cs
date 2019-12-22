@@ -12,6 +12,13 @@ namespace Netnr.ResponseFramework.Controllers
     /// </summary>
     public class RFController : Controller
     {
+        public ContextBase db;
+
+        public RFController(ContextBase cb)
+        {
+            db = cb;
+        }
+
         #region 表配置示例
 
         /// <summary>
@@ -31,11 +38,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QueryTempExample(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.TempExample;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.TempExample;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -60,11 +66,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysTableConfig(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysTableConfig;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysTableConfig;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -81,7 +86,6 @@ namespace Netnr.ResponseFramework.Controllers
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                using var db = new ContextBase();
                 var query = from a in db.SysMenu
                             where a.SmPid == id
                             orderby a.SmOrder
@@ -113,11 +117,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QuerySysMenu(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysMenu;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysMenu;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -142,11 +145,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QueryGridChange1(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysRole;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysRole;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -158,11 +160,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QueryGridChange2(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.SysUser;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.SysUser;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -213,11 +214,10 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QueryInvoiceMain(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = db.TempInvoiceMain;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+
+            var query = db.TempInvoiceMain;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -229,20 +229,19 @@ namespace Netnr.ResponseFramework.Controllers
         public QueryDataOutputVM QueryInvoiceDetail(QueryDataInputVM ivm)
         {
             var ovm = new QueryDataOutputVM();
-            using (var db = new ContextBase())
-            {
-                var query = from a in db.TempInvoiceDetail select a;
-                if (string.IsNullOrWhiteSpace(ivm.pe1))
-                {
-                    query = query.Where(x => false);
-                }
-                else
-                {
-                    query = query.Where(x => x.TimId == ivm.pe1);
-                }
 
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
+            var query = from a in db.TempInvoiceDetail select a;
+            if (string.IsNullOrWhiteSpace(ivm.pe1))
+            {
+                query = query.Where(x => false);
             }
+            else
+            {
+                query = query.Where(x => x.TimId == ivm.pe1);
+            }
+
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
+
             return ovm;
         }
 
@@ -270,45 +269,43 @@ namespace Netnr.ResponseFramework.Controllers
                 moMain.TimOwnerName = "系统登录人员";
             }
 
-            using (var db = new ContextBase())
+
+            if (isadd)
             {
-                if (isadd)
+                db.TempInvoiceMain.Add(moMain);
+            }
+            else
+            {
+                db.TempInvoiceMain.Update(moMain);
+
+                //更新时，删除原有明细
+                var currDetail = db.TempInvoiceDetail.Where(x => x.TimId == moMain.TimId).ToList();
+                if (currDetail.Count > 0)
                 {
-                    db.TempInvoiceMain.Add(moMain);
+                    db.TempInvoiceDetail.RemoveRange(currDetail);
                 }
-                else
+            }
+
+            //添加明细
+            if (listDetail.Count > 0)
+            {
+                //初始值
+                foreach (var item in listDetail)
                 {
-                    db.TempInvoiceMain.Update(moMain);
-
-                    //更新时，删除原有明细
-                    var currDetail = db.TempInvoiceDetail.Where(x => x.TimId == moMain.TimId).ToList();
-                    if (currDetail.Count > 0)
-                    {
-                        db.TempInvoiceDetail.RemoveRange(currDetail);
-                    }
-                }
-
-                //添加明细
-                if (listDetail.Count > 0)
-                {
-                    //初始值
-                    foreach (var item in listDetail)
-                    {
-                        item.TidId = Guid.NewGuid().ToString();
-                        item.TimId = moMain.TimId;
-                    }
-
-                    db.TempInvoiceDetail.AddRange(listDetail);
+                    item.TidId = Guid.NewGuid().ToString();
+                    item.TimId = moMain.TimId;
                 }
 
-                int num = db.SaveChanges();
+                db.TempInvoiceDetail.AddRange(listDetail);
+            }
 
-                vm.Set(num > 0);
+            int num = db.SaveChanges();
 
-                if (isadd)
-                {
-                    vm.data = moMain.TimId;
-                }
+            vm.Set(num > 0);
+
+            if (isadd)
+            {
+                vm.data = moMain.TimId;
             }
 
             return vm;
@@ -374,14 +371,11 @@ namespace Netnr.ResponseFramework.Controllers
                 list.Add(mo);
             }
 
-            using (var db = new ContextBase())
-            {
-                db.SysLog.BulkInsert(list);
+            db.SysLog.BulkInsert(list);
 
-                db.BulkSaveChanges();
+            db.BulkSaveChanges();
 
-                vm.Set(ARTag.success);
-            }
+            vm.Set(ARTag.success);
 
             return vm;
         }
@@ -394,21 +388,18 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            var list = db.SysLog.OrderBy(x => x.LogCreateTime).Take(50_000).ToList();
+
+            foreach (var item in list)
             {
-                var list = db.SysLog.OrderBy(x => x.LogCreateTime).Take(50_000).ToList();
-
-                foreach (var item in list)
-                {
-                    item.LogRemark = Guid.NewGuid().ToString();
-                }
-
-                db.SysLog.BulkUpdate(list);
-
-                db.BulkSaveChanges();
-
-                vm.Set(ARTag.success);
+                item.LogRemark = Guid.NewGuid().ToString();
             }
+
+            db.SysLog.BulkUpdate(list);
+
+            db.BulkSaveChanges();
+
+            vm.Set(ARTag.success);
 
             return vm;
         }
@@ -421,16 +412,13 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
-            {
-                var list = db.SysLog.OrderBy(x => x.LogCreateTime).Take(50_000).ToList();
+            var list = db.SysLog.OrderBy(x => x.LogCreateTime).Take(50_000).ToList();
 
-                db.SysLog.BulkDelete(list);
+            db.SysLog.BulkDelete(list);
 
-                db.BulkSaveChanges();
+            db.BulkSaveChanges();
 
-                vm.Set(ARTag.success);
-            }
+            vm.Set(ARTag.success);
 
             return vm;
         }

@@ -18,15 +18,6 @@ namespace Netnr.ResponseFramework
         {
             GlobalTo.Configuration = configuration;
             GlobalTo.HostEnvironment = env;
-
-            //无创建，有忽略
-            using var db = new Data.ContextBase();
-            //不存在创建，创建后返回true
-            if (db.Database.EnsureCreated())
-            {
-                //调用重置数据库（实际开发中，你可能不需要，或只初始化一些表数据）
-                new Controllers.ToolController().ResetDataBaseForJson();
-            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -63,7 +54,6 @@ namespace Netnr.ResponseFramework
                     Title = "RF API"
                 });
 
-
                 "ResponseFramework,Func,Fast".Split(',').ToList().ForEach(x =>
                 {
                     c.IncludeXmlComments(System.AppContext.BaseDirectory + "Netnr." + x + ".xml", true);
@@ -82,20 +72,24 @@ namespace Netnr.ResponseFramework
             //session
             services.AddSession();
 
+            //数据库连接池
+            services.AddDbContextPool<Data.ContextBase>(options =>
+            {
+                Data.ContextBase.DCOB(options);
+            }, 99);
+
             //定时任务
-            FluentScheduler.JobManager.Initialize(new Controllers.ServicesController.TaskComponent.Reg());
+            FluentScheduler.JobManager.Initialize(new Func.TaskAid.Reg());
 
             //配置上传文件大小限制（详细信息：FormOptions）
             services.Configure<FormOptions>(options =>
             {
-                //100MB
-                options.ValueLengthLimit = 1024 * 1024 * 100;
-                options.MultipartBodyLengthLimit = options.ValueLengthLimit;
+                options.MultipartBodyLengthLimit = GlobalTo.GetValue<int>("StaticResource:MaxSize") * 1024 * 1024;
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMemoryCache memoryCache)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Data.ContextBase db, IMemoryCache memoryCache)
         {
             //缓存
             Core.CacheTo.memoryCache = memoryCache;
@@ -109,6 +103,13 @@ namespace Netnr.ResponseFramework
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
+            }
+
+            //数据库不存在则创建，创建后返回true
+            if (db.Database.EnsureCreated())
+            {
+                //调用重置数据库（实际开发中，你可能不需要，或只初始化一些表数据）
+                new Controllers.ToolController(db).ResetDataBaseForJson();
             }
 
             //配置swagger（生产环境不需要，把该代码移至 是开发环境 条件里面）

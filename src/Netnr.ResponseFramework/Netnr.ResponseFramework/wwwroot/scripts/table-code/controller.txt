@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
-using Netnr.Func.ViewModel;
 using Netnr.Domain;
 using Netnr.Data;
 using System;
@@ -12,6 +10,12 @@ namespace Netnr.ResponseFramework.Controllers
     [Route("[controller]/[action]")]
     public class @TableName@Controller : Controller
     {
+        public ContextBase db;
+        public @TableName@Controller(ContextBase cb)
+        {
+            db = cb;
+        }
+
 		/// <summary>
         /// @TableTitle@页面
         /// </summary>
@@ -33,11 +37,8 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var ovm = new QueryDataOutputVM();
 
-            using (var db = new ContextBase())
-            {
-                var query = db.@TableName@;
-                Func.Common.QueryJoin(query, ivm, db, ref ovm);
-            }
+            var query = db.@TableName@;
+            Func.Common.QueryJoin(query, ivm, db, ref ovm);
 
             return ovm;
         }
@@ -53,23 +54,20 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            if (savetype == "add")
             {
-                if (savetype == "add")
-                {
-					mo.@PrimaryKey@ = Guid.NewGuid().ToString();
+				mo.@PrimaryKey@ = Guid.NewGuid().ToString();
 
-                    db.@TableName@.Add(mo);
-                }
-                else
-                {
-                    db.@TableName@.Update(mo);
-                }
-
-                int num = db.SaveChanges();
-
-                vm.Set(num > 0);
+                db.@TableName@.Add(mo);
             }
+            else
+            {
+                db.@TableName@.Update(mo);
+            }
+
+            int num = db.SaveChanges();
+
+            vm.Set(num > 0);
 
             return vm;
         }
@@ -84,20 +82,17 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var vm = new ActionResultVM();
 
-            using (var db = new ContextBase())
+            var mo = db.@TableName@.Find(id);
+            if (mo != null)
             {
-                var mo = db.@TableName@.Find(id);
-                if (mo != null)
-                {
-                    db.@TableName@.Remove(mo);
-                    int num = db.SaveChanges();
+                db.@TableName@.Remove(mo);
+                int num = db.SaveChanges();
 
-                    vm.Set(num > 0);
-                }
-                else
-                {
-                    vm.Set(ARTag.invalid);
-                }
+                vm.Set(num > 0);
+            }
+            else
+            {
+                vm.Set(ARTag.invalid);
             }
 
             return vm;

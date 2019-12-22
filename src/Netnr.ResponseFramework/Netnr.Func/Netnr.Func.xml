@@ -282,6 +282,37 @@
             <param name="st"></param>
             <returns></returns>
         </member>
+        <member name="T:Netnr.Func.TaskAid">
+            <summary>
+            任务
+            </summary>
+        </member>
+        <member name="M:Netnr.Func.TaskAid.ClearTemp">
+            <summary>
+            清理临时文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Netnr.Func.TaskAid.Reg">
+            <summary>
+            任务注册
+            </summary>
+        </member>
+        <member name="M:Netnr.Func.TaskAid.Reg.#ctor">
+            <summary>
+            构造
+            </summary>
+        </member>
+        <member name="T:Netnr.Func.TaskAid.ResetDataBaseJob">
+            <summary>
+            重置数据库
+            </summary>
+        </member>
+        <member name="T:Netnr.Func.TaskAid.ClearTempJob">
+            <summary>
+            清理临时目录
+            </summary>
+        </member>
         <member name="T:Netnr.Func.ViewModel.AccountValidationVM">
             <summary>
             账号验证信息
@@ -371,21 +402,6 @@
             <summary>
             角色ID
             </summary>
-        </member>
-        <member name="F:ipdb.BaseStation.reader">
-            @var Reader
-        </member>
-        <member name="F:ipdb.City.reader">
-            @var Reader
-        </member>
-        <member name="F:ipdb.District.reader">
-            @var Reader
-        </member>
-        <member name="F:ipdb.IDC.reader">
-            @var Reader
-        </member>
-        <member name="T:ipdb.MetaData">
-            @copyright IPIP.net
         </member>
     </members>
 </doc>

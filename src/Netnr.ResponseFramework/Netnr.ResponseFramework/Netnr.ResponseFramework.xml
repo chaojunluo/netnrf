@@ -351,37 +351,11 @@
             清理临时目录
             </summary>
         </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.ServicesController.ExecTask(System.Nullable{Netnr.ResponseFramework.Controllers.ServicesController.TaskItem})">
+        <member name="M:Netnr.ResponseFramework.Controllers.ServicesController.ExecTask">
             <summary>
-            执行任务
+            执行任务项，支持名称或索引
             </summary>
-            <param name="ti">任务项枚举</param>
             <returns></returns>
-        </member>
-        <member name="T:Netnr.ResponseFramework.Controllers.ServicesController.TaskComponent">
-            <summary>
-            任务组件
-            </summary>
-        </member>
-        <member name="T:Netnr.ResponseFramework.Controllers.ServicesController.TaskComponent.Reg">
-            <summary>
-            任务注册
-            </summary>
-        </member>
-        <member name="M:Netnr.ResponseFramework.Controllers.ServicesController.TaskComponent.Reg.#ctor">
-            <summary>
-            构造
-            </summary>
-        </member>
-        <member name="T:Netnr.ResponseFramework.Controllers.ServicesController.TaskComponent.ResetDataBaseJob">
-            <summary>
-            重置数据库
-            </summary>
-        </member>
-        <member name="T:Netnr.ResponseFramework.Controllers.ServicesController.TaskComponent.ClearTempJob">
-            <summary>
-            清理临时目录
-            </summary>
         </member>
         <member name="T:Netnr.ResponseFramework.Controllers.SettingController">
             <summary>
@@ -592,7 +566,7 @@
         </member>
         <member name="M:Netnr.ResponseFramework.Controllers.TestController.Index">
             <summary>
-            测试
+            系统字典表页面
             </summary>
             <returns></returns>
         </member>

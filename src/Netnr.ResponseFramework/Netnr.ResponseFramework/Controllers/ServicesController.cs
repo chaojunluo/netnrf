@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using FluentScheduler;
 using Microsoft.AspNetCore.Mvc;
+using Netnr.Data;
 
 namespace Netnr.ResponseFramework.Controllers
 {
@@ -13,6 +14,12 @@ namespace Netnr.ResponseFramework.Controllers
     [Route("[controller]/[action]")]
     public class ServicesController : Controller
     {
+        public ContextBase db;
+        public ServicesController(ContextBase cb)
+        {
+            db = cb;
+        }
+
         #region 定时任务
 
         //帮助文档：https://github.com/fluentscheduler/FluentScheduler
@@ -34,139 +41,36 @@ namespace Netnr.ResponseFramework.Controllers
         }
 
         /// <summary>
-        /// 执行任务
+        /// 执行任务项，支持名称或索引
         /// </summary>
-        /// <param name="ti">任务项枚举</param>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResultVM ExecTask(TaskItem? ti)
+        [HttpGet("{id}")]
+        public ActionResultVM ExecTask()
         {
             var vm = new ActionResultVM();
 
-            try
+            Enum.TryParse(typeof(TaskItem), RouteData.Values["id"]?.ToString(), true, out object ti);
+
+            switch (ti as TaskItem?)
             {
-                if (!ti.HasValue)
-                {
-                    ti = (TaskItem)Enum.Parse(typeof(TaskItem), RouteData.Values["id"]?.ToString(), true);
-                }
+                default:
+                    vm.Set(ARTag.invalid);
+                    break;
 
-                switch (ti)
-                {
-                    default:
-                        vm.Set(ARTag.invalid);
-                        break;
+                case TaskItem.ResetDataBase:
+                    {
+                        vm = new Func.DataMirrorAid().AddForJson();
+                    }
+                    break;
 
-                    case TaskItem.ResetDataBase:
-                        using (var tc = new ToolController())
-                        {
-                            vm = tc.ResetDataBaseForJson();
-                        }
-                        break;
-
-                    case TaskItem.ClearTemp:
-                        {
-                            string directoryPath = (GlobalTo.WebRootPath + "/upload/temp/").Replace("\\", "/");
-
-                            var listLog = new List<string>();
-
-                            int delFileCount = 0;
-                            int delFolderCount = 0;
-
-                            //删除文件
-                            var listFile = Directory.GetFiles(directoryPath).ToList();
-                            foreach (var path in listFile)
-                            {
-                                if (!path.Contains("README"))
-                                {
-                                    try
-                                    {
-                                        System.IO.File.Delete(path);
-                                        delFileCount++;
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        listLog.Add("删除文件异常：" + ex.Message);
-                                    }
-                                }
-                            }
-
-                            //删除文件夹
-                            var listFolder = Directory.GetDirectories(directoryPath).ToList();
-                            foreach (var path in listFolder)
-                            {
-                                try
-                                {
-                                    Directory.Delete(path, true);
-                                    delFolderCount++;
-                                }
-                                catch (Exception ex)
-                                {
-                                    listLog.Add("删除文件夹异常：" + ex.Message);
-                                }
-                            }
-
-                            listLog.Insert(0, $"删除文件{delFileCount}个，删除{delFolderCount}个文件夹");
-
-                            vm.data = listLog;
-                            vm.Set(ARTag.success);
-                        }
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                vm.Set(ex);
+                case TaskItem.ClearTemp:
+                    {
+                        vm = Func.TaskAid.ClearTemp();
+                    }
+                    break;
             }
 
             return vm;
-        }
-
-        /// <summary>
-        /// 任务组件
-        /// </summary>
-        public class TaskComponent
-        {
-            /// <summary>
-            /// 任务注册
-            /// </summary>
-            public class Reg : Registry
-            {
-                /// <summary>
-                /// 构造
-                /// </summary>
-                public Reg()
-                {
-                    //每间隔一天在4:4 重置数据库
-                    Schedule<ResetDataBaseJob>().ToRunEvery(1).Days().At(4, 4);
-                    //每间隔两天在3:3 清理临时目录
-                    Schedule<ClearTempJob>().ToRunEvery(2).Days().At(3, 3);
-                }
-            }
-
-            /// <summary>
-            /// 重置数据库
-            /// </summary>
-            public class ResetDataBaseJob : IJob
-            {
-                void IJob.Execute()
-                {
-                    using var sc = new ServicesController();
-                    Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ResetDataBase).ToJson());
-                }
-            }
-
-            /// <summary>
-            /// 清理临时目录
-            /// </summary>
-            public class ClearTempJob : IJob
-            {
-                void IJob.Execute()
-                {
-                    using var sc = new ServicesController();
-                    Core.ConsoleTo.Log(sc.ExecTask(TaskItem.ClearTemp).ToJson());
-                }
-            }
-
         }
 
         #endregion

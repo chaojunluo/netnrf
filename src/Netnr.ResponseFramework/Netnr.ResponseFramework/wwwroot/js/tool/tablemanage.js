@@ -167,7 +167,7 @@ var codeGenerate = {
 
         require(['vs/editor/editor.main'], function () {
 
-            $.get('/scripts/table-code/controller.txt').then(function (res) {
+            $.get('/scripts/table-code/controller.txt?1').then(function (res) {
                 if (window.editor1) {
                     window.editor1.dispose()
                 }
@@ -181,7 +181,7 @@ var codeGenerate = {
                 });
             })
 
-            $.get('/scripts/table-code/view.txt').then(function (res) {
+            $.get('/scripts/table-code/view.txt?1').then(function (res) {
                 if (window.editor2) {
                     window.editor2.dispose()
                 }
@@ -195,7 +195,7 @@ var codeGenerate = {
                 });
             })
 
-            $.get('/scripts/table-code/javascript.txt').then(function (res) {
+            $.get('/scripts/table-code/javascript.txt?1').then(function (res) {
                 if (window.editor3) {
                     window.editor3.dispose()
                 }

@@ -16,6 +16,12 @@ namespace Netnr.ResponseFramework.Controllers
     [Route("[controller]/[action]")]
     public class ToolController : Controller
     {
+        public ContextBase db;
+        public ToolController(ContextBase cb)
+        {
+            db = cb;
+        }
+
         #region 表管理
 
         /// <summary>
@@ -25,8 +31,7 @@ namespace Netnr.ResponseFramework.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult TableManage()
         {
-            using var db = new ContextBase();
-            if (ContextBase.TDB == ContextBase.TypeDB.InMemory)
+            if (db.Database.IsInMemory())
             {
                 return Content("不支持内存数据库，请切换其它数据库");
             }
@@ -63,47 +68,44 @@ namespace Netnr.ResponseFramework.Controllers
         {
             var ovm = new QueryDataOutputVM();
 
-            using (var db = new ContextBase())
+            var queryHas = from a in db.SysTableConfig
+                           group a by a.TableName into g
+                           select g.Key;
+
+            var listHas = queryHas.ToList();
+
+            var dbname = db.Database.GetDbConnection().Database;
+
+            var sql = QueryScripts(ContextBase.TDB.ToString(), "name").Replace("@DataBaseName", dbname);
+
+            var listRow = new List<TreeNodeVM>();
+            if (!string.IsNullOrWhiteSpace(sql))
             {
-                var queryHas = from a in db.SysTableConfig
-                               group a by a.TableName into g
-                               select g.Key;
+                using var dt = new DataTable();
 
-                var listHas = queryHas.ToList();
+                using var conn = db.Database.GetDbConnection();
+                conn.Open();
+                using var cmd = conn.CreateCommand();
 
-                var dbname = db.Database.GetDbConnection().Database;
+                cmd.CommandText = sql;
+                dt.Load(cmd.ExecuteReader());
 
-                var sql = QueryScripts(ContextBase.TDB.ToString(), "name").Replace("@DataBaseName", dbname);
-
-                var listRow = new List<TreeNodeVM>();
-                if (!string.IsNullOrWhiteSpace(sql))
+                foreach (DataRow dr in dt.Rows)
                 {
-                    using var dt = new DataTable();
-
-                    using (var conn = db.Database.GetDbConnection())
+                    var key = dr[0].ToString();
+                    var val = (listHas.Exists(x => x.ToLower() == key.ToLower()) ? "1" : "");
+                    var row = new TreeNodeVM
                     {
-                        conn.Open();
-                        var cmd = conn.CreateCommand();
-                        cmd.CommandText = sql;
-                        dt.Load(cmd.ExecuteReader());
-                    }
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        var key = dr[0].ToString();
-                        var val = (listHas.Exists(x => x.ToLower() == key.ToLower()) ? "1" : "");
-                        var row = new TreeNodeVM
-                        {
-                            id = key,
-                            pid = val
-                        };
-                        listRow.Add(row);
-                    }
+                        id = key,
+                        pid = val
+                    };
+                    listRow.Add(row);
                 }
-
-                var listFilter = Func.Common.QueryWhere(listRow, ivm);
-                ovm.data = listFilter;
-                ovm.total = listFilter.Count();
             }
+
+            var listFilter = Func.Common.QueryWhere(listRow, ivm);
+            ovm.data = listFilter;
+            ovm.total = listFilter.Count();
 
             return ovm;
         }
@@ -125,16 +127,19 @@ namespace Netnr.ResponseFramework.Controllers
                 vm.code = 1;
                 vm.msg = "表名不能为空";
             }
-            if (ContextBase.TDB == ContextBase.TypeDB.SQLite)
+            if (db.Database.IsSqlite())
             {
                 vm.Set(ARTag.lack);
                 vm.msg = "不支持当前数据库";
             }
             else
             {
-                using var db = new ContextBase();
                 var dbname = db.Database.GetDbConnection().Database;
                 var sqltemplate = QueryScripts(ContextBase.TDB.ToString(), "config");
+
+                using var conn = db.Database.GetDbConnection();
+                conn.Open();
+                using var cmd = conn.CreateCommand();
 
                 foreach (var name in listName)
                 {
@@ -144,14 +149,8 @@ namespace Netnr.ResponseFramework.Controllers
                     {
                         var dt = new DataTable();
 
-                        using (var dbsql = new ContextBase())
-                        {
-                            using var conn = dbsql.Database.GetDbConnection();
-                            conn.Open();
-                            var cmd = conn.CreateCommand();
-                            cmd.CommandText = sql;
-                            dt.Load(cmd.ExecuteReader());
-                        }
+                        cmd.CommandText = sql;
+                        dt.Load(cmd.ExecuteReader());
 
                         if (dt.Rows.Count > 0)
                         {
@@ -218,11 +217,14 @@ namespace Netnr.ResponseFramework.Controllers
             }
             else
             {
-                using var db = new ContextBase();
                 var dbname = db.Database.GetDbConnection().Database;
                 var sqltemplate = QueryScripts(ContextBase.TDB.ToString(), "config");
 
                 var listTc = db.SysTableConfig.ToList();
+
+                using var conn = db.Database.GetDbConnection();
+                conn.Open();
+                using var cmd = conn.CreateCommand();
 
                 foreach (var name in listName)
                 {
@@ -232,14 +234,8 @@ namespace Netnr.ResponseFramework.Controllers
                     {
                         var dt = new DataTable();
 
-                        using (var dbsql = new ContextBase())
-                        {
-                            using var conn = dbsql.Database.GetDbConnection();
-                            conn.Open();
-                            var cmd = conn.CreateCommand();
-                            cmd.CommandText = sql;
-                            dt.Load(cmd.ExecuteReader());
-                        }
+                        cmd.CommandText = sql;
+                        dt.Load(cmd.ExecuteReader());
 
                         foreach (DataRow dr in dt.Rows)
                         {
@@ -278,138 +274,131 @@ namespace Netnr.ResponseFramework.Controllers
 
             var dt = new DataTable();
 
-            using (var db = new ContextBase())
+            var dbname = db.Database.GetDbConnection().Database;
+
+            if (db.Database.IsSqlite())
             {
-                var dbname = db.Database.GetDbConnection().Database;
+                //补齐列
+                dt.Columns.Add(new DataColumn("表名"));
+                dt.Columns.Add(new DataColumn("表说明"));
 
-                if (ContextBase.TDB == ContextBase.TypeDB.SQLite)
+                using var conn = db.Database.GetDbConnection();
+                conn.Open();
+                //遍历表查询
+                foreach (var tname in listName)
                 {
-                    //补齐列
-                    dt.Columns.Add(new DataColumn("表名"));
-                    dt.Columns.Add(new DataColumn("表说明"));
-
-                    using var conn = db.Database.GetDbConnection();
-                    conn.Open();
-                    //遍历表查询
-                    foreach (var tname in listName)
-                    {
-                        var sql = QueryScripts(ContextBase.TDB.ToString(), "info").Replace("@TableName", tname);
-
-                        if (!string.IsNullOrWhiteSpace(sql))
-                        {
-                            var cmd = conn.CreateCommand();
-                            cmd.CommandText = sql;
-
-                            using var reader = cmd.ExecuteReader();
-                            while (reader.Read())
-                            {
-                                var newdr = dt.NewRow();
-
-                                for (int i = 0; i < reader.FieldCount; i++)
-                                {
-                                    var field = reader.GetName(i);
-                                    if (!dt.Columns.Contains(field))
-                                    {
-                                        dt.Columns.Add(new DataColumn(field));
-                                    }
-
-                                    newdr[field] = reader[field].ToString();
-
-                                    switch (field)
-                                    {
-                                        case "notnull":
-                                            newdr[field] = newdr[field].ToString() == "1" ? "YES" : "";
-                                            break;
-                                        case "pk":
-                                            newdr[field] = newdr[field].ToString() == "0" ? "" : "YES (" + newdr[field].ToString() + ")";
-                                            break;
-                                    }
-                                }
-
-                                newdr["表名"] = tname;
-                                newdr["表说明"] = "";
-
-                                dt.Rows.Add(newdr.ItemArray);
-                            }
-                        }
-                    }
-
-                    //更改列名
-                    foreach (DataColumn dc in dt.Columns)
-                    {
-                        if (dc.ColumnName == "name")
-                        {
-                            dc.ColumnName = "字段名";
-                        }
-                        if (dc.ColumnName == "type")
-                        {
-                            dc.ColumnName = "类型";
-                        }
-                        if (dc.ColumnName == "notnull")
-                        {
-                            dc.ColumnName = "不为空";
-                        }
-                        if (dc.ColumnName == "dflt_value")
-                        {
-                            dc.ColumnName = "默认值";
-                        }
-                        if (dc.ColumnName == "pk")
-                        {
-                            dc.ColumnName = "主键";
-                        }
-                    }
-                }
-                else
-                {
-                    var sql = QueryScripts(ContextBase.TDB.ToString(), "info").Replace("@DataBaseName", dbname).Replace("@TableName", innames);
+                    var sql = QueryScripts(ContextBase.TDB.ToString(), "info").Replace("@TableName", tname);
 
                     if (!string.IsNullOrWhiteSpace(sql))
                     {
-                        using var conn = db.Database.GetDbConnection();
-                        conn.Open();
                         var cmd = conn.CreateCommand();
                         cmd.CommandText = sql;
-                        dt.Load(cmd.ExecuteReader());
+
+                        using var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            var newdr = dt.NewRow();
+
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                var field = reader.GetName(i);
+                                if (!dt.Columns.Contains(field))
+                                {
+                                    dt.Columns.Add(new DataColumn(field));
+                                }
+
+                                newdr[field] = reader[field].ToString();
+
+                                switch (field)
+                                {
+                                    case "notnull":
+                                        newdr[field] = newdr[field].ToString() == "1" ? "YES" : "";
+                                        break;
+                                    case "pk":
+                                        newdr[field] = newdr[field].ToString() == "0" ? "" : "YES (" + newdr[field].ToString() + ")";
+                                        break;
+                                }
+                            }
+
+                            newdr["表名"] = tname;
+                            newdr["表说明"] = "";
+
+                            dt.Rows.Add(newdr.ItemArray);
+                        }
                     }
                 }
 
-                ovm.data = dt;
-                ovm.total = dt.Rows.Count;
+                //更改列名
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    if (dc.ColumnName == "name")
+                    {
+                        dc.ColumnName = "字段名";
+                    }
+                    if (dc.ColumnName == "type")
+                    {
+                        dc.ColumnName = "类型";
+                    }
+                    if (dc.ColumnName == "notnull")
+                    {
+                        dc.ColumnName = "不为空";
+                    }
+                    if (dc.ColumnName == "dflt_value")
+                    {
+                        dc.ColumnName = "默认值";
+                    }
+                    if (dc.ColumnName == "pk")
+                    {
+                        dc.ColumnName = "主键";
+                    }
+                }
+            }
+            else
+            {
+                var sql = QueryScripts(ContextBase.TDB.ToString(), "info").Replace("@DataBaseName", dbname).Replace("@TableName", innames);
+
+                if (!string.IsNullOrWhiteSpace(sql))
+                {
+                    using var conn = db.Database.GetDbConnection();
+                    conn.Open();
+                    using var cmd = conn.CreateCommand();
+
+                    cmd.CommandText = sql;
+                    dt.Load(cmd.ExecuteReader());
+                }
             }
 
+            ovm.data = dt;
+            ovm.total = dt.Rows.Count;
+
             #region 其它处理
-            switch (ContextBase.TDB)
+
+            //mysql默认值，单独查询
+            if (db.Database.IsMySql())
             {
-                //mysql默认值，单独查询
-                case ContextBase.TypeDB.MySQL:
-                    using (var db = new ContextBase())
+                using var conn = db.Database.GetDbConnection();
+                conn.Open();
+                using var cmd = conn.CreateCommand();
+
+                foreach (var name in listName)
+                {
+                    cmd.CommandText = "desc " + name + ";";
+
+                    var dtdefault = new DataTable();
+                    dtdefault.Load(cmd.ExecuteReader());
+
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        var conn = db.Database.GetDbConnection();
-                        conn.Open();
-                        var cmd = conn.CreateCommand();
-                        foreach (var name in listName)
+                        if (dr["表名"].ToString().ToLower() == name.ToLower())
                         {
-                            cmd.CommandText = "desc " + name + ";";
-
-                            var dtdefault = new DataTable();
-                            dtdefault.Load(cmd.ExecuteReader());
-
-                            foreach (DataRow dr in dt.Rows)
+                            var dv = dtdefault.Select("Field='" + dr["字段名"].ToString() + "'")[0]["Default"];
+                            if (dv != DBNull.Value)
                             {
-                                if (dr["表名"].ToString().ToLower() == name.ToLower())
-                                {
-                                    var dv = dtdefault.Select("Field='" + dr["字段名"].ToString() + "'")[0]["Default"];
-                                    if (dv != DBNull.Value)
-                                    {
-                                        dr["默认值"] = dv;
-                                    }
-                                }
+                                dr["默认值"] = dv;
                             }
                         }
-                        cmd.Dispose();
-                        conn.Dispose();
                     }
-                    break;
+                }
             }
             #endregion
 
@@ -539,18 +528,7 @@ namespace Netnr.ResponseFramework.Controllers
         [HttpGet]
         public ActionResultVM ResetDataBaseForJson()
         {
-            var vm = new ActionResultVM();
-
-            try
-            {
-                int num = new Func.DataMirrorAid().AddForJson();
-                vm.Set(num > 0);
-                vm.data = num;
-            }
-            catch (Exception ex)
-            {
-                vm.Set(ex);
-            }
+            var vm = new Func.DataMirrorAid().AddForJson();
 
             return vm;
         }

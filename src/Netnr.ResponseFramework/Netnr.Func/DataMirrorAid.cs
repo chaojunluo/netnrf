@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Netnr.Data;
 using Netnr.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,13 +15,13 @@ namespace Netnr.Func
     /// </summary>
     public class DataMirrorAid
     {
+        public ContextBase db;
+
         /// <summary>
         /// JSON存储路径
         /// </summary>
         public string JsonPath = GlobalTo.WebRootPath + "/scripts/table-json/";
         public string JsonName = "data.json";
-
-        ContextBase Cdb;
 
         public virtual DbSet<SysButton> Tsb { get; set; }
         public virtual DbSet<SysDictionary> Tsd { get; set; }
@@ -34,17 +35,17 @@ namespace Netnr.Func
 
         public DataMirrorAid()
         {
-            Cdb = new ContextBase();
+            db = new ContextBase(ContextBase.DCOB().Options);
 
-            Tsb = Cdb.SysButton;
-            Tsd = Cdb.SysDictionary;
-            Tsm = Cdb.SysMenu;
-            Tsr = Cdb.SysRole;
-            Tstc = Cdb.SysTableConfig;
-            Tsu = Cdb.SysUser;
-            Tte = Cdb.TempExample;
-            Ttid = Cdb.TempInvoiceDetail;
-            Ttim = Cdb.TempInvoiceMain;
+            Tsb = db.SysButton;
+            Tsd = db.SysDictionary;
+            Tsm = db.SysMenu;
+            Tsr = db.SysRole;
+            Tstc = db.SysTableConfig;
+            Tsu = db.SysUser;
+            Tte = db.TempExample;
+            Ttid = db.TempInvoiceDetail;
+            Ttim = db.TempInvoiceMain;
         }
 
         /// <summary>
@@ -87,65 +88,76 @@ namespace Netnr.Func
         /// </summary>
         /// <param name="isClear">是否清理表，默认清理</param>
         /// <returns></returns>
-        public int AddForJson(bool isClear = true)
+        public ActionResultVM AddForJson(bool isClear = true)
         {
-            var json = Core.FileTo.ReadText(JsonPath, JsonName);
+            var vm = new ActionResultVM();
 
-            var objs = json.ToJObject()["data"];
-
-            var jsb = objs["SysButton"].ToString().ToEntitys<SysButton>();
-            var jsd = objs["SysDictionary"].ToString().ToEntitys<SysDictionary>();
-            var jsm = objs["SysMenu"].ToString().ToEntitys<SysMenu>();
-            var jsr = objs["SysRole"].ToString().ToEntitys<SysRole>();
-            var jstc = objs["SysTableConfig"].ToString().ToEntitys<SysTableConfig>();
-            var jsu = objs["SysUser"].ToString().ToEntitys<SysUser>();
-            var jte = objs["TempExample"].ToString().ToEntitys<TempExample>();
-            var jtid = objs["TempInvoiceDetail"].ToString().ToEntitys<TempInvoiceDetail>();
-            var jtim = objs["TempInvoiceMain"].ToString().ToEntitys<TempInvoiceMain>();
-
-            Tsb = Cdb.SysButton;
-            Tsd = Cdb.SysDictionary;
-            Tsm = Cdb.SysMenu;
-            Tsr = Cdb.SysRole;
-            Tstc = Cdb.SysTableConfig;
-            Tsu = Cdb.SysUser;
-            Tte = Cdb.TempExample;
-            Ttid = Cdb.TempInvoiceDetail;
-            Ttim = Cdb.TempInvoiceMain;
-
-            var num = 0;
-            if (isClear)
+            try
             {
-                Tsb.RemoveRange(Tsb.ToList());
-                Tsd.RemoveRange(Tsd.ToList());
-                Tsm.RemoveRange(Tsm.ToList());
-                Tsr.RemoveRange(Tsr.ToList());
-                Tstc.RemoveRange(Tstc.ToList());
-                Tsu.RemoveRange(Tsu.ToList());
+                var json = Core.FileTo.ReadText(JsonPath, JsonName);
 
-                Tte.RemoveRange(Tte.ToList());
-                Ttid.RemoveRange(Ttid.ToList());
-                Ttim.RemoveRange(Ttim.ToList());
+                var objs = json.ToJObject()["data"];
 
-                num = Cdb.SaveChanges();
+                var jsb = objs["SysButton"].ToString().ToEntitys<SysButton>();
+                var jsd = objs["SysDictionary"].ToString().ToEntitys<SysDictionary>();
+                var jsm = objs["SysMenu"].ToString().ToEntitys<SysMenu>();
+                var jsr = objs["SysRole"].ToString().ToEntitys<SysRole>();
+                var jstc = objs["SysTableConfig"].ToString().ToEntitys<SysTableConfig>();
+                var jsu = objs["SysUser"].ToString().ToEntitys<SysUser>();
+                var jte = objs["TempExample"].ToString().ToEntitys<TempExample>();
+                var jtid = objs["TempInvoiceDetail"].ToString().ToEntitys<TempInvoiceDetail>();
+                var jtim = objs["TempInvoiceMain"].ToString().ToEntitys<TempInvoiceMain>();
+
+                Tsb = db.SysButton;
+                Tsd = db.SysDictionary;
+                Tsm = db.SysMenu;
+                Tsr = db.SysRole;
+                Tstc = db.SysTableConfig;
+                Tsu = db.SysUser;
+                Tte = db.TempExample;
+                Ttid = db.TempInvoiceDetail;
+                Ttim = db.TempInvoiceMain;
+
+                var num = 0;
+                if (isClear)
+                {
+                    Tsb.RemoveRange(Tsb.ToList());
+                    Tsd.RemoveRange(Tsd.ToList());
+                    Tsm.RemoveRange(Tsm.ToList());
+                    Tsr.RemoveRange(Tsr.ToList());
+                    Tstc.RemoveRange(Tstc.ToList());
+                    Tsu.RemoveRange(Tsu.ToList());
+
+                    Tte.RemoveRange(Tte.ToList());
+                    Ttid.RemoveRange(Ttid.ToList());
+                    Ttim.RemoveRange(Ttim.ToList());
+
+                    num = db.SaveChanges();
+                }
+
+                Tsb.AddRange(jsb);
+                Tsd.AddRange(jsd);
+                Tsm.AddRange(jsm);
+                Tsr.AddRange(jsr);
+                Tstc.AddRange(jstc);
+                Tsu.AddRange(jsu);
+
+                Tte.AddRange(jte);
+                Ttid.AddRange(jtid);
+                Ttim.AddRange(jtim);
+
+                db.AddRange(jsb);
+
+                num += db.SaveChanges();
+
+                vm.Set(num > 0);
+            }
+            catch (Exception ex)
+            {
+                vm.Set(ex);
             }
 
-            Tsb.AddRange(jsb);
-            Tsd.AddRange(jsd);
-            Tsm.AddRange(jsm);
-            Tsr.AddRange(jsr);
-            Tstc.AddRange(jstc);
-            Tsu.AddRange(jsu);
-
-            Tte.AddRange(jte);
-            Ttid.AddRange(jtid);
-            Ttim.AddRange(jtim);
-
-            Cdb.AddRange(jsb);
-
-            num += Cdb.SaveChanges();
-
-            return num;
+            return vm;
         }
     }
 }

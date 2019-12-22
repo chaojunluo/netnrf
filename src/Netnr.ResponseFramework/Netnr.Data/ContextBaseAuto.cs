@@ -141,33 +141,54 @@ namespace Netnr.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.LogAction).HasMaxLength(50);
+                entity.Property(e => e.LogAction)
+                    .HasMaxLength(50)
+                    .HasComment("动作");
 
-                entity.Property(e => e.LogBrowserName).HasMaxLength(50);
+                entity.Property(e => e.LogBrowserName)
+                    .HasMaxLength(50)
+                    .HasComment("浏览器");
 
                 entity.Property(e => e.LogCity)
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasComment("IP所属城市");
 
-                entity.Property(e => e.LogContent).HasMaxLength(200);
+                entity.Property(e => e.LogContent)
+                    .HasMaxLength(200)
+                    .HasComment("内容");
 
-                entity.Property(e => e.LogCreateTime).HasColumnType("datetime");
+                entity.Property(e => e.LogCreateTime)
+                    .HasColumnType("datetime")
+                    .HasComment("创建时间");
+
+                entity.Property(e => e.LogGroup).HasComment("分组");
 
                 entity.Property(e => e.LogIp)
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasComment("IP");
 
-                entity.Property(e => e.LogRemark).HasMaxLength(200);
+                entity.Property(e => e.LogRemark)
+                    .HasMaxLength(200)
+                    .HasComment("备注");
 
-                entity.Property(e => e.LogSystemName).HasMaxLength(50);
+                entity.Property(e => e.LogSystemName)
+                    .HasMaxLength(50)
+                    .HasComment("客户端操作系统");
 
                 entity.Property(e => e.LogUrl)
                     .HasMaxLength(500)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasComment("链接");
 
-                entity.Property(e => e.SuName).HasMaxLength(50);
+                entity.Property(e => e.SuName)
+                    .HasMaxLength(50)
+                    .HasComment("用户名");
 
-                entity.Property(e => e.SuNickname).HasMaxLength(50);
+                entity.Property(e => e.SuNickname)
+                    .HasMaxLength(50)
+                    .HasComment("昵称");
             });
 
             modelBuilder.Entity<SysMenu>(entity =>

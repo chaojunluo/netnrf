@@ -3,6 +3,7 @@ using System.Data;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Netnr.Data;
 using Netnr.Func;
 
 namespace Netnr.ResponseFramework.Controllers
@@ -14,6 +15,12 @@ namespace Netnr.ResponseFramework.Controllers
     [Route("[controller]/[action]")]
     public class IOController : Controller
     {
+        public ContextBase db;
+        public IOController(ContextBase cb)
+        {
+            db = cb;
+        }
+
         #region 导出
 
         /// <summary>
@@ -53,7 +60,7 @@ namespace Netnr.ResponseFramework.Controllers
                     //角色
                     case "sysrole":
                         {
-                            using var ctl = new SettingController();
+                            using var ctl = new SettingController(db);
                             dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysRole(ivm));
                         }
                         break;
@@ -61,7 +68,7 @@ namespace Netnr.ResponseFramework.Controllers
                     //用户
                     case "sysuser":
                         {
-                            using var ctl = new SettingController();
+                            using var ctl = new SettingController(db);
                             dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysUser(ivm));
                         }
                         break;
@@ -69,7 +76,7 @@ namespace Netnr.ResponseFramework.Controllers
                     //日志
                     case "syslog":
                         {
-                            using var ctl = new SettingController();
+                            using var ctl = new SettingController(db);
                             dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysLog(ivm));
                         }
                         break;
@@ -77,7 +84,7 @@ namespace Netnr.ResponseFramework.Controllers
                     //字典
                     case "sysdictionary":
                         {
-                            using var ctl = new SettingController();
+                            using var ctl = new SettingController(db);
                             dtReport = ExportAid.ModelsMapping(ivm, ctl.QuerySysDictionary(ivm));
                         }
                         break;

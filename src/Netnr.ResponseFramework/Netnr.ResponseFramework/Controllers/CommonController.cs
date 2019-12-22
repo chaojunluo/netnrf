@@ -17,6 +17,13 @@ namespace Netnr.ResponseFramework.Controllers
     [Route("[controller]/[action]")]
     public class CommonController : Controller
     {
+        public ContextBase db;
+
+        public CommonController(ContextBase cb)
+        {
+            db = cb;
+        }
+
         /// <summary>
         /// 公共查询：菜单树
         /// </summary>
@@ -116,7 +123,6 @@ namespace Netnr.ResponseFramework.Controllers
         [HttpPost]
         public List<ValueTextVM> QueryRole()
         {
-            using var db = new ContextBase();
             var query = from a in db.SysRole
                         where a.SrStatus == 1
                         orderby a.SrCreateTime
@@ -137,8 +143,6 @@ namespace Netnr.ResponseFramework.Controllers
         [HttpPost]
         public List<ValueTextVM> QueryDictionaryDemo()
         {
-            using var db = new ContextBase();
-
             var list = db.SysDictionary.Where(x => x.SdType == "SysDictionary:SdType" && x.SdStatus == 1).Select(x => new ValueTextVM
             {
                 value = x.SdId,

@@ -12,6 +12,12 @@ namespace Netnr.ResponseFramework.Components
     /// </summary>
     public class FormViewComponent : ViewComponent
     {
+        public ContextBase db;
+        public FormViewComponent(ContextBase cb)
+        {
+            db = cb;
+        }
+
         /// <summary>
         /// 表单、单据 组件
         /// </summary>
@@ -19,7 +25,6 @@ namespace Netnr.ResponseFramework.Components
         /// <returns></returns>
         public async Task<IViewComponentResult> InvokeAsync(InvokeFormVM vm)
         {
-            using var db = new ContextBase();
             //查询表对应的表单，排序，按区域分组
             var list = await db.SysTableConfig
                .Where(x => x.TableName == vm.TableName)
