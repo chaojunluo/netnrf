@@ -16,7 +16,18 @@ z.button('query', function () {
 
 //角色格式化
 function col_custom_srid(value, row, v) {
-    return row.SrName;
+    //初始化第一次
+    if (gd1.isinit) {
+        value = row.SrName;
+    } else {
+        $.each(z.DC["/common/queryrole"].data, function () {
+            if (this.value == value) {
+                value = this.text;
+                return false;
+            }
+        });
+    }
+    return value;
 }
 
 //刷新
