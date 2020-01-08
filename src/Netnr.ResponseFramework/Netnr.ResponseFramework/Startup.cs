@@ -116,7 +116,7 @@ namespace Netnr.ResponseFramework
             app.UseSwagger().UseSwaggerUI(c =>
             {
                 c.DocumentTitle = "RF API";
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "RF API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", c.DocumentTitle);
             });
 
             //默认起始页index.html

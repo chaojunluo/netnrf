@@ -46,5 +46,5 @@ document.getElementById('img_captcha').onclick = function () {
 //自适应高度
 $(window).on('load resize', function () {
     var rc = $('.rightcard');
-    rc.height(Math.max($('.leftcard').height(), rc.height()))
+    rc.height(Math.max($('.leftcard').outerHeight(), rc.children().outerHeight(), $(window).height()) - 1);
 });
