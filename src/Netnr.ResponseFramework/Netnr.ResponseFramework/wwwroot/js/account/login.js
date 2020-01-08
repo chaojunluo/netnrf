@@ -1,78 +1,50 @@
-﻿//低版本跳转
+﻿//非嵌套显示
+top != self && (top.location = self.location);
+
+//低版本跳转
 if (typeof document.createElement == "object" || !window.localStorage) {
     top.location = "/home/updatebrowser";
 }
 
-//非嵌套显示
-top != self && (top.location = self.location);
+//登录
+function loginValid() {
 
-$(document).keydown(function (e) {
-    if ((e.keyCode || e.which || e.charCode) == 13) {
-        $('#btnLogin')[0].click()
-    }
-});
+    $('.submit')[0].disabled = true;
 
-$('#btnLogin').click(function () {
-    if ($("#username").val() != "" && $("#userpwd").val() != "" && $('#captcha').val() != "") {
-        writemsg('<span class="text-muted">登录中</span>', true);
-
-        $('#btnLogin')[0].disabled = true;
-
-        $.ajax({
-            url: "/Account/LoginValidation?" + new Date().valueOf(),
-            type: "POST",
-            data: $('#formLogin').serialize(),
-            dataType: 'json',
-            success: function (data) {
-                if (data.code == 100) {
-                    writemsg('<span class="text-success">' + data.message + '</span>');
-                    window.location.href = data.url;
-                }
-                else {
-                    writemsg(data.message);
-                    if (data.code == 104) {
-                        $('#captcha').val('')[0].focus();
-                        $("#img_captcha")[0].click();
-                    } else {
-                        $("#username").val("");
-                        $("#userpwd").val("");
-                    }
-                }
-            },
-            error: function () {
-                writemsg("网络错误。");
-                $("#img_captcha")[0].click();
-            },
-            complete: function () {
-                $('#btnLogin')[0].disabled = false;
+    $.ajax({
+        url: "/Account/LoginValidation?" + new Date().valueOf(),
+        type: "POST",
+        data: $('form').serialize(),
+        dataType: 'json',
+        success: function (data) {
+            if (data.code == 200) {
+                window.location.href = data.data;
             }
-        })
-    }
-    else {
-        writemsg("请完整填写信息。");
-    }
-});
+            else {
+                $('form')[0].reset();
+                $("#img_captcha")[0].click();
+                alert(data.msg);
+            }
+        },
+        error: function () {
+            $("#img_captcha")[0].click();
+            alert('网络错误');
+        },
+        complete: function () {
+            $('.submit')[0].disabled = false;
+        }
+    })
 
-$('#username')[0].focus();
-
-//刷新验证码
-$("#img_captcha").click(function () {
-    this.src = "/Account/Captcha?" + new Date().valueOf();
-});
-
-//输出消息
-var defer1;
-function writemsg(msg, keep) {
-    $('#loginmsg').html(msg);
-    clearTimeout(defer1);
-    if (!keep) {
-        defer1 = setTimeout(function () {
-            $('#loginmsg').html('');
-        }, 1000 * 7)
-    }
+    return false;
 }
 
+//刷新验证码
+document.getElementById('img_captcha').onclick = function () {
+    this.src = "/account/captcha?" + new Date().valueOf();
+};
+
+//自适应高度
 $(window).on('load resize', function () {
-    var cc = $('.cc');
-    cc.css('margin-top', $(window).height() / 2 - cc.height() / 2)
+    var rc = $('.rightcard');
+    rc.height(Math.max($('.leftcard').height(), rc.height()))
 });

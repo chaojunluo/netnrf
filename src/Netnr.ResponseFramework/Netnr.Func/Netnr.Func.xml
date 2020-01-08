@@ -313,26 +313,6 @@
             清理临时目录
             </summary>
         </member>
-        <member name="T:Netnr.Func.ViewModel.AccountValidationVM">
-            <summary>
-            账号验证信息
-            </summary>
-        </member>
-        <member name="P:Netnr.Func.ViewModel.AccountValidationVM.code">
-            <summary>
-            状态码
-            </summary>
-        </member>
-        <member name="P:Netnr.Func.ViewModel.AccountValidationVM.message">
-            <summary>
-            消息
-            </summary>
-        </member>
-        <member name="P:Netnr.Func.ViewModel.AccountValidationVM.url">
-            <summary>
-            链接
-            </summary>
-        </member>
         <member name="T:Netnr.Func.ViewModel.InvokeFormVM">
             <summary>
             表单组件参数项

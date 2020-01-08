@@ -59,9 +59,9 @@ namespace Netnr.ResponseFramework.Controllers
         /// <param name="remember">1记住登录状态</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<AccountValidationVM> LoginValidation(SysUser mo, string captcha, int remember)
+        public async Task<ActionResultVM> LoginValidation(SysUser mo, string captcha, int remember)
         {
-            var result = new AccountValidationVM();
+            var vm = new ActionResultVM();
 
             var outMo = new SysUser();
 
@@ -76,16 +76,16 @@ namespace Netnr.ResponseFramework.Controllers
 
                 if (string.IsNullOrWhiteSpace(captcha) || (capt ?? "") != Core.CalcTo.MD5(captcha.ToLower()))
                 {
-                    result.code = 104;
-                    result.message = "验证码错误或已过期";
-                    return result;
+                    vm.Set(ARTag.fail);
+                    vm.msg = "验证码错误或已过期";
+                    return vm;
                 }
 
                 if (string.IsNullOrWhiteSpace(mo.SuName) || string.IsNullOrWhiteSpace(mo.SuPwd))
                 {
-                    result.code = 101;
-                    result.message = "用户名或密码不能为空";
-                    return result;
+                    vm.Set(ARTag.lack);
+                    vm.msg = "用户名或密码不能为空";
+                    return vm;
                 }
 
                 outMo = db.SysUser.Where(x => x.SuName == mo.SuName && x.SuPwd == Core.CalcTo.MD5(mo.SuPwd, 32)).FirstOrDefault();
@@ -93,16 +93,16 @@ namespace Netnr.ResponseFramework.Controllers
 
             if (outMo == null || string.IsNullOrWhiteSpace(outMo.SuId))
             {
-                result.code = 102;
-                result.message = "用户名或密码错误";
-                return result;
+                vm.Set(ARTag.unauthorized);
+                vm.msg = "用户名或密码错误";
+                return vm;
             }
 
             if (outMo.SuStatus != 1)
             {
-                result.code = 103;
-                result.message = "用户已被禁止登录";
-                return result;
+                vm.Set(ARTag.refuse);
+                vm.msg = "用户已被禁止登录";
+                return vm;
             }
 
             try
@@ -127,18 +127,17 @@ namespace Netnr.ResponseFramework.Controllers
                 //写入
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), authParam);
 
-                result.code = 100;
-                result.message = "登录成功";
-                result.url = "/";
-                return result;
+                vm.Set(ARTag.success);
+                vm.data = "/";
+
+                return vm;
 
                 #endregion
             }
             catch (Exception ex)
             {
-                result.code = 105;
-                result.message = "处理登录请求出错（" + ex.Message + "）";
-                return result;
+                vm.Set(ex);
+                return vm;
             }
         }
         #endregion

@@ -23,17 +23,17 @@
             break;
 
         case "easyui":
-            <link href="/lib/jquery-easyui/themes/metro/easyui.css" rel="stylesheet" asp-append-version="true" />
-            <script src="/lib/jquery-easyui/jquery.easyui.min.js" asp-append-version="true"></script>
+            <link href="https://cdn.jsdelivr.net/gh/netnr/cdn/libs/jquery-easyui/1.9.0/themes/metro/easyui.css" rel="stylesheet" />
+            <script src="https://cdn.jsdelivr.net/gh/netnr/cdn/libs/jquery-easyui/1.9.0/jquery.easyui.min.js"></script>
             break;
 
         case "ace.css":
-            <link href="/lib/acenav/ace.min.css" rel="stylesheet" asp-append-version="true" />
-            <link href="/lib/acenav/ace-skins.min.css" rel="stylesheet" asp-append-version="true" async />
+            <link href="https://cdn.jsdelivr.net/gh/netnr/cdn/libs/acenav/20200108/ace.min.css" rel="stylesheet" asp-append-version="true" />
+            <link href="https://cdn.jsdelivr.net/gh/netnr/cdn/libs/acenav/20200108/ace-skins.min.css" rel="stylesheet" asp-append-version="true" async />
             break;
 
         case "ace.js":
-            <script src="/lib/acenav/ace.min.js" asp-append-version="true"></script>
+            <script src="https://cdn.jsdelivr.net/gh/netnr/cdn/libs/acenav/20200108/ace.min.js" asp-append-version="true"></script>
             break;
 
         case "z.css":
@@ -53,10 +53,10 @@
             break;
 
         case "monaco-editor":
-            <script src="https://code.bdstatic.com/npm/monaco-editor@0.19.0/min/vs/loader.js"></script>
+            <script src="https://code.bdstatic.com/npm/monaco-editor@0.19.2/min/vs/loader.js"></script>
             <script>
                 require.config({
-                    paths: { vs: "https://code.bdstatic.com/npm/monaco-editor@0.19.0/min/vs" },
+                    paths: { vs: "https://code.bdstatic.com/npm/monaco-editor@0.19.2/min/vs" },
                     'vs/nls': { availableLanguages: { '*': 'zh-cn' } }
                 });
             </script>
